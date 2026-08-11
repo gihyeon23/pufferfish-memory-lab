@@ -28,7 +28,7 @@ Pufferfish는 메모리가 부족한 컨테이너를 바로 종료하는 대신,
 |---|---|---|
 | 사전 준비 | Ubuntu VM, Docker Engine, cgroup v2 환경 구축 | 완료 |
 | 사전 준비 | 32MB씩 점진적으로 메모리를 할당하는 Java 워크로드 | 완료 |
-| 1차 | 논문 3장의 CPU 1% 제한 동작 재현 | 진행 중 |
+| 1차 | 논문 3장의 CPU 1% 제한 동작 재현 | 완료 |
 | 2차 | 논문 4장의 `puff()` 구현 | 예정 |
 | 3차 | 다중 컨테이너 및 `reclaim()` 구현 | 예정 |
 
@@ -169,6 +169,77 @@ python3 container_monitor.py pf-test   # OCM 감지 + 자동 suspend
 # 수동 suspend/resume (테스트/1차 이후 확장용)
 python3 suspend_manager.py suspend pf-test
 python3 suspend_manager.py resume pf-test
+```
+
+### 직접 실습해보기 (단계별)
+
+터미널 창 2개를 띄워두고 따라 하면 편하다. 창 A에서 컨테이너 실행과 모니터를,
+창 B에서 결과 확인을 한다.
+
+**창 A**
+
+```bash
+# 0) 저장소 루트에서 시작
+cd ~/pufferfish-memory-lab
+
+# 1) 이미지 빌드
+cd workload-java
+docker build -t pufferfish/workload-java:latest .
+cd ..
+
+# 2) 컨테이너 실행 (이미 떠 있다면 먼저 정리)
+docker rm -f pf-test 2>/dev/null
+docker run -d --name pf-test \
+  --memory=256m --memory-swap=768m \
+  -e CHUNK_SIZE_MB=32 -e INTERVAL_SECONDS=2 -e MAX_ALLOCATION_MB=512 \
+  -e JAVA_OPTS="-Xmx700m" \
+  pufferfish/workload-java:latest
+
+# 3) 로그로 워크로드가 정상 동작하는지 잠깐 확인 (Ctrl+C로 스트리밍만 중단, 컨테이너는 계속 실행됨)
+docker logs -f pf-test
+
+# 4) 반드시 controller 디렉터리로 이동한 뒤 모니터 실행
+cd controller
+python3 container_monitor.py pf-test --interval 0.5
+```
+
+`container_monitor.py`를 저장소 루트에서 그대로 실행하면
+`can't open file '.../container_monitor.py': No such file or directory`
+에러가 난다 — 흔한 실수이니 4번 단계에서 `cd controller`를 빼먹지 않는다.
+
+모니터 로그에 다음 순서가 찍히면 정상 동작이다 (32MiB씩 쌓이다 256MiB를
+넘는 시점, 대략 16번째 할당 전후에서 발생).
+
+```
+[container_monitor] pf-test: OCM 감지 (method=swap_current_delta_fallback, ...)
+[suspend_manager] pf-test: 원래 CPU 설정 저장 ...
+[suspend_manager] pf-test: suspend 적용 (--cpus 0.01 --cpuset-cpus 0)
+[suspend_manager] pf-test: cgroup cpu.max='1000 100000' cpuset.cpus='0'
+```
+
+이미 `MAX_ALLOCATION_MB`까지 다 채우고 "최대 누적 할당량에 도달" 상태인
+컨테이너로 모니터를 새로 실행하면, swap이 이미 정체 상태라 새로운 swap
+activity가 안 잡혀 OCM이 감지되지 않을 수 있다 — 그럴 땐 컨테이너를 2번
+단계로 다시 띄운다.
+
+**창 B** (모니터는 창 A에서 계속 켜둔 채로)
+
+```bash
+# CPU 실사용률 확인 — suspend 이후 ~1%대로 떨어져야 한다
+docker stats pf-test --no-stream
+
+# cgroup 파일 직접 확인 (docker inspect의 CpuQuota/CpusetCpus는 부정확할 수 있어 신뢰하지 않는다)
+PID=$(docker inspect --format '{{.State.Pid}}' pf-test)
+CG=$(sed -n 's/^0:://p' /proc/$PID/cgroup)
+cat /sys/fs/cgroup$CG/cpu.max      # 1000 100000 => 1%
+cat /sys/fs/cgroup$CG/cpuset.cpus  # 0 => 0번 코어만
+```
+
+**정리**
+
+```bash
+docker rm -f pf-test
+rm -f controller/state/*.json
 ```
 
 **OCM 판정 로직**: `memory.current + memory.swap.current > memory.max` 이면서
