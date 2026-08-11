@@ -6,3 +6,7 @@ out/
 
 experiments/results/*.csv
 experiments/results/*.log
+
+__pycache__/
+*.pyc
+controller/state/
