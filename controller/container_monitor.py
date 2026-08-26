@@ -11,13 +11,15 @@ swapping activity는 다음 순서로 판단한다 (fallback):
 workingset_refault_anon은 존재하면 보조 관측값으로만 로그에 남기고,
 판정에는 사용하지 않는다.
 
-puff()/reclaim()은 이 단계에서 구현하지 않는다.
+OCM 감지 시 CPU를 1%로 제한하는 것(suspend)과 별도로, 호스트에 메모리
+여유가 있으면 puff_manager로 컨테이너의 memory.max도 늘려본다(puff).
 """
 
 import argparse
 import time
 from pathlib import Path
 
+import puff_manager
 import suspend_manager
 from cgroup_utils import (
     CgroupError,
@@ -84,7 +86,16 @@ def monitor(container: str, interval: float, once: bool) -> None:
 
     while True:
         time.sleep(interval)
-        curr = read_snapshot(cgroup_path)
+        try:
+            curr = read_snapshot(cgroup_path)
+        except (CgroupError, OSError):
+            print(
+                f"[container_monitor] {container}: cgroup을 더 이상 읽을 수 없습니다 "
+                "(컨테이너 종료 또는 OOM-kill로 추정) — 모니터링을 종료합니다. "
+                f"`docker inspect {container} --format "
+                "'OOMKilled={{.State.OOMKilled}} ExitCode={{.State.ExitCode}}'`로 확인해보세요."
+            )
+            return
 
         ocm, method, detail = evaluate_ocm(prev, curr)
 
@@ -100,6 +111,9 @@ def monitor(container: str, interval: float, once: bool) -> None:
 
         if ocm:
             print(f"[container_monitor] {container}: OCM 감지 (method={method}, detail={detail})")
+            new_limit = puff_manager.puff(container)
+            if new_limit is not None:
+                print(f"[container_monitor] {container}: puff 완료, 새 메모리 한도 {new_limit}MiB")
             if not suspend_manager.is_suspended(container):
                 suspend_manager.suspend(container)
             else:
