@@ -1,0 +1,13 @@
+# 실험 목록
+
+각 실험의 목적, 실행 명령어, 검증 결과를 담은 문서다. 새 실험을 시작하면
+`0N-짧은-이름.md` 형식으로 파일을 추가하고 이 목록에 링크를 더한다.
+
+| 순서 | 문서 | 내용 | 상태 |
+|---|---|---|---|
+| 1차 | [01-ocm-suspend.md](01-ocm-suspend.md) | OCM(On-Container Memory pressure) 감지 시 CPU 1% 제한 | 완료 |
+| 2차 | [02-puff-reclaim-single.md](02-puff-reclaim-single.md) | 단일 컨테이너에서 `puff()`/`reclaim()` 동작·자동 트리거 검증 | 완료 |
+| 3차 | [03-multi-container-reclaim.md](03-multi-container-reclaim.md) | 다중 컨테이너 환경에서 `reclaim_host()` 우선순위 검증 | 부분 완료 (OCM 감지 버그 발견·수정, `reclaim-host` 자동 트리거는 미구현) |
+
+공통 실행 환경(호스트/VM 스펙)은 [`docs/environment.md`](../environment.md)에
+정리돼 있다.

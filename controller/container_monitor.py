@@ -3,11 +3,19 @@ pressure)을 감지하면 suspend_manager로 CPU를 1%로 제한한다.
 
 OCM 판정:
     (memory.current + memory.swap.current > memory.max)
-    AND swapping activity
+    AND (swapping activity OR swap가 이미 포화 상태)
 
 swapping activity는 다음 순서로 판단한다 (fallback):
     1) memory.stat에 pswpin/pswpout 키가 있으면 두 값의 delta 중 하나라도 > 0
     2) 없으면 memory.swap.current의 delta > 0 을 대신 사용한다
+
+swap이 이미 memory.swap.max에 근접(95% 이상)해 delta가 0으로 굳어버리면
+"활동이 없다"가 아니라 "더 이상 도망갈 곳이 없다"는 뜻이다. 이 경우
+swapping activity가 0이어도 OCM으로 판정한다 — 그렇지 않으면 swap이
+가득 찬 뒤 memory.current만 memory.max까지 조용히 올라가다가 puff 한 번
+못 받아보고 바로 OOM-kill당하는 경우가 생긴다(다중 컨테이너 3차 실습에서
+실제로 관찰됨).
+
 workingset_refault_anon은 존재하면 보조 관측값으로만 로그에 남기고,
 판정에는 사용하지 않는다.
 
@@ -30,6 +38,7 @@ from cgroup_utils import (
 )
 
 DEFAULT_INTERVAL_SECONDS = 0.5
+SWAP_SATURATION_RATIO = 0.95  # swap.current가 swap.max의 이 비율 이상이면 "포화"로 본다
 
 
 def read_snapshot(cgroup_path: Path) -> dict:
@@ -37,6 +46,7 @@ def read_snapshot(cgroup_path: Path) -> dict:
         "mem_current": read_value(cgroup_path / "memory.current") or 0,
         "mem_max": read_value(cgroup_path / "memory.max"),
         "swap_current": read_value(cgroup_path / "memory.swap.current") or 0,
+        "swap_max": read_value(cgroup_path / "memory.swap.max"),
         "events": read_events(cgroup_path / "memory.events"),
         "mem_stat": read_flat_kv(cgroup_path / "memory.stat"),
         "cpu_stat": read_flat_kv(cgroup_path / "cpu.stat"),
@@ -65,11 +75,17 @@ def evaluate_ocm(prev: dict, curr: dict) -> tuple[bool, str, dict]:
         method = "swap_current_delta_fallback"
         detail = {"delta_swap_current": delta_swap_current}
 
+    swap_max = curr["swap_max"]
+    swap_saturated = (
+        swap_max is not None and curr["swap_current"] >= swap_max * SWAP_SATURATION_RATIO
+    )
+    detail["swap_saturated"] = swap_saturated
+
     # 보조 관측값: 판정에는 사용하지 않고 로그에만 남긴다.
     if "workingset_refault_anon" in curr_stat:
         detail["workingset_refault_anon"] = curr_stat["workingset_refault_anon"]
 
-    return (over_limit and swap_activity), method, detail
+    return (over_limit and (swap_activity or swap_saturated)), method, detail
 
 
 def format_bytes_mb(value):
