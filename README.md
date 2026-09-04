@@ -34,6 +34,8 @@ Pufferfish는 메모리가 부족한 컨테이너를 바로 종료하는 대신,
 | 1차 | 논문 3장의 CPU 1% 제한 동작 재현 | 완료 | [01-ocm-suspend.md](docs/experiments/01-ocm-suspend.md) |
 | 2차 | 논문 4장의 `puff()`/`reclaim()` 구현 | 완료 | [02-puff-reclaim-single.md](docs/experiments/02-puff-reclaim-single.md) |
 | 3차 | 다중 컨테이너 환경에서 `reclaim()` 시나리오 검증 | 부분 완료 | [03-multi-container-reclaim.md](docs/experiments/03-multi-container-reclaim.md) |
+| 4차 | 호스트 예산 부족 시 자동 `reclaim_host()` 트리거 (⚠️ 논문 재현 아님, 독자 확장 정책) | 구현 완료 (실습 검증 필요) | [04-host-reclaim-daemon.md](docs/experiments/04-host-reclaim-daemon.md) |
+| 5차 | 신규 컨테이너 admission 시점 `reclaim_host()` 트리거 (논문 §4.3.1 lazy reclaim 재현) | 구현 완료 (실습 검증 필요) | [05-admission-reclaim.md](docs/experiments/05-admission-reclaim.md) |
 
 > 위 단계는 논문의 공식 단계 구분이 아니라, 본 재현 실험을 위해 정의한 구현 순서입니다.
 
@@ -133,18 +135,24 @@ Allocated: 96 MB
 | `container_monitor.py` | 500ms 주기로 `memory.current`/`memory.max`/`memory.swap.current`/`memory.events`/`memory.stat`/`cpu.stat`을 폴링하고 OCM 여부를 판정 |
 | `suspend_manager.py` | OCM 감지 시 CPU를 1%(cpuset 0번 코어)로 제한(`suspend`)하고, 저장해둔 원래 설정으로 복구(`resume`)하는 인터페이스 |
 | `puff_manager.py` | OCM 감지 시 호스트에 여유가 있으면 컨테이너의 `memory.max`를 늘리고(`puff`), 필요하면 원래 한도까지 다시 줄이는(`reclaim`/`reclaim-host`) 인터페이스 |
+| `host_reclaim_daemon.py` | 호스트 메모리 예산이 부족해지면 `puff_manager.reclaim_host()`를 자동으로 호출하는 감시 데몬 (컨테이너별이 아니라 호스트당 하나만 실행, ⚠️ 논문 재현 아님 — 이 프로젝트의 독자 확장 정책) |
+| `admission.py` | 신규 컨테이너를 `docker run`으로 띄우기 전 가용 메모리를 확인하고, 부족하면 `reclaim_host()`를 호출한 뒤 실행하는 래퍼 (논문 §4.3.1의 실제 reclaim 트리거 재현) |
 
 ```bash
 cd controller
 python3 cgroup_precheck.py pf-test     # 사전 점검
 python3 swap_preflight.py pf-test      # swap 발생 여부 dry-run
 python3 container_monitor.py pf-test   # OCM 감지 + 자동 suspend + 자동 puff
+python3 host_reclaim_daemon.py         # 호스트 예산 감시 + 자동 reclaim (호스트당 1개, 독자 확장 정책)
 
 # 수동 suspend/resume, puff/reclaim
 python3 suspend_manager.py suspend pf-test
 python3 suspend_manager.py resume pf-test
 python3 puff_manager.py puff pf-test
 python3 puff_manager.py reclaim pf-test
+
+# 신규 컨테이너 admission (논문 방식 reclaim 트리거)
+python3 admission.py pf-test-new pufferfish/workload-java:latest --request-mb 512
 ```
 
 이미지 빌드, 컨테이너 실행, 단계별 실습, 검증 결과 등 실험별 상세 절차는
@@ -167,17 +175,22 @@ pufferfish-memory-lab/
 │   ├── swap_preflight.py
 │   ├── container_monitor.py
 │   ├── suspend_manager.py
-│   └── puff_manager.py
+│   ├── puff_manager.py
+│   ├── host_reclaim_daemon.py
+│   └── admission.py
 ├── experiments/
 │   ├── configs/
 │   └── results/
 ├── docs/
 │   ├── environment.md
+│   ├── pufferfish-architecture.md
 │   └── experiments/
 │       ├── README.md
 │       ├── 01-ocm-suspend.md
 │       ├── 02-puff-reclaim-single.md
-│       └── 03-multi-container-reclaim.md
+│       ├── 03-multi-container-reclaim.md
+│       ├── 04-host-reclaim-daemon.md
+│       └── 05-admission-reclaim.md
 └── README.md
 ```
 
@@ -203,5 +216,6 @@ pufferfish-memory-lab/
 - [x] 메모리 부족 상황에서 CPU 사용률 1% 제한 (`suspend_manager.py`)
 - [x] `puff()`/`reclaim()`을 통한 메모리 한도 증감 (`puff_manager.py`, 단일 컨테이너 기준 단위 동작·자동 트리거 모두 검증됨)
 - [x] 다중 컨테이너 puff 경쟁 상황 재현, OCM 판정 로직의 swap 포화 blind spot 발견·수정
-- [ ] 호스트 예산 부족 시 자동으로 `reclaim_host()`를 호출하는 호스트 레벨 데몬
+- [x] 호스트 예산 부족 시 자동으로 `reclaim_host()`를 호출하는 호스트 레벨 데몬 (`host_reclaim_daemon.py`, 구현 완료 — ⚠️ 논문 재현이 아닌 독자 확장 정책, 다중 컨테이너 경쟁 상황에서의 실습 검증은 예정)
+- [x] 신규 컨테이너 admission 시점에만 `reclaim_host()`를 호출하는 논문 방식 lazy reclaim 재현 (`admission.py`, 구현 완료 — 실습 검증은 예정)
 - [ ] 고정 메모리 방식과 동적 메모리 방식 비교
