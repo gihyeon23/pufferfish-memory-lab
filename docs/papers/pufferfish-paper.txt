@@ -1,0 +1,1077 @@
+    Pufferfish: Container-driven Elastic Memory Management for
+                     Data-intensive Applications
+                                                Wei Chen, Aidi Pi, Shaoqi Wang, and Xiaobo Zhou
+                                                                 Department of Computer Science
+                                                        University of Colorado, Colorado Springs, CO, USA
+                                                                {cwei,epi,swang,xzhou}@uccs.edu
+
+ABSTRACT                                                                                            1   INTRODUCTION
+Data-intensive applications often suffer from significant memory                                    Data-intensive applications have become increasingly popular in
+pressure, resulting in excessive garbage collection (GC) and out-of-                                many fields, such as data mining, machine learning, and database
+memory (OOM) errors, harming system performance and reliability.                                    query. To enable data-parallel processing on large datasets and to
+In this paper, we demonstrate how lightweight virtualization via                                    improve hardware utilization, those applications are often executed
+OS containers opens up opportunities to address memory pressure                                     in a shared cluster and scheduled by a modern resource manager [21,
+and realize memory elasticity: 1) tasks running in a container can                                  42]. A typical resource manager relies on the estimation of workload
+be set to a large heap size to avoid OutOfMemory (OOM) errors,                                      resource (e.g., CPU cores and memory) by users to perform resource
+and 2) tasks that are under memory pressure and incur significant                                   allocation and enforce resource limits. Currently, most resource
+swapping activities can be temporarily “suspended” by depriving                                     managers employ static resource allocation mechanisms. Therefore,
+resources from the hosting containers, and be “resumed” when                                        the allocated resource remains unchanged and cannot be revoked
+resources are available. We propose and develop Pufferfish, an elastic                              during application runtime.
+memory manager, that leverages containers to flexibly allocate                                          Popular data-processing frameworks such as Hadoop [4], Spark [49],
+memory for tasks. Memory elasticity achieved by Pufferfish can be                                   Dryad [25] and Hyracks [7], are implemented using managed lan-
+exploited by a cluster scheduler to improve cluster utilization and                                 guages (e.g., Java) in which runtimes commonly have built-in au-
+task parallelism. We implement Pufferfish on the cluster scheduler                                  tomatic memory management. For these frameworks, garbage col-
+Apache Yarn. Experiments with Spark and MapReduce on real-                                          lection (GC) often causes significant memory and CPU overhead.
+world traces show Pufferfish is able to avoid OOM errors, improve                                   It even fails applications with OOM errors when the JVM heap is
+cluster memory utilization by 2.7x and the median job runtime by                                    not configured properly. However, the JVM heap usage depends on
+5.5x compared to a memory over-provisioning solution.                                               many application-related factors, such as the size of the input data,
+                                                                                                    the size of the generated intermediate results, and the execution
+CCS CONCEPTS                                                                                        stage, which vary largely across different applications and during
+                                                                                                    application runtime.
+• Computer systems organization → Cloud computing; Avail-
+                                                                                                        As a result, it is almost impossible to accurately estimate the
+ability; • Software and its engineering → Operating systems;
+                                                                                                    required memory for data-intensive applications before execution.
+Memory management; Cloud computing.
+                                                                                                    As manual configuration and tuning are tedious and ineffective,
+                                                                                                    users tend to provision task memory size based on the measured
+KEYWORDS                                                                                            peak demand. However, for the prevalent static cluster resource al-
+cloud computing, containerization, memory management, cluster                                       location, the resource request acceptance decisions are made based
+scheduling                                                                                          on the resource availability on each individual node. The prevalent
+                                                                                                    static cluster resource allocation accepts a resource request based
+ACM Reference Format:                                                                               on the resource availability on each node. A task normally has
+Wei Chen, Aidi Pi, Shaoqi Wang, and Xiaobo Zhou. 2019. Pufferfish: Container-                       to wait until sufficient memory becomes available. Thus, memory
+driven Elastic Memory Management for Data-intensive Applications. In                                over-provision often leads to under-utilized cluster resource and
+ACM Symposium on Cloud Computing (SoCC ’19), November 20–23, 2019,                                  significant job queuing delay when allocated but inefficiently used
+Santa Cruz, CA, USA. ACM, New York, NY, USA, 13 pages. https://doi.org/                             cluster resources accumulate.
+10.1145/3357223.3362730
+                                                                                                        In this paper, we focus on data-intensive applications that have
+                                                                                                    a large memory demand and a long running time (e.g., iterative
+                                                                                                    machine learning applications and large batch workloads), in Java-
+Permission to make digital or hard copies of all or part of this work for personal or               based frameworks. We identify two major challenges: (1) improper
+classroom use is granted without fee provided that copies are not made or distributed
+for profit or commercial advantage and that copies bear this notice and the full citation           memory setting causes individual tasks to suffer from performance
+on the first page. Copyrights for components of this work owned by others than ACM                  degradation or even OOM; (2) dynamic and unpredictable task mem-
+must be honored. Abstracting with credit is permitted. To copy otherwise, or republish,             ory behaviors under static memory management cause significant
+to post on servers or to redistribute to lists, requires prior specific permission and/or a
+fee. Request permissions from permissions@acm.org.                                                  resource wastage and queuing delay.
+SoCC ’19, November 20–23, 2019, Santa Cruz, CA, USA                                                     We present Pufferfish, a container-driven application-agnostic
+© 2019 Association for Computing Machinery.                                                         elastic memory manager. To address the first challenge, Pufferfish
+ACM ISBN 978-1-4503-6973-2/19/11. . . $15.00
+https://doi.org/10.1145/3357223.3362730                                                             proposes an effective yet simple approach based on lightweight
+
+
+
+
+                                                                                              259
+SoCC ’19, November 20–23, 2019, Santa Cruz, CA, USA                                                            Wei Chen, Aidi Pi, Shaoqi Wang, and Xiaobo Zhou
+
+
+virtualization to address the performance issue and OOM of an in-                             3000                                   spark-kmeans-ex
+                                                                                                                                     mapreduce-terasort-exe
+dividual task. The key idea is to leverage OS containers to limit the                         2500                                   spark-pagerank-exe
+                                                                                                                                     gc
+
+
+
+
+                                                                                   Time (s)
+memory usage of a task while setting a sufficiently large heap size to                        2000
+
+avoid OOM. In this scenario, a task under memory pressure incurs                              1500
+
+disk swapping instead of running out of memory. However, simply                               1000
+
+running the task with a large heap incurs significant overhead and                            500
+
+degrades system performance due to excessive disk accesses. There-                              0
+                                                                                                     4     8        16        32        64          128
+fore, we temporarily suspend the swapping container by capping                                                 JVM heap size (GB)
+its CPU resource to a very low level such that thrashing is throttled
+but the task is still alive.                                                   Figure 1: Job runtime of Spark Kmeans, Spark Pagerank and
+    To address the second challenge, Pufferfish monitors the memory            MapReduce Terasort with different heap sizes.
+usage of application containers and optimizes memory allocation
+by dynamically adjusting the container memory size on the fly. As
+long as free node memory is detected and a task demands more                   by breaking down the job runtime into execution time and GC time.
+memory (when JVM heap usage increases), Pufferfish increases the               For MapReduce Terasort, we only modify the heap size of reduce
+container memory size to avoid container swapping using a mem-                 tasks, since Terasort is bottlenecked by the reduce phase.
+ory puff mechanism. However, if memory contention is detected                      For the three applications, their performance is improved by
+when Pufferfish serves memory requests from multiple containers                increasing the JVM heap size. Kmeans throws OOM at a 4GB heap
+on the same node, a heuristic is used to selectively increase the              size. Pagerank only survives when heap size is larger than 64GB.
+memory of prioritized containers and depress the rest. If a node’s             However, the 64GB heap boosts the performance of Kmeans by 5x
+memory is insufficient to start a new job, Pufferfish uses reclaim             over the 8GB heap. GC is often not triggered by a large heap size,
+mechanism to squeeze the memory of puffed containers. Pufferfish               thus GC overhead is decreased with the increase of heap size. We
+achieves memory elasticity so that improved cluster memory usage               further find that the job execution also benefits from a large heap
+can be translated to higher parallelism, lower queuing delay and               size. Frameworks like Spark and MapReduce reserve memory pools
+improved job completion time.                                                  to store intermediate data [48] (for Spark) or to improve I/O per-
+    The ideology of Pufferfish is similar to that of VM ballooning.            formance (for MapReduce). In case of memory insufficiency, data
+However, Pufferfish is designed to be deployed within an operating             cached in the memory pool is spilled to disks, resulting in excessive
+system, which requires different techniques and poses different                I/O and degraded performance. We notice that this phenomenon
+challenges and opportunities. For instance, in Pufferfish, the mem-            is significant on Spark Kmeans, since Kmeans is an iterative appli-
+ory consumption of containers can be obtained via Linux cgroup                 cation and its intermediate results are immediately needed in the
+interfaces while VM ballooning requires a balloon driver to indi-              next iteration. A big heap size not only reduces the GC overhead
+rectly infer the memory demand of VMs. Pufferfish is transparent               but also avoids spilling.
+to applications and compatible with existing cluster schedulers.               Memory heterogeneity opportunity. Figure 2 shows the 50t h
+We implemented it on a popular cluster scheduler, Yarn [42]. Ex-               and the 90t h percentiles of memory usage of each container1 through-
+periments with Google trace [38] on a 26-node cluster show that                out the application execution time. The results show that there is a
+Pufferfish can help applications with a large memory footprint                 heterogeneous memory distribution across the executors. Executor-
+avoid OOM errors, and survive from memory pressure with less                   9 uses much more memory than others do. After examining the
+than 10% performance overhead. Through its memory elasticity,                  Spark logs and repeating the experiment with various inputs, we
+Pufferfish improves cluster utilization by 2.7x and the median job             find Executor-9 is cached with more intermediate data (as Spark
+runtime by 5.5x compared to a memory over-provisioning solution.               RDD) and scheduled with more Spark tasks than other executors.
+                                                                               We generally denote a task as the scheduling entity managed by a
+                                                                               cluster scheduler, such as a Spark executor and a MapReduce task.
+2    IMPACT OF TASK MEMORY SIZE                                                Note that a Spark task means the execution thread in each executor.
+For Java-based applications, the task memory size is given by set-             We conclude three causes of heterogeneous memory distribution:
+ting the maximum JVM heap size (i.e., parameter -Xmx). If the JVM              (1) Skewed input data. The intermediate results might be gathered
+heap size is not set properly and there is not enough memory in                on the hotspot executor after shuffling [15]. (2) Localization. The
+the JVM heap for creating new objects, the JVM throws an OOM                   hotspot executor residing on the node with more localized data
+error and the task fails. Determining the optimal heap size for ap-            might be scheduled with more Spark tasks [1, 34, 48]. (3) Stragglers.
+plications is not realistic. The aggregated heap size of all tasks on          The executor with less or without straggler tasks might be sched-
+the same node should not be too large to cause memory swapping.                uled with more Spark tasks [27, 28]. In these situations, a unified
+Thus, setting a large per-task heap size limits the degree of paral-           task memory configuration makes memory over-provisioning a
+lelism for application tasks in one machine, which leaves potential            necessity to avert OOM.
+concurrency unexploited. In contrast, a small heap size jeopardizes            Memory dynamics opportunity. The profiled memory usage
+task execution with degraded performance and OOM errors.                       also shows that a task’s memory usage can be significantly below
+    We profile the task memory usage of representative data-intensive          its assigned heap size. For one third of the execution time, Spark
+applications: Spark Kmeans, Spark Pagerank and MapReduce Tera-
+sort. Figure 1 illustrates how JVM heap sizes affect job performance           1 We ran Spark executor in a Docker container managed by Yarn.
+
+
+
+
+                                                                         260
+Pufferfish: Container-driven Elastic Memory Management for Data-intensive Applications                          SoCC ’19, November 20–23, 2019, Santa Cruz, CA, USA
+
+
+
+                 60   Pagerank-50th                                                      on the same node. Further, GC is not effective since heap scanning
+                      Pagerank-90th                                                      under memory pressure does not reclaim much memory [14]. To
+   Memory (GB)
+
+
+
+
+                 50
+                                                                                         address these issues, we temporarily suspend a task in trouble by
+                 40
+                                                                                         reducing the CPU allocation of the container to a low level. Since
+                 30
+                                                                                         memory access in a swapping container generates paging activities,
+                 20
+                                                                                         the reduced CPU usage reduces the rate at which the JVM accesses
+                 10
+                                                                                         memory so as to reduce its contribution to paging activities. The
+                 0
+                      1      2        3     4    5    6   7     8   9   10
+                                                                                         low CPU allocation should be sufficient so that the cluster scheduler
+                                          Executor number (#)                            does not consider the task as a failed one.
+                                                                                         Identifying OCM heuristic. We use a heuristic to identify con-
+Figure 2: Memory usage of Spark Pagerank with different                                  tainers in which the running processes are out of container memory
+number of executors.                                                                     (OCM): if the sum of the memory usage and swap usage are larger
+                                                                                         than the memory limit and there are swapping activities detected, the
+                                                                                         container should be suspended. For an OCM container, Pufferfish sus-
+Pagerank, Spark Kmeans, and MapReduce Terasort jobs only uti-                            pends its execution to confine its swapping and GC activities. After
+lize 49%, 64%, and 86% its configured heap, respectively, although                       an OCM container is suspended, Pufferfish checks the node memory
+the heap is not over-provisioned. It demonstrates that the memory                        availability and determines if the suspended container is able to puff
+usage for a single task is dynamic, and much memory is unused                            (by puffing, the memory capacity of a container is increased). After
+during its execution. Causes include: (1) JVM uses lazy memory al-                       multiple rounds of puffing, the container size will be adjusted to its
+location mechanism, which means memory is allocated on demand.                           actual demand during execution. By this design, containerization
+As a result, application memory usage is slowly increased from a                         enables tasks to utilize temporarily available node memory (sourced
+small value. (2) Application behavior is dynamic. Intermediate data                      from memory over-provision, memory dynamics and heterogeneity
+might be dropped by the application and collected by the GC at                           opportunities), achieving memory elasticity. Pufferfish may also
+runtime.                                                                                 trigger memory reclaim by forcing memory pages to be swapped
+   In this paper, we consider that memory heterogeneity and mem-                         to disk under node memory contention. Suspended and reclaimed
+ory dynamics are prevalent in data-intensive applications, which                         containers can be resumed to normal execution with sufficient CPU
+provide Pufferfish the opportunities to achieve memory elasticity                        and memory if memory availability is detected when completed
+in datacenter scheduling.                                                                containers release their allocated resources.
+                                                                                            To suspend an OCM container, we minimize its CPU usage and
+3 CONTAINERIZATION                                                                       pin task threads (including working threads and GC threads) to a
+                                                                                         single core while maintaining sufficient footprint for this task to
+3.1 Avoiding OOM Errors
+                                                                                         be alive. We experimentally set the low container CPU usage to 1%
+In Pufferfish, the key to avoiding Java OOM errors is to set a large                     and restrict the container only to run on CPU 0. Because 1% of a
+enough heap size for JVMs running inside OS containers. The heap                         CPU usage still enables the task in the suspended container to send
+size (e.g., 64GB) should be larger than the physical memory limit                        heartbeats to the cluster scheduler, the cluster scheduler will not
+of the container (e.g., 4GB). Thus, the JVM heap is built on the                         consider this task dead and restart a new one. Note that the task
+virtual memory of the container rather than on its allocated physical                    performance is significantly degraded under swapping. For data-
+memory. In this case, when a task is under memory pressure, the                          intensive applications (e.g., Hadoop, Spark), heartbeat mechanism
+container will start to swap recently unused data to the disk. The                       is often implemented in a separate thread and the thread is woken
+memory overcommitment supported by the OS allows JVMs to                                 up to send heartbeats every 3-5 seconds. Our experiment shows that
+run with a much larger heap size than the physical memory limit.                         a heartbeat thread woken up at this frequency can still be kept alive
+With this mechanism, a task will not run into OOM errors but                             even the entire task is only assigned with 1% CPU quota. We do
+start memory swapping once the task memory usage exceeds the                             not expect the task to make progress in this situation, but the task
+container memory size. However, application performance could                            and its intermediate results should be kept alive. All these resource
+be degraded.                                                                             manipulations are conducted through the cgroup subsystem that
+   Note that one alternative is to simply kill the swapping JVM.                         corresponds to the container. Although heap over-provisioning and
+However, Pufferfish targets long-running applications, such as off-                      containerization avoid OOM, they do not achieve memory elasticity.
+line batch jobs and iterative machine learning jobs that can run for                     To that end, we discuss elastic memory management in section 4.3.
+hours or even days. Killing causes substantial slowdown due to the                       Address swapping. In the previous section, we advocate to sus-
+loss of execution progress. It also leads to low cluster utilization.                    pend a swapping task by reducing its CPU usage. In this section,
+                                                                                         we use an example to demonstrate the necessity of suspension to
+3.2               Suppressing Memory Thrashing                                           address significant I/O traffic and JVM garbage collection. In order
+While containerization and a large JVM heap help avoid OOM                               to emulate a scenario where a task is consecutively swapping, we
+errors, the problem shifts from JVM heap pressure to container                           run a Spark Pagerank job, then manually reclaim its memory by
+memory pressure. When task memory demand grows beyond the                                shrinking the container size, and finally resume its execution by
+memory limit of a container, memory swapping or thrashing signif-
+icantly slows down the task execution and even affect other tasks
+
+
+
+
+                                                                                 261
+SoCC ’19, November 20–23, 2019, Santa Cruz, CA, USA                                                                                        Wei Chen, Aidi Pi, Shaoqi Wang, and Xiaobo Zhou
+
+
+                                          (a) Memory & swapping
+                                                                                                                are sparse. Since each task is given an illusion of a large available
+ Memory usage (GB)
+
+
+
+
+                                                                                                      20
+                     60                                     read
+                                                            write
+                                                                                                      15
+                                                                                                                memory due to the configured large heap size, it allows tasks to
+                     40                                                                                         exploit the memory elasticity when the host has sufficient memory.
+                                                                                                      10
+                                                                                                                On the other hand, tasks can still leverage GC to reduce the JVM
+                     20
+                                                                                                      50
+                                                                                                                heap to confine swapping. (2) The excessive GC, which spawns
+                     0
+                              300   400   500         600            700   800         900     1000
+                                                                                                      0         many GC threads, causes strong CPU interference to other tasks
+                                                      Time (s)                                                  running on the same node if not well handled. Pufferfish addresses
+                                                                                                                this issue by reducing the container CPU usage to a low level and
+                                                 (b) Heap & GC
+                                                                                                                confining the container’s CPUSET to one core.
+ Heap size (GB)
+
+
+
+
+                     40
+                                                                                                                   The experiment provides following insights on our proposed
+                     30
+                                                                                                                container-based memory management:
+                     20
+
+                     10
+                                                                                                                      • By reducing the CPU usage, the disk swapping activities are
+                                            GC
+                     0                      on swapping                                                                 successfully throttled.
+                          0         200         400                 600          800         1000                     • Task is still alive by keeping a low CPU footprint of 1%.
+                                                      Time (s)
+                                                                                                                      • Swapping during suspension still triggers full GC, which
+                                                                                                                        effectively reduces the committed memory.
+Figure 3: (a) Pufferfish effectively suspends Spark Pagerank
+without incurring much memory thrashing. The gray line                                                          4  PUFFERFISH DESIGN AND
+represents the container memory size. Each dot represents
+an IO operation (read/write). (b) A full GC on swapping can
+                                                                                                                   IMPLEMENTATION
+be observed at 270t h second when the container starts re-                                                      4.1 FLEX container
+claiming. The gray line represents the JVM heap size. Each                                                      Pufferfish is built on top of Apache Yarn. To leverage our proposed
+dark blue line represents the time of a full GC.                                                                functionalities, We define a new type of container, FLEX, whose
+                                                                                                                size can be dynamically adjusted during execution by Pufferfish. In
+                                                                                                                contrast, a REGULAR container is Yarn’s default container, whose
+recovering the container size. We configure a one-executor Pager-                                               size is static and determined at request time. FLEX containers are
+ank with the optimal 64GB heap (a heap larger than 64GB does not                                                designed for the long-running data-intensive applications with
+yield better performance).                                                                                      large memory demands. We derive the property of FLEX containers
+   Figure 3-(a) shows the memory usage and the container swap-                                                  as follows:
+ping activities. We start reclaiming the container at the 265t h sec-
+                                                                                                                      • To avoid OOM, task running in a FLEX container is set with
+ond (an arbitrary chosen moment). Significant disk write activities
+                                                                                                                        the same large heap size MAX_HEAP, representing the max-
+(as high as 2GB/s) are observed while the container is reclaimed
+                                                                                                                        imum memory demand among all application tasks. Since
+from 64GB to 4GB because of swapping. At the 450t h second, we
+                                                                                                                        each container at most holds memory of an entire node,
+reduce the container’s CPU usage to 1% and the swapping activities
+                                                                                                                        MAX_HEAP value is capped by memory capacity of a node.
+are quickly throttled with the disk/read rate dropping to below
+                                                                                                                      • To avoid memory waste, all FLEX containers should be
+1MB/s because paging is constrained under low CPU usage. During
+                                                                                                                        started with the same small memory size (MIN_CONT) , repre-
+suspension, we still observe heartbeats between the Spark executor
+                                                                                                                        senting the minimum memory demand among all application
+and the master. This illustrates that container suspension success-
+                                                                                                                        tasks.
+fully confines the swapping activities. Note that in such a case, the
+working set size of the task is far beyond the container size. Thus, it                                            Currently, users need to specify the values of MAX_HEAP and
+is not helpful for fast memory retrieval if the task is being swapped                                           MIN_CONT for FLEX containers. Cluster operators may apply their
+without reducing CPU usage. Additionally, it causes significant I/O                                             previously used over-provisioned task memory size for MAX_HEAP.
+traffic. Finally, the container’s memory and CPU are restored to                                                The difference lies in that both the container size and the JVM
+64GB and 100% respectively at the 750t h second. With sufficient                                                heap size are over-provisioned in Yarn, while only the heap size is
+memory, the container experiences a burst of disk activities in order                                           over-provisioned in Pufferfish.
+to load the working set into memory.
+   Figure 3-(b) shows the full GC activities and the JVM heap usage.                                            4.2     System Components
+Even though the task is configured with a large heap, an aggressive                                             We implement Pufferfish by extending Apache Yarn. Yarn is a gen-
+full GC upon swapping can be observed at the 270t h second, which                                               eral resource management framework that allows applications to
+lasts for 89 seconds. As a result, the used JVM heap is dropped from                                            negotiate resources on a shared cluster. Yarn uses container, a logi-
+45GB to 30GB. After analyzing the GC logs, we find the full GC is                                               cal bundle of resources (e.g., ⟨1 CPU, 2GB RAM⟩), as the resource
+caused by an OS memory allocation failure. The reason is that JVM                                               allocation unit. In Yarn, the ResourceManager, one per cluster, is
+memory allocation requests to the OS (by mmap() or malloc())                                                    responsible for allocating containers to each node. The Applica-
+fail on container memory shortage, activating the GC to try to                                                  tionMaster, one per application, submits requests for containers
+reclaim memory from the JVM heap. Two insights can be drawn                                                     to ResourceManager. The NodeManager, one per node, monitors
+from this experiment. (1) GC on swapping is useful in reducing the                                              node status and updates ResourceManager with resource availabil-
+committed memory, especially when the surviving objects after GC                                                ity. The key components of Pufferfish include one node memory
+
+
+
+
+                                                                                                          262
+Pufferfish: Container-driven Elastic Memory Management for Data-intensive Applications                              SoCC ’19, November 20–23, 2019, Santa Cruz, CA, USA
+
+
+                                             Node Manager
+Resource       Scheduling                     Monitor                                                                                       Container 4 10%
+                                                        Memory Manager
+ Manager         plugin                                                                           Container2 40%
+                                         Task                                                                                               Container 3 10%
+                                         Task      PR
+                            Heartbeat    Task           Container Monitor
+          Request
+                                                                                                                                             Container 2 20%
+                                             Node Manager
+          Application                         Monitor
+                                                        Memory Manager
+           Master
+                             Launch      Task
+                                         Task      PR                                             Container 1 40%
+                                         Task           Container Monitor                                                                    Container 1 40%
+
+
+
+               Figure 4: Architecture of Pufferfish.                                                   (a)                                         (b)
+
+                                                                                               Figure 5: Demonstration of memory contentions.
+manager per NodeManager, one container monitor per container,
+and a scheduling plugin in ResourceManager. The architecture of
+Pufferfish is shown in Figure 4.
+Node Memory Manager, implemented in NodeManager, is re-                                  present a simple method to quickly adapt the container sizes to their
+sponsible for monitoring node memory usage and instructing Con-                          actual demands. Consider a container with size M that is currently
+tainer Monitor to resize a container. In the Node Memory Manager,                        suspended due to OCM and has been selected to puff. In the next
+we define two functions, puff() and reclaim(), shown as PR in                            round with puff ratio ϕ, the container size will be M × (ϕ + 1). The
+Figure 4. Function puff() periodically selects FLEX containers un-                       container size keeps increasing in each round until its demand is
+der OCM and computes the amount of memory that can be added                              satisfied.
+to them. Function puff() is invoked every two seconds which                                 Determining an optimal ratio ϕ for all applications is non-trivial.
+equals to the heartbeat interval between ResourceManager and                             A large ϕ causes waste, while a small ϕ causes significant overhead
+NodeManager since containers might be released or launched dur-                          because of frequent suspension and puffing. A practical method is
+ing this interval. The puff() stops puffing when either all FLEX                         to profile representative data-intensive applications and express the
+task memory demands are satisfied, i.e., no more OCM contain-                            memory usage as a function of time M(t). Its memory growth rate
+ers are detected, or the node memory is almost run out. Function                         can be represented as M(t + δ )/M(t). If we set δ as the Container
+reclaim() is called whenever a new container is to be launched                           Monitor interval, M(t +δ )/M(t) represents the growth rate between
+on the node. At that moment, the Node Memory Manager needs                               two consecutive puffing rounds. Generally, ϕ can be set by choosing
+to check if the node has enough memory. If not, it chooses one of                        a relatively large growth rate from all profiled applications. By this
+the FLEX containers and computes how much memory belonging                               setting, there is little overhead on the containers caused by memory
+to this container to reclaim. We describe how the Node Memory                            insufficiency. The additional unused memory can later be reclaimed.
+Manager chooses containers in Section 4.3.1.                                                We find that applying the same puff ratio for all containers on the
+Container Monitor is a per-container daemon implemented in                               same node can cause memory contention. As shown in Figure 5-(a),
+NodeManager that is responsible for memory monitoring and ad-                            after a few rounds of puffing, each container might hold 40% of the
+justing. It is instructed by the Node Memory Manager to increase                         memory on the node machine but is still demanding more memory.
+or decrease container memory through the interface provided by                           In this case, both containers are suspended with OCM state and
+cgroup. It also maintains container state and its corresponding                          cannot make further progress, because the node has almost run
+action. For example, when a container is detected under OCM,                             out of its memory. To resolve memory contention, we develop a
+its Container Monitor immediately suspends the container by set-                         backoff-based puffing algorithm. It works by sorting the containers
+ting its CPU allocation to 1% and limiting its CPUSET to a single                        on the same node by their priorities and giving the default ratio
+core. In contrast, if a suspended container is under OCM, which                          to the container with the highest priority and backing off for the
+means the memory demand of this container is satisfied after puff-                       rest. For example, if there are multiple OCM containers on a node,
+ing, Container Monitor resumes its CPU and CPUSET. Pufferfish                            the container with highest priority gets the default puff ratio ϕ, the
+is built at the resource management layer of Yarn and is trans-                          second gets ratio ϕ/Nc , the third gets ratio ϕ/(Nc )2 , and so on. By
+parent to applications. We have open-sourced Pufferfish at: https:                       enforcing the priorities, memory contention is avoided by giving
+//github.com/yncxcw/pufferfish.                                                          more puffing chances to high priority containers and suspending
+                                                                                         low priority containers. The priority is defined by the cluster-level
+4.3     Elastic Memory Management                                                        policy in section 4.3.3.
+                                                                                            Avoiding memory contention is not effective when a node mem-
+For elastic memory management in clusters, Pufferfish develops two
+                                                                                         ory is about to be used up, however. As shown in Figure 5-(b),
+node-level mechanisms, one cluster scheduler plugin, and adopts
+                                                                                         container-1 with the highest priority is under OCM and demanding
+two prioritization polices.
+                                                                                         more memory while the node cannot satisfy the request. To avoid
+4.3.1 Two Node-level Mechanisms.                                                         OOM of the node, puff() kills the container with the lowest prior-
+Puff. Given a set of OCM containers, function puff() determines                          ity because killing and relaunching it incurs the least performance
+the amount of memory that can be added to these containers. We                           loss.
+
+
+
+
+                                                                                 263
+SoCC ’19, November 20–23, 2019, Santa Cruz, CA, USA                                                    Wei Chen, Aidi Pi, Shaoqi Wang, and Xiaobo Zhou
+
+
+Algorithm 1 Memory puff function: puff().                                   4.3.2 Cluster Scheduler Plugin. When Pufferfish applies puff and
+ 1: Variables: Memory puff ratio ϕ, Set of sorted OCM containers            reclaim mechanisms for cluster memory management, there ex-
+      C, Node allocated memory A, Node total memory M.                      ists one major issue. The risk of task killing on some nodes would
+ 2: /* C is sorted by container priority */                                 be significantly high due to memory contention on those nodes
+ 3: Nc = C.size();                                                          if the memory utilization is unbalanced across the cluster. The
+ 4: if A ≥ M then                                                           cause is that the cluster scheduler is unaware of the actual puffed
+ 5:     if C.дet_f irst().is_ocm() then                                     memory usage of containers on individual nodes. Yarn ResourceM-
+ 6:         kill(C.дet_last());                                             anager keeps track of cluster-wide resource allocation based on job
+ 7:     end if                                                              resource requests. However, the requested memory for a FLEX con-
+ 8:     return;                                                             tainer (MIN_CONT) is always smaller than the actually used memory,
+ 9: end if                                                                  which makes it difficult for ResourceManager to identify a suitable
+10: for each container c in C do                                            node for container allocation.
+11:     if A ≥ M then                                                           We develop one cluster scheduler plugin to address the issue.
+12:         break                                                           First, we augment the heartbeat between ResourceManager and
+13:     end if                                                              NodeManager to convey the actual memory usage of each node.
+14:     if !c.is_ocm() then                                                 Second, to avoid FLEX containers overwhelming one node, we
+15:         continue                                                        develop a memory-aware heuristic to direct container allocation in
+16:     end if                                                              the cluster. When scheduling a FLEX container, Pufferfish delays
+17:     /* Avoid one container to dominate available M − A */               the request if it cannot be satisfied due to insufficient memory of
+18:    bm = min(c.дet_memory() × ϕ, M 2−A );                                a node, to avoid meaningless memory reclaim. The heuristic also
+19:    c.add_memory(bm);                                                    tries to balance the memory usage of FLEX containers on each
+20:    A+ = bm;                                                             node because they likely dominate one node. To this end, when
+21:    ϕ/= Nc ;                                                             choosing a node for container placement in the cluster, Pufferfish
+22: end for                                                                 prioritizes the node with the most amount of available memory. If
+                                                                            several nodes have the same amount of available memory, Pufferfish
+                                                                            chooses the node with data locality. The heuristic implementation
+                                                                            requires less than 20 lines of code. It can be easily ported to any
+   Details of the puff() function are shown in Algorithms 1. Func-          Yarn compatible scheduler. The plugin enables the existing cluster
+tion is_ocm() implements the heuristic of identifying OCM. In line          schedulers to be memory-elasticity aware.
+14, we skip containers whose memory demands are satisfied. Lines
+                                                                            4.3.3 Prioritization Policies. Pufferfish can be coupled with differ-
+10 to 21 implement the backoff-based puffing. Lines 4 to 9 kill the
+                                                                            ent cluster-level policies so as to achieve various memory manage-
+container with the lowest priority if the memory demand from the
+                                                                            ment objectives. In this paper, we aim to maximize cluster memory
+container with the highest priority cannot be satisfied. To track
+                                                                            utilization and improve job runtime. We adopt two prioritization
+the set of OCM containers (C), each container is augmented with
+                                                                            policies that determine the order of puffing for containers on the
+a timestamp. If a container is detected as OCM, it is put in set C
+                                                                            same node upon memory pressure.
+with a timer bound. If a container is not detected as OCM for more
+than a time threshold (e.g., 2 minutes), which means its container               • Earliest Job First (EJF) policy prioritizes containers based
+size is sufficient for its memory demand, it will be removed from                   on the arrival time of the job that the containers belong to.
+set C by Node Memory Manager. Container Monitor also shrinks                       This is the default policy in Pufferfish. Its rationale is that
+the container size if memory slack is detected. For instance, if a                  the oldest job may release memory first.
+container is puffed from 50GB to 70GB while its actual demand                    • Shortest Job First (SJF) policy sorts containers based on
+is 60GB, then 10GB is not actively used. Thus, to avoid memory                      the expected job completion time, giving the shortest job
+fragmentation, the puff mechanism shrinks the container size to                     the highest priority. This policy requires estimation of job
+62GB (2GB overhead by default).                                                     duration which can be inferred from historical logs. Its ratio-
+Reclaim. Before Pufferfish launches a container on a node, it                       nale is that long jobs should be penalized as short jobs may
+checks if the node has enough memory. If not, function reclaim()                    release memory sooner. Note that the actual job completion
+is called to reclaim memory based on memory availability and                        time may vary due to various factors.
+memory demand. For example, if a REGULAR container requests                    We introduce suspension tolerance as the maximum duration a
+5GB memory, Pufferfish ensures there is 5GB free memory. But                container can be suspended. A task will be killed if it is suspended
+for a FLEX container, Pufferfish only needs to ensure free space            longer than the suspension tolerance. We expect the killed contain-
+of MIN_CONT. Reclaiming starts from the OCM container with the              ers to be launched on another node with sufficient resources. By
+lowest priority to avoid overhead on REGULAR containers. Once               default, suspension tolerance is set to half of the expected duration
+containers exit and release their occupied memory, reclaimed con-           of a job. This enhancement is useful for those FLEX containers that
+tainers are puffed immediately. Note that containers under reclaim          are allocated with a huge amount of memory but suspended for
+are suspended. To reduce the overhead, Pufferfish uses a lazy ap-           long time, which causes a lot of memory waste. Note that under
+proach that delays the memory reclaim until the node memory                 SJF policy long jobs can suffer from starvation when short jobs
+cannot satisfy a newly scheduled container.                                 keep arriving. Pufferfish increases a suspended job one priority
+
+
+
+
+                                                                      264
+Pufferfish: Container-driven Elastic Memory Management for Data-intensive Applications                                                                     SoCC ’19, November 20–23, 2019, Santa Cruz, CA, USA
+
+
+
+                       100
+                                               (a) puff() function                                                                    (b) reclaim() function                            (c) TPC-H JCT
+                                                                                                                                                                            1.0
+    Memory usage(GB)
+
+
+
+
+                                                                                                             Memory usage(GB)
+                                       use-1       use-2     use-3        cnt-1      cnt-2          cnt-3                                  cnt-FLEX
+                                                                                                                                100        cnt-REGULAR
+                       80
+                                                              shrinked                                                                                                      0.8
+                                                                                                                                 80
+                       60
+
+
+
+
+                                                                                                                                                                      CDF
+                                                                                                                                                                                                              mix-PF
+                                                                                                                                 60
+                                                                                                                                                                            0.6                               mix-YARN
+                       40
+                                                                                                                                 40
+                                                                                                                                                                            0.4
+                       20                          killed                                                                        20
+
+                                                                     relaunched                                                  0                                          0.2
+                        0
+                             0   250     500       750      1000       1250       1500       1750                                     0    250    500    750   1000               100    200    300     400      500
+                                                    Run time (s)                                                                              Run time(s)                                      JCT(s)
+
+
+Figure 6: Efficacy of puff() and reclaim() functions in the single-node cluster. The solid line in (a) and in (b) shows the real
+memory usage while the dashed line draws the container memory size.
+
+
+level when the job has been suspended for half of the suspension                                                                           Table 1: Inputs of the evaluated workloads.
+tolerance, and eventually starvation is avoided.
+   For producer-consumer scenario where consumer tasks wait on                                                                        Workloads (units)                Small/Executor Large/Executor
+producer tasks (e.g., reduce tasks wait on map tasks), as Pufferfish                                                                  Spark-WC(GB)                     100 / 1                 1000 / 6
+assigns the same puff ratio to tasks belonging to the same job, their                                                                 Spark-KM(Samples)                1 × 108 / 1             5 × 108 / 6
+memory allocation can progress at a similar pace. However, it is                                                                      Spark-PR(Pages)                  5 × 106 / 1             5 × 107 / 8
+possible that a producer container demands much more memory                                                                           Spark-NW(Edges)                  1 × 107 / 1             1 × 108 / 8
+and gets suspended while the consumer container waits on it. In
+this case, Pufferfish simply kills any container once it has been                                                                     MapReduce-TS(Records)            3.2 × 108               3.2 × 109 / 25
+suspended for too long in order to avoid deadlock.                                                                                    MapReduce-II(GB)                 10 × 10                 10 × 30 / 6
+
+5                      EVALUATION
+We evaluate Pufferfish by using representative MapReduce and                                                                    representative machine learning workloads with long runtime and
+Spark workloads. We first evaluate Pufferfish on a single-node clus-                                                            excessive memory usage. We use the small dataset for the single-
+ter (the cluster only has one slave node) to validate efficacy of                                                               node cluster evaluation. We use both small and large datasets for
+node-level puff and reclaim mechanisms. We then evaluate Puffer-                                                                the multi-node cluster evaluation. We follow the default configura-
+fish in a multi-node cluster using the Google trace [38]. We finally                                                            tion of Spark and Hadoop, except we change the application heap
+discuss Pufferfish overhead and parameter sensitivity.                                                                          size in the evaluation. For evaluation of multi-tenant workloads, we
+                                                                                                                                use TPC-H [2] running on Spark-SQL [6] as short jobs. The total
+5.1                      Experimental Setup                                                                                     input size for TPC-H is 10GB.
+Cluster setup The multi-node cluster in the experiment consists of                                                                 We map jobs in Google trace to workloads in Table 1. The appli-
+26 nodes. Each node has two 8-core Intel Xeon E5-2640 processors                                                                cation types and input scales are chosen based on the task memory
+with hyper-threading enabled, 128GB of RAM, and 5x1-TB hard                                                                     usage in the trace files. Specifically, we choose a 5-hour interval
+drives configured as RAID-5. The machines are interconnected                                                                    from Google trace and group all jobs in that interval. We compute
+by 10Gbps Ethernet. Each machine is installed with Ubuntu-16.04.                                                                the memory usage of each job. The top 1% is mapped to Inverte-
+Pufferfish implementation is based on Yarn-2.7.3. We use the same                                                               dIndex. The top 10% is mapped to TeraSort and NWeight, and the
+Yarn version for comparison. We configure each node with 120GB                                                                  top 70% is mapped to KMeans and PageRank. The rest is mapped
+memory for Yarn (excluding OS and Yarn daemon usage). We use                                                                    to WorkCount. Each job is submitted according to the timestamp
+                                                                                                                                in the trace.
+Spark-2.0.1 for Spark applications. Docker-1.12.1 is used to create
+OS containers. The image is downloaded from online Docker hub
+sequenceiq/hadoop-docker.                                                                                                       5.2       Pufferfish in the Single-Node Cluster
+Pufferfish setting Based on our initial application profiling, we                                                               We evaluate Pufferfish (‘PF’ for short in figures) on the single-node
+configure the puff ratio ϕ to 40%. For FLEX containers, we configure                                                            cluster to assess the puff and reclaim mechanisms as well as the
+MIN_CONT to 4GB and MAX_HEAP to 64GB to ensure Spark-PR and                                                                     adaptive parallelism of elastic memory management.
+Spark-NW do not run into OOM.                                                                                                   Puff function evaluation. In this experiment, we create a con-
+Workloads Several of our data-intensive workloads are chosen                                                                    trolled environment by submitting one Pagerank job (container-1)
+from HiBench [22]. Table 1 lists their input size, number of execu-                                                             and two Kmeans jobs (container-2 and container-3) one by one.
+tors for Spark workloads (e.g., 1 and 6 for small and large Spark-                                                              As shown in Figure 6-(a), with default EJF container-1 is given the
+Wordcount workloads, respectively), and number of reduce tasks                                                                  highest priority, while container-2 and container-3 are suppressed
+for MapReduce workloads. Wordcount (WC), Terasort (TS), and In-                                                                 at the beginning. Container-3 is killed by Pufferfish at around the
+vertedindex (II) are both memory intensive and I/O intensive batch                                                              600t h second because of the aggressive demand of container-1.
+workloads. Kmeans (KM), Pagerank (PR), and Nweight (NW) are                                                                     However, the failover request for container-3 is blocked from the
+
+
+
+
+                                                                                                            265
+SoCC ’19, November 20–23, 2019, Santa Cruz, CA, USA                                                                                            Wei Chen, Aidi Pi, Shaoqi Wang, and Xiaobo Zhou
+
+
+                                  (a) Kmeans                                            (b) Wordcount                                                  (c) Mixed jobs
+  Normalized makespan
+
+
+
+
+                                                        Normalized makespan
+
+
+
+
+                                                                                                                                                                                             # of successful jobs
+                                                                              3.0                                                        300
+                        6
+
+
+
+
+                                                                                                                        Makespan (min)
+                                    4G      16G   64G                                       4G         16G        64G                                   Makespan                        10
+                                                                              2.5                                                        250
+                                    8G      32G   PF                                        8G         32G        PF                                    Makespan w/o OOM jobs
+                                                                                                                                                                                        8
+                                                                              2.0                                                        200
+                        4                                                                                                                                                  # of
+                                                                                                                                                                                        6
+                                                                              1.5                                                        150                               successful
+                                                                                                                                                                           jobs
+                                                                              1.0                                                        100                                            4
+                        2
+                                                                              0.5                                                        50                                             2
+
+                        0                                                     0.0                                                         0                                             0
+                            1       2       4     8                                 1       2           4         8                            8G      16G      32G      64G       PF
+                                Concurrent runs                                         Concurrent runs                                                   Heap size
+
+
+Figure 7: Performance comparison between Pufferfish and Yarn under various heap sizes. We report the median makespan over
+5 runs of each experiment. A job is submitted 120s later than the previous one. In (a), Kmeans fails with the 4GB heap. With
+the 4GB heap, only Wordcount can finish in (c). We use normalized runtime to report the execution time for an individual job
+since the runtime of different jobs may vary widely. We use the absolute time in Fig 6-(c) since it is a makespan. The makespans
+in (a) and (b) are normalized to a single run of Pufferfish.
+
+
+600t h second to the 1050t h second, as node memory is not available.                                 is an I/O intensive workload and has a maximum profiled memory
+After the memory demand is satisfied, the size of container-1 drops                                   usage of 24GB per container under 64GB heap size. Unlike iterative
+at the 880t h second because Pufferfish detects a memory slack in                                     Kmeans whose cached data can be immediately used in the next
+container-1 and shrinks its size. As a result, the released slack is                                  stage, Wordcount only has two stages (one map and one reduce). As
+immediately allocated to container-3.                                                                 a result, a large memory pool, although it decreases the frequency
+Reclaim function evaluation We submit a Kmeans job (in a FLEX                                         of data spilling, does not gain obvious performance improvement.
+container) along with a set of TPC-H workloads (in REGULAR                                            In this case, the benefit of higher container parallelism outweighs
+containers). Figure 6-(b) shows the memory usage of the FLEX                                          the benefit of a large heap. Pufferfish enables Wordcount to have the
+container and all REGULAR containers, respectively. The FLEX-                                         maximum container parallelism of 4. Thus, as shown in Figure 7-(b),
+container is forced to reclaim memory by swapping memory pages                                        it outperforms the 64GB heap by 1.75x-2.5x for concurrent runs.
+to the disk when facing TPC-H jobs. Thus, the FLEX-container                                          Due to high container parallelism, 8GB heap and 16GB heap outper-
+memory is reclaimed from 58GB to 40GB at around the 400t h sec-                                       form Pufferfish in the makespan. The reason is that Wordcount is
+ond and further reduced to 32GB at around the 670t h second. As a                                     an I/O intensive application without iterative execution. Oversub-
+result, we observe a 1.2x slowdown in the Kmeans job. However,                                        scribing I/O by increasing the parallelism outperforms Pufferfish.
+the timely released memory ensures that REGULAR containers do                                         However, there does not exist one heap size for all workload sce-
+not suffer from memory insufficiency. As shown in Figure 6-(c),                                       narios. Relying on a larger heap or higher container parallelism
+under Yarn’s static memory allocation, the performance of TPC-H                                       does not necessarily improve performance. Pufferfish adaptively
+is severely affected by queuing delay due to head-of-line blocking.                                   sets the container size at runtime to improve cluster utilization and
+With memory reclaim, Pufferfish (mix-PF) achieves an 80% improve-                                     job performance.
+ment over Yarn (mix-YARN) for the 99t h percentile job completion                                         We conduct another experiment with mixed workloads and show
+time.                                                                                                 it in Figure 7-(c). The mixed workloads contain two Wordcount, two
+Container parallelism and performance. To show the benefits                                           Kmeans, two Pagerank and two NWeight jobs. We use the Spark
+of memory elasticity, we compare Pufferfish with Yarn. In Yarn, ap-                                   default failover retry number (4). Only the 64GB-heap and Pufferfish
+plications are set with different heap sizes so that different degrees                                successfully finish all of the jobs. Through adaptive parallelism,
+of container parallelism (the number of concurrently running con-                                     Pufferfish outperforms the 64GB-heap by 26%.
+tainers) on a node are achieved. The trade-off is that less memory                                        This experiment illustrates that Pufferfish exploits more memory
+offers higher parallelism but suffers from suboptimal performance.                                    elasticity in an environment with more memory heterogeneity
+We submit two sets of jobs. One only consists of Kmeans jobs and                                      (Figure 7-(b) vs. Figure 7-(c)). The reason is that Pufferfish can adjust
+the other only consists of Wordcount jobs. Kmeans is a memory-                                        container memory on the fly. In particular, it shrinks container sizes
+intensive and CPU-intensive workload with a maximum profiled                                          of less demanding jobs (e.g., Wordcount) for high demanding jobs
+memory demand of 61GB per container with 64GB heap size. Fig-                                         (e.g., Kmeans) to improve overall concurrency. We also observe that
+ure 7-(a) shows the performance of Kmeans is significant degraded                                     the makespan excluding OOM jobs is 1.2x-2.2x shorter, implying
+under suboptimal heap sizes because of GC activities and data                                         that OOM causes substantial. We further find that it is difficult to
+spilling. However, the 64GB-heap still achieves shorter makespan                                      detect OOM. First, failover execution launches several retries for
+than those with higher container parallelism. For 2 and 4 concurrent                                  a failed task. Second, the default garbage collector is conservative
+runs, the makespan of Pufferfish is better than that of the 64GB-                                     in throwing OOM until it takes 98% of CPU time but releases less
+heap by 33.6% and 35.6%, because Pufferfish enables a container                                       than 2% of heap memory [23]. For a heap close to the size that is
+parallelism of 2 during most of the application runtime while Yarn                                    just enough to avoid OOM, JVM spends a lot of time on useless GC.
+only admits one job (two 64GB Kmeans would exceed 120GB node                                          It also explains why the 32GB heap has a longer makespan than
+capacity). However, Wordcount has a different behavior. Wordcount                                     the 16GB heap. In contrast, by allocating a large heap, Pufferfish
+
+
+
+
+                                                                                                266
+Pufferfish: Container-driven Elastic Memory Management for Data-intensive Applications                                                                                             SoCC ’19, November 20–23, 2019, Santa Cruz, CA, USA
+
+
+                                       (a) Synthetic                                                                     (b) Production                                                                        (c) Production
+                                                                        120
+                                                                                                1.0                                                                                         1.0
+
+
+
+
+                                                                              Completion rate
+   Makespan (min)
+
+
+
+                    400       Small            Small
+                                                                        100
+                              Large            Large                                            0.8                                                                                         0.8
+                    300                                                 80
+
+
+
+
+                                                                                  CDF
+
+
+
+
+                                                                                                                                                                                      CDF
+                                                                                                0.6                                                                   8g                    0.6                                        8g
+                                                                        60                                                                                            16g                                                              16g
+                    200                                                                                                                                                                     0.4
+                                                                                                0.4
+                                                                        40                                                                                            32g                                                              32g
+                    100                                                                         0.2                                                                   64g                   0.2                                        64g
+                                                                        20
+                                                                                                                                                                      PF                                                               PF
+                                                                                                0.0                                                                                         0.0
+                     0                                                  0
+                              8G       16G     32G     64G        PF                                  0.0        2.5     5.0    7.5        10.0                12.5   15.0                        0     10      20     30    40   50
+                                        Heap size                                                                      Normalized runtime                                                                       Usage (%)
+
+
+                                                              Figure 8: Experiment results of the multi-node cluster.
+
+
+
+
+                                                                                                                                      Normalized runtime
+     Table 2: Number of each application mapped in trace.
+                                                                                                                                                                                                         50th
+                                                                                                                                                                                                         90th
+                                                                                                                                                           3
+                    App                WC         KM         PR             NW                  TS          II
+                    Small/Large        23/26      31/20      41/24          3/5                 3           2                                              2
+
+
+                                                                                                                                                           1
+                          Table 3: OOM rate under various heap size.
+                                                                                                                                                           0
+                                                                                                                                                                            KILL                  EJF                EJF+S             SJF
+                    Heap           64GB/pf     32GB       16GB         8GB                4GB
+                                                                                                                                                                                                      Policy
+                    Failure        0           5.1%       17.3%        34.1%              > 60%
+                                                                                                                                      Figure 9: Normalized runtime under various policies.
+ensures successful execution for all applications and shifts unused
+heap quota to others to improve overall performance.
+                                                                                                                                adjusts the memory allocation and container parallelism on each
+5.3                  Pufferfish in the Multi-Node Cluster                                                                       node, avoiding queuing delay and OOM.
+Synthetic workloads. We then evaluate Pufferfish using the syn-                                                                     Figure 8-(c) shows the cluster memory utilization reported by
+thetic workloads on the 26-node cluster. We build the synthetic                                                                 Docker. Pufferfish achieves the highest memory utilization. In par-
+workloads by replicating the mixed workloads in Figure 7-(c) by 20x.                                                            ticular, Pufferfish improves the median memory utilization over
+We run both small workloads and large workloads (corresponding                                                                  Yarn with 64G heap by 2.7x. Note that Yarn with 16GB heap and
+to Table 1) to study the impact of job size on elastic memory man-                                                              8GB heap represent a relatively high memory utilization. However,
+agement. In this experiment, each task is only allowed to fail once                                                             as suboptimal heap size causes OOM, the high memory utilization
+to exclude the overhead caused by failover. As shown in Figure 8-(a),                                                           is the result of useless failover and does not contribute to better job
+Pufferfish achieves the best performance with large workloads as                                                                performance. The improved utilization in Pufferfish with elastic
+Pufferfish is configured with optimal heap and higher parallelism.                                                              memory, on the other hand, is used to host more jobs, increasing
+For small workloads, Pufferfish is a little bit slower than 32-GB heap                                                          the overall parallelism, reducing queuing delay and job runtime.
+(42 mins vs. 52 mins) as the overhead of puff() is more pronounced                                                              Policy evaluation. We evaluate the impact of policy discussed
+when the job is short. However, most importantly, Pufferfish yields                                                             in section 4.3.3 using the same production trace. Figure 9 shows
+no application failure.                                                                                                         the median and 90t h percentile job runtimes. For comparison, we
+Production data-intensive workloads. We replay subsets of the                                                                   also implement a variant of Pufferfish in which elastic memory
+Google trace on our 26-node cluster. The trace contains 178 data-                                                               management is not implemented. In this variant, which we denote
+intensive workloads, all of which are configured with FLEX con-                                                                 as KILL in the figure, each container will puff on its own without
+tainers. The number of each application with small and large input                                                              any coordination with the containers on the same node, and will
+datasets is listed in Table 2 (e.g., WC stands for Wordcount). The job                                                          be killed when its increased memory cannot be met in one puff.
+runtime is normalized to that when running the job in an isolated                                                               We also implement EJF with suspension tolerance and denote it
+environment with a 64GB heap.                                                                                                   as EJF+S. Note that SJF is enabled with suspension tolerance by
+    As shown in Table 3, Pufferfish does not cause OOM. Figure 8-(b)                                                            default to avoid starvation.
+plots the runtime distribution of successfully finished applications.                                                               For the 90t h percentile job runtime, SJF achieve the best perfor-
+It shows Pufferfish outperforms Yarn with the 32GB heap and the                                                                 mance (23% faster than EJF) because (1) it avoids the situation where
+64GB heap by 3.2x and 5.5x respectively for the median job runtime                                                              short jobs are blocked by long jobs, and (2) the completed short jobs
+because of memory elasticity. We further notice that the degraded                                                               soon release enough memory for long jobs. EJF+S improves the
+performance with 32GB and 64GB heaps by Yarn is caused by                                                                       performance of EJF by killing a task which is suspended too long so
+significant queuing delay at ResourceManager. For Yarn with 8GB                                                                 that the relaunched task might be placed on a less intensive node,
+and 16GB, the job failures caused by OOM and intensive GC caused                                                                partially resolving the issue that short jobs are blocked by long jobs.
+by suboptimal heap size ruin performance. Pufferfish automatically                                                              Without coordination of memory management, KILL achieves the
+
+
+
+
+                                                                                                                          267
+SoCC ’19, November 20–23, 2019, Santa Cruz, CA, USA                                                                                                          Wei Chen, Aidi Pi, Shaoqi Wang, and Xiaobo Zhou
+
+
+
+                                         (a) TPC-H jobs                                                                                          (b) Data-intensive jobs
+                   1.0                                                                            1.0
+
+                   0.8                                                                            0.8
+
+                   0.6                                                                            0.6
+      CDF
+
+
+
+
+                                                                                           CDF
+                   0.4                                                                            0.4
+
+                   0.2                                                allone-run                  0.2                                                                                                                               64g
+                                                                      PF-run                                                                                                                                                        PF
+                   0.0                                                                            0.0
+                         20       40        60          80      100            120                                         1                 2                 3                              4           5                 6
+                                             Time (s)                                                                                                  Normalized time
+
+
+                               Figure 10: Results of mixed workloads. (a) TPC-H workloads. (b) Data-intensive workloads.
+
+                                                                                                                                     (a) Parameter φ                                                  (b) Parameter MIN CONT
+                                                             Small     Large
+                  20                                                                                                                                          Kmeans                                                                 Kmeans
+                                                                                                                30                                            Wordcount                  20                                          Wordcount
+   Overhead (%)
+
+
+
+
+                                                                                                                25
+
+
+
+
+                                                                                                 Overhead (%)
+
+
+
+
+                                                                                                                                                                          Overhead (%)
+                  15                                                                                                                                                                     15
+                                                                                                                20
+
+                                                                                                                15                                                                       10
+                  10
+                                                                                                                10
+                                                                                                                                                                                         5
+                  5                                                                                             5
+
+                                                                                                                                                                                         0
+                                                                                                                0
+                  0                                                                                                  0.1       0.2         0.4         0.8          1.6                           1   2            4            8           16
+                          WC       KM       PG          NW     TS         II                                                               φ                                                                  MIN CONT GB
+                                         Applications
+
+
+                                                                                                                                      Figure 12: Parameter sensitivity.
+                   Figure 11: The overhead of different workloads.
+
+                                                                                            Overhead. The overhead caused by Pufferfish comes from the
+                                                                                            application start phase when application containers are puffed
+worst performance. The drawback of SJF is that it requires prior
+                                                                                            from MIN_CONT. During this period, the container is consecutively
+knowledge of job duration.
+                                                                                            suspended and puffed. Figure 11 shows that the overhead during
+Production mixed workloads. This experiment shows that Puffer-
+                                                                                            the start phase is less than 10% across various applications.
+fish can preserve fairness in the presence of low-latency workloads.
+                                                                                               It is also important to evaluate the latency of memory reclaim,
+   The trace contains 38 data-intensive workloads and 576 TPC-H
+                                                                                            since some latency critical applications with REGULAR containers
+workloads. We first compare Pufferfish where mixed workloads
+                                                                                            cannot wait too long during memory reclaim. Our experiment
+are used against Yarn where TPC-H runs alone, to examine the
+                                                                                            shows it takes about 0.5 seconds to reclaim 1 GB memory on our
+memory reclaim overhead. As shown in Figure 10, since Pufferfish
+                                                                                            SSD-backed swap partition. We also expect that future fast storage
+reclaims memory from FLEX containers in a timely manner, Puffer-
+                                                                                            will further reduce the latency.
+fish achieves similar performance to that of Yarn for TPC-H jobs.
+                                                                                            Parameter sensitivity. We evaluate Pufferfish’s overhead under
+However, we also observe a 1.74x slowdown in the 99t h percentile
+                                                                                            various parameters ϕ and MIN_CONT. We run CPU-intensive Kmeans
+latency for Pufferfish due to memory reclaim overhead.
+                                                                                            and I/O-intensive Wordcount applications. As shown in Figures 12-
+   We then run the mixed workloads with both Pufferfish and Yarn.
+                                                                                            (a) and (b), respectively, increasing ϕ and MIN_CONT both result
+For data-intensive workloads, Pufferfish improves the 80t h per-
+                                                                                            in lower overhead because fewer numbers of puff operations are
+centile job runtime over Yarn by 2x due to elastic memory alloca-
+                                                                                            required. Another observation is that this overhead can be amor-
+tion. However, Pufferfish incurs as much as 8x slowdown for the
+                                                                                            tized with increasing of job runtime, since the overhead mainly
+95t h percentile job runtime compared to the fastest (1st percentile)
+                                                                                            occurs during the task start phase. To reduce puff overhead, we
+job runtime by Pufferfish. This is due to the fact that Pufferfish re-
+                                                                                            recommend users use a large ϕ. A large ϕ does not cause memory
+claims memory from FLEX containers to avoid memory allocation
+                                                                                            waste as Pufferfish will finally shrink the unused memory.
+delays for REGULAR containers. This experiment shows Pufferfish
+                                                                                            Spilling vs. Paging. A recently proposed spilling-based approach [24]
+achieves global fair-share for REGULAR containers by reclaiming
+                                                                                            also aims to achieve memory elasticity for data paralleled work-
+over-provisioned memory from FLEX containers. Due to the longer
+                                                                                            loads. In the spilling approach, applications proactively store data
+tail latency, we recommend that users only use FLEX containers
+                                                                                            from memory into disks and release memory. We run Spark Pager-
+for jobs without strict SLOs.
+                                                                                            ank with the spilling approach and Pufferfish’s paging approach.
+                                                                                            For paging, we limit the container size to force swapping but set the
+5.4                Overhead and Parameter Sensitivity                                       64GB optimal heap size. For spilling, we limit the JVM heap size but
+This section evaluates the overhead of Pufferfish and its parameter                         enable spilling by using persist() function on RDDs [48]. Thus,
+sensitivity. The job runtime and overhead are both normalized to                            we provide a fair performance comparison because the physical
+those with a 64 GB heap.                                                                    memory usage is the same. We scale up the memory allocation
+
+
+
+
+                                                                                     268
+Pufferfish: Container-driven Elastic Memory Management for Data-intensive Applications                                SoCC ’19, November 20–23, 2019, Santa Cruz, CA, USA
+
+
+                                                                                               management. As a result, the OS approach lacks contextual infor-
+  Normalized runtime
+
+
+                       10                                                     spilling
+                                                                              paging           mation about the JVM layer or the application layer. Our proposed
+                        8                                                                      container approach utilizes both the OS interfaces through cgroup
+                        6
+                                                                                               and the application context information in user space through Yarn,
+                                                                                               while requiring no modification to the OS source code.
+                        4                                                                      Container approach vs. application approach. It is intuitive to
+                        2
+                                                                                               optimize memory management in the application layer because an
+                                                                                               application understands its memory demands [29, 37]. Although
+                            0.1     0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9              users can specify the memory size of containers upon job submis-
+                                  Mem allocated as fraction of optimal                         sion, dynamically adjusting container size without application’s
+                                                                                               instruction is not supported during runtime. It is also challenging
+                                  Figure 13: Paging vs. spilling.                              to achieve memory elasticity across different application frame-
+                                                                                               works at the application level. For example, it is hard to coordinate
+                                                                                               memory allocation between Spark tasks and Hadoop tasks when
+                                                                                               using an application approach. Checkpoint-based techniques (e.g.,
+(container size for paging and heap size for spilling) as fractions                            CRIU) requires an intrusive modification to applications. Pufferfish
+of the optimal 64GB heap. Figure 13 shows that both approaches                                 aims to dynamically resize the containers during job runtime.
+achieve ideal performance when the allocated memory gets close                                 Container approach vs. JVM approach. Another intuition is to
+to the optimal heap (0.5 or more). The spilling approach wins when                             build memory elasticity into the JVM. [45] proposes dynamically
+less memory is allocated (0.3-0.5) because spilling uses LRU to                                adjusting the JVM heap size to achieve memory elasticity for data
+evict data and follows the data usage pattern. However, when the                               queries. However, this approach relies on the estimation of future
+allocated memory is less than 30% of the optimal, the spilling ap-                             memory usage to determine the target heap size after resizing. It
+proach throws OOM while the paging approach still completes the                                has two major drawbacks. First, the estimation requires application
+execution, though at the cost of a 10x slowdown.                                               runtime information (e.g, column size of a database table), which is
+   The spilling approach can achieve better performance for non-                               hard to (1) generalize to all applications and (2) couple with cluster
+iterative applications with very few execution stages, such as Word-                           schedulers. Second, if the estimation is not right, the JVMs runing
+count or Sort. But for in-memory iterative applications, e.g. Spark                            on the same node collide with each other due to memory contention.
+Kmeans and Pagerank, the spilling approach still suffers from in-                              Our approach, on the other hand, adjusts the container size based
+tensive I/O traffic or even OOM, because the data that is just spilled                         on the JVM memory demand, which is transparent to applications.
+may be needed immediately in the next stage. Thus, the spilling ap-                            Further, our approach avoids memory contention through (1) guar-
+proach does not provide an advantage over paging for in-memory                                 anteed memory isolation between containers; (2) dedicated memory
+iterative applications. In addition, we note there are two challenges                          control through puff and reclaim function. Further, tasks running
+to apply spilling practically, as spilling is an application-aware ap-                         in FLEX containers inherently have a large heap size. Overall, this
+proach: (1) Users have to identify which data blocks (RDDs in Spark)                           benefits the applications as less GC and less spilling are triggered.
+to spill; (2) Users have to figure out an proper heap size that is small                       Container approach vs. virtual machine monitor. Memory
+enough to achieve high parallelism but large enough to avoid OOM.                              management in virtual machines often employs memory ballooning
+Pufferfish is transparent to applications and thus does not suffer                             techniques. Since it is difficult for a virtual machine monitor (VMM)
+from these problems.                                                                           to obtain the actual memory demand directly from the guest OS,
+                                                                                               ballooning is a mechanism that allows the VMM to reclaim memory
+5.5                     Discussion                                                             from a guest OS based on information provided by a ballooning
+REGULAR container vs. FLEX container. Pufferfish allows users                                  driver installed on the guest OS [40, 44]. Pufferfish works in an
+to enforce fairness between FLEX containers and REGULAR con-                                   different way. It obtains the memory demand through OCM heuris-
+tainers in a multi-tenant cluster. In particular, users can launch                             tics, which is not available in memory ballooning. It improves job
+REGULAR containers for applications that require a fixed mem-                                  performance by flexibly puffing OS containers so as to accelerate
+ory budget, while launching FLEX containers for jobs that can run                              individual tasks when node memory is available.
+under a flexible memory budget.
+Application-assisted container resizing. A recent improvement [3]
+to Apache Yarn enables resizing the container size. However, con-
+tainer resizing requires the applications (e.g, Spark Driver) to specify                       6   RELATED WORK
+the amount of memory to be added or reclaimed, which requires                                  Cluster scheduling. Yarn [42] and Mesos [21] are two widely
+intrusive modification to applications. Pufferfish, on the other hand,                         used open-source centralized schedulers. Sparrow [35] is a fully
+relies on puff and reclaim which are transparent to applications.                              distributed scheduler based on random sampling. Hawk [12] and
+Container approach vs. OS approach. Another alternative solu-                                  Mercury [26] both implement a hybrid scheduler to avoid infe-
+tion is to make modifications to the OS and implement elastic mem-                             rior scheduling decisions and balance the trade-off of scheduling
+ory management in the OS level (e.g., in OS memory management).                                quality and scalability. CARBYNE [19] allows applications to altru-
+However, this approach is not practical as current data-intensive ap-                          istically yield their allocated resources to achieve secondary goals.
+plication software stacks contain multiple hierarchies for memory                              GRAPHENE [20] discusses task dependency in cluster scheduling.
+
+
+
+
+                                                                                         269
+SoCC ’19, November 20–23, 2019, Santa Cruz, CA, USA                                                               Wei Chen, Aidi Pi, Shaoqi Wang, and Xiaobo Zhou
+
+
+3sigma [36] proposes scheduling jobs based on their runtime distri-            demands survive from memory pressure, increase task parallelism,
+bution. Medea [16] develops a framework to manage long running                 and significantly improve job performance and cluster utilization.
+applications. Gandiva [46] proposes a scheduler tailored for deep
+learning applications. BIG-C [10] is a preemptive-based framework
+                                                                               8     ACKNOWLEDGMENT
+that improves the performance for latency-critical applications in a
+shared cluster. Elassecutor [29] schedules Spark executors in an elas-         We thank our shepherd Siddhartha Sen and the anonymous review-
+tic manner according to predicted time-varying resource demands.               ers for the valuable feedback. This research was supported in part
+Pufferfish can be implemented on these representative schedulers.              by U.S. NSF grant SHF-1816850.
+Memory management. Pufferfish is closely related to studies
+that address memory pressure. ROLP [8], FACADE [33], Yak [32]                  REFERENCES
+and Broom [17] optimize GC overhead by allocating data items                    [1] Spark-19371. https://issues.apache.org/jira/browse/SPARK-19371.
+in regions. iTask [14] forcibly suspends tasks and performs an                  [2] Tpch standard specification. http://www.tpch.org/tpcc/spec/tpcc.
+                                                                                [3] Yarn-1645. https://issues.apache.org/jira/browse/SPARK-19371/.
+external GC to reduce memory demand. These approaches either                    [4] Hadoop. http://hadoop.apache.org, 2009.
+require users to implement memory management-related code,                      [5] O. Alipourfard, H. H. Liu, J. Chen, S. Venkataraman, M. Yu, and M. Zhang. Cher-
+which requires expertise or mainly focus on GC overhead, which                      rypick: Adaptively unearthing the best cloud configurations for big data analytics.
+                                                                                    In Proc. of USENIX NSDI, 2017.
+still leaves memory pressure as a threat. Recent studies [24, 45]               [6] M. Armbrust, R. S. Xin, C. Lian, Y. Huai, D. Liu, J. K. Bradley, X. Meng, T. Kaftan,
+aim for memory elasticity to improve cluster memory utilization.                    M. J. Franklin, A. Ghodsi, et al. Spark sql: Relational data processing in spark. In
+Both approaches need application assistance to achieve memory                       Pro. of ACM SIGMOD, 2015.
+                                                                                [7] V. Borkar, M. Carey, R. Grover, N. Onose, and R. Vernica. Hyracks: A flexible and
+elasticity.                                                                         extensible foundation for data-intensive computing. In Proc. of IEEE ICDE, 2011.
+Cluster utilization. To improve resource utilization, several stud-             [8] R. Bruno, D. Patrício, J. Simão, L. Veiga, and P. Ferreira. Runtime object lifetime
+                                                                                    profiler for latency sensitive big data applications. In Proc. of ACM Eurosys, 2019.
+ies [30, 31, 47] propose consolidating applications on shared re-               [9] W. Chen, A. Pi, S. Wang, and X. Zhou. Characterizing scheduling delay for
+sources and managing interference at the node level so that appli-                  low-latency data analytics workloads. In Proc. of IEEE IPDPS, 2018.
+cation quality-of-service can be met. Other studies [11, 50] improve           [10] W. Chen, J. Rao, and X. Zhou. Preemptive, low latency datacenter scheduling via
+                                                                                    lightweight virtualization. In Proc. of USENIX ATC, 2017.
+resource management at the datacenter level and achieve higher                 [11] E. Cortez, A. Bonde, A. Muzio, M. Russinovich, M. Fontoura, and R. Bianchini.
+utilization. SDChecker [9] profiles and analyzes the causes of la-                  Resource central: Understanding and predicting workloads for improved resource
+tency in a multi-stack scheduling environment (e.g. Spark on Yarn).                 management in large cloud platforms. In Proc. of the ACM SOSP, 2017.
+                                                                               [12] P. Delgado, F. Dinu, A.-M. Kermarrec, and W. Zwaenepoel. Hawk: Hybrid data-
+Pufferfish exploits memory elasticity for higher memory utilization.                center scheduling. In Proc. of USENIX ATC, 2015.
+   There are efforts that estimate resource usage for long-running             [13] C. Engle, A. Lupher, R. Xin, M. Zaharia, M. J. Franklin, S. Shenker, and I. Stoica.
+                                                                                    Shark: fast data analysis using coarse-grained distributed memory. In Proc. of
+workloads, which have limitations because they either require                       ACM SIGMOD, 2012.
+domain-specific knowledge [43] or a static profiling approach [5].             [14] L. Fang, K. Nguyen, G. Xu, B. Demsky, and S. Lu. Interruptible tasks: Treating
+Relying on estimation by profiling may still results in with OOM                    memory pressure as interrupts for highly scalable data-parallel programs. In
+                                                                                    Proc. of ACM SOSP, 2015.
+errors [1]. Pufferfish is a general-purpose framework that tackles             [15] R. Gandhi, D. Xie, and Y. C. Hu. Pikachu: How to rebalance load in optimizing
+these issues without any assumption about the underlying frame-                     MapReduce on heterogeneous clusters. In Proc. of USENIX ATC, 2013.
+works or how memory is managed in these frameworks.                            [16] P. Garefalakis, K. Karanasos, P. R. Pietzuch, A. Suresh, and S. Rao. Medea:
+                                                                                    scheduling of long running applications in shared production clusters. In Proc.
+Data-parallel Frameworks. Many data-parallel processing frame-                      of the ACM EuroSys, 2018.
+works have been developed to help people facilitate data analysis,             [17] I. Gog, J. Giceva, M. Schwarzkopf, K. Vaswani, D. Vytiniotis, G. Ramalingam,
+                                                                                    M. Costa, D. G. Murray, S. Hand, and M. Isard. Broom: Sweeping out garbage
+model data, and understand data. Hadoop [4] is for massive data                     collection from big data systems. In Proc. of USENIX HotOS, 2015.
+processing on commodity PCs. Spark [49] leverages in-memory                    [18] J. E. Gonzalez, R. S. Xin, A. Dave, D. Crankshaw, M. J. Franklin, and I. Stoica.
+computing to speed up data processing. Shark [13] and Hive [41]                     Graphx: Graph processing in a distributed dataflow framework. In Proc. of USENIX
+                                                                                    OSDI, 2014.
+provide an SQL interface to access data based on Hadoop and Spark.             [19] R. Grandl, M. Chowdhury, A. Akella, and G. Ananthanarayanan. Altruistic
+Tez [39] and Dryad [25] enhance parallel data processing with                       scheduling in multi-resource clusters. In Proc. of USENIX OSDI, 2016.
+strong expression through a DAG of tasks. GraphX [18] enables                  [20] R. Grandl, S. Kandula, S. Rao, A. Akella, and J. Kulkarni. Graphene: Packing and
+                                                                                    dependency-aware scheduling for data-parallel clusters. In Proc. of the USENIX
+users to build and deploy graphs and graph-parallel computation.                    OSDI, 2016.
+Pufferfish is application-agnostic and can help these application              [21] B. Hindman, A. Konwinski, M. Zaharia, A. Ghodsi, A. D. Joseph, R. H. Katz,
+                                                                                    S. Shenker, and I. Stoica. Mesos: A platform for fine-grained resource sharing in
+frameworks survive from memory pressure and achieve better per-                     the data center. In Proc. of USENIX NSDI, 2011.
+formance.                                                                      [22] S. Huang, J. Huang, J. Dai, T. Xie, and B. Huang. The hibench benchmark suite:
+                                                                                    Characterization of the mapreduce-based data analysis. In Proc. of IEEE Data
+                                                                                    Engineering Workshops (ICDEW), 2010.
+                                                                               [23] C. Hunt and B. John. Java performance. Prentice Hall Press, 2011.
+                                                                               [24] C. Iorgulescu, F. Dinu, A. Raza, W. U. Hassan, and W. Zwaenepoel. Don’t cry over
+7    CONCLUSION                                                                     spilled records: Memory elasticity of data-parallel applications and its application
+                                                                                    to cluster scheduling. In Proc. of USENIX ATC, 2017.
+In this paper, we advocate Pufferfish, an elastic memory manager               [25] M. Isard, M. Budiu, Y. Yu, A. Birrell, and D. Fetterly. Dryad: distributed data-
+for data-intensive applications. It tackles both memory pressure                    parallel programs from sequential building blocks. In Proc. of ACM SOSP, 2007.
+                                                                               [26] K. Karanasos, S. Rao, C. Curino, C. Douglas, K. Chaliparambil, G. M. Fumarola,
+and low cluster utilization. The core idea is to run a big JVM in a                 S. Heddaya, R. Ramakrishnan, and S. Sakalanaga. Mercury: Hybrid centralized
+small OS container to avoid OOM and realize cluster memory elas-                    and distributed scheduling in large shared clusters. In Proc. of USENIX ATC, 2015.
+ticity with the puff and reclaim mechanisms. We have implemented               [27] Y. Kwon, M. Balazinska, B. Howe, and J. Rolia. Skewtune: mitigating skew in
+                                                                                    MapReduce applications. In Proc. of ACM SIGMOD, 2012.
+Pufferfish as an independent module in Yarn. Experimental results              [28] Y. Kwon, K. Ren, M. Balazinska, B. Howe, and J. Rolia. Managing skew in hadoop.
+show Pufferfish is able to help applications with large memory                      Proc. of IEEE Data Eng. Bull., 2013.
+
+
+
+
+                                                                         270
+Pufferfish: Container-driven Elastic Memory Management for Data-intensive Applications                                           SoCC ’19, November 20–23, 2019, Santa Cruz, CA, USA
+
+
+[29] L. Liu and H. Xu. Elasecutor: Elastic executor scheduling in data analytics systems.         [40] T.-I. Salomie, G. Alonso, T. Roscoe, and K. Elphinstone. Application level bal-
+     In Proc. of the ACM SoCC, 2018.                                                                   looning for efficient server consolidation. In Proc. of ACM Eurosys, 2013.
+[30] D. Lo, L. Cheng, R. Govindaraju, P. Ranganathan, and C. Kozyrakis. Heracles:                 [41] A. Thusoo, J. S. Sarma, N. Jain, Z. Shao, P. Chakka, S. Anthony, H. Liu, P. Wyckoff,
+     improving resource efficiency at scale. In Proc. of ACM ISCA, 2015.                               and R. Murthy. Hive: a warehousing solution over a map-reduce framework.
+[31] J. Mars, L. Tang, R. Hundt, K. Skadron, and M. L. Soffa. Bubble-up: Increasing                    Proc. of VLDB Endowment, 2009.
+     utilization in modern warehouse scale computers via sensible co-locations. In                [42] V. K. Vavilapalli, A. C. Murthy, C. Douglas, S. Agarwal, M. Konar, R. Evans,
+     Proc. of IEEE/ACM MICRO, 2011.                                                                    T. Graves, J. Lowe, H. Shah, S. Seth, et al. Apache Hadoop YARN: Yet another
+[32] K. Nguyen, L. Fang, G. Xu, B. Demsky, S. Lu, S. Alamian, and O. Mutlu. Yak: A                     resource negotiator. In Proc. of ACM SoCC, 2013.
+     high-performance big-data-friendly garbage collector. In Proc. of USENIX OSDI,               [43] S. Venkataraman, Z. Yang, M. Franklin, B. Recht, and I. Stoica. Ernest: efficient
+     2016.                                                                                             performance prediction for large-scale advanced analytics. In Proc. of USENIX
+[33] K. Nguyen, K. Wang, Y. Bu, L. Fang, J. Hu, and G. Xu. Facade: A compiler and                      NSDI, 2016.
+     runtime for (almost) object-bounded big data applications. In Proc. of ACM SOSP,             [44] C. A. Waldspurger. Memory resource management in vmware esx server. ACM
+     2015.                                                                                             SIGOPS Operating Systems Review, 2002.
+[34] K. Ousterhout, R. Rasti, S. Ratnasamy, S. Shenker, B.-G. Chun, and V. ICSI. Making           [45] J. Wang and M. Balazinska. Elastic memory management for cloud data analytics.
+     sense of performance in data analytics frameworks. In Proc. of USENIX NSDI,                       In Proc. of USENIX ATC, 2017.
+     2015.                                                                                        [46] W. Xiao, R. Bhardwaj, R. Ramjee, M. Sivathanu, N. Kwatra, Z. Han, P. Patel,
+[35] K. Ousterhout, P. Wendell, M. Zaharia, and I. Stoica. Sparrow: distributed, low                   X. Peng, H. Zhao, Q. Zhang, et al. Gandiva: introspective cluster scheduling for
+     latency scheduling. In Proc. of ACM SOSP, 2013.                                                   deep learning. In Proc. of the USENIX OSDI, 2018.
+[36] J. W. Park, A. Tumanov, A. Jiang, M. A. Kozuch, and G. R. Ganger. 3sigma:                    [47] H. Yang, A. Breslow, J. Mars, and L. Tang. Bubble-flux: Precise online qos man-
+     distribution-based cluster scheduling for runtime uncertainty. In Proc. of the                    agement for increased utilization in warehouse scale computers. In Proc. of ACM
+     ACM EuroSys, 2018.                                                                                ISCA, 2013.
+[37] A. Qiao, A. Aghayev, W. Yu, H. Chen, Q. Ho, G. A. Gibson, and E. P. Xing. Litz:              [48] M. Zaharia, M. Chowdhury, T. Das, A. Dave, J. Ma, M. McCauley, M. J. Franklin,
+     Elastic framework for high-performance distributed machine learning. In Proc.                     S. Shenker, and I. Stoica. Resilient distributed datasets: A fault-tolerant abstraction
+     of the USENIX ATC), 2018.                                                                         for in-memory cluster computing. In Proc. of USENIX NSDI, 2012.
+[38] C. Reiss, A. Tumanov, G. R. Ganger, R. H. Katz, and M. A. Kozuch. Heterogeneity              [49] M. Zaharia, R. S. Xin, P. Wendell, T. Das, M. Armbrust, A. Dave, X. Meng, J. Rosen,
+     and dynamicity of clouds at scale: Google trace analysis. In Proc. of ACM SoCC,                   S. Venkataraman, M. J. Franklin, et al. Apache spark: a unified engine for big
+     2012.                                                                                             data processing. Communications of the ACM, 59(11):56–65, 2016.
+[39] B. Saha, H. Shah, S. Seth, G. Vijayaraghavan, A. Murthy, and C. Curino. Apache               [50] Z. Zhang, L. Cherkasova, and B. T. Loo. Exploiting cloud heterogeneity to optimize
+     tez: A unifying framework for modeling and building data processing applications.                 performance and cost of MapReduce processing. In Proc. of ACM SIGMETRICS,
+     In Proc. of ACM SIGMOD, 2015.                                                                     2015.
+
+
+
+
+                                                                                            271
+
