@@ -3,7 +3,10 @@
 CPU가 suspend된(=OCM 상태의) 컨테이너에게 호스트에 여유 메모리가 있다면
 cgroup 메모리 한도(memory.max)를 늘려준다(puff). 호스트 메모리가 빠듯해지면
 이전에 puff했던 컨테이너의 한도를 다시 줄인다(reclaim), 단 puff하기 전
-원래 한도 아래로는 내리지 않는다.
+원래 한도 아래로는 내리지 않는다. 여러 컨테이너 중 무엇을 reclaim할지는
+논문 기본 정책인 EJF(Earliest Job First, §4.3.3)를 따른다 — 가장 먼저
+생성된 컨테이너를 최고 우선순위로 보호하고, 가장 나중에 생성된 컨테이너부터
+reclaim한다.
 
 `docker update --memory/--memory-swap`으로 cgroup의 memory.max를 조정한다.
 suspend_manager와 마찬가지로 puff 전 원래 한도를 컨테이너별로 저장해두고,
@@ -24,7 +27,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from cgroup_utils import CgroupError, get_container_cgroup_path, read_value
+from cgroup_utils import CgroupError, docker_inspect, get_container_cgroup_path, read_value
 
 STATE_DIR = Path(__file__).parent / "state"
 MEMORY_STATE_SUFFIX = "_memory.json"
@@ -178,19 +181,54 @@ def reclaim(container: str, amount_mb: int | None = None) -> int:
     return reclaimed
 
 
+def _container_created_at(container: str) -> str | None:
+    """컨테이너 생성 시각(RFC3339 문자열)을 반환한다. 조회 실패하면 None
+    (컨테이너가 이미 종료/삭제된 경우 등)."""
+    try:
+        return docker_inspect(container, "{{.Created}}")
+    except CgroupError:
+        return None
+
+
+def _sort_reclaim_candidates_ejf(state_paths: list[Path]) -> list[Path]:
+    """EJF(Earliest Job First, 논문 §4.3.3 기본 정책, p.264) 순으로 reclaim
+    후보를 정렬한다.
+
+    "가장 먼저 도착(생성)한 컨테이너가 최고 우선순위(보호), 가장 나중에
+    도착한 컨테이너부터 reclaim"이 원칙이므로, 컨테이너 생성 시각(RFC3339
+    문자열은 사전순 정렬이 시간순 정렬과 일치)을 기준으로 내림차순(가장
+    최근에 생성된 것 먼저) 정렬한다. 생성 시각을 알 수 없는(=이미 종료된)
+    컨테이너의 state 파일은 정리하고 후보에서 제외한다.
+    """
+    entries = []
+    for state_path in state_paths:
+        container = state_path.name[: -len(MEMORY_STATE_SUFFIX)]
+        created_at = _container_created_at(container)
+        if created_at is None:
+            print(
+                f"[puff_manager] {container}: 컨테이너를 더 이상 찾을 수 없어 "
+                "state 파일을 정리합니다"
+            )
+            state_path.unlink(missing_ok=True)
+            continue
+        entries.append((created_at, state_path))
+
+    entries.sort(key=lambda entry: entry[0], reverse=True)
+    return [state_path for _, state_path in entries]
+
+
 def reclaim_host(target_free_mb: int) -> int:
     """호스트 여유 메모리가 target_free_mb 이상이 될 때까지, puff했던
-    컨테이너들 중 가장 최근에 puff한 것부터 순서대로 reclaim한다.
+    컨테이너들을 EJF 우선순위(가장 나중에 생성된 컨테이너부터) 순서로
+    reclaim한다.
 
     여러 컨테이너에 걸쳐 reclaim할 때(다중 컨테이너 환경) 쓰는 host 레벨
     진입점이다. 실제로 회수한 총 MiB를 반환한다.
     """
     STATE_DIR.mkdir(parents=True, exist_ok=True)
     host_total = get_host_memory_total_mb()
-    candidates = sorted(
-        STATE_DIR.glob(f"*{MEMORY_STATE_SUFFIX}"),
-        key=lambda p: p.stat().st_mtime,
-        reverse=True,
+    candidates = _sort_reclaim_candidates_ejf(
+        list(STATE_DIR.glob(f"*{MEMORY_STATE_SUFFIX}"))
     )
 
     reclaimed_total = 0
