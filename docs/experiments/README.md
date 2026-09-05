@@ -11,6 +11,7 @@
 | 4차 | [04-host-reclaim-daemon.md](04-host-reclaim-daemon.md) | 호스트 예산 부족 시 자동으로 `reclaim_host()`를 호출하는 감시 데몬 (⚠️ 논문 재현 아님, 이 프로젝트의 독자 확장 정책 — [pufferfish-architecture.md](../pufferfish-architecture.md) 참고) | 구현 완료 (실습 검증 필요) |
 | 5차 | [05-admission-reclaim.md](05-admission-reclaim.md) | 신규 컨테이너 admission 시점에만 `reclaim_host()`를 호출하는 `admission.py` — 논문 §4.3.1의 실제 reclaim 트리거(lazy reclaim) 재현 | 구현 완료 (실습 검증 필요) |
 | 6차 | [06-priority-reclaim.md](06-priority-reclaim.md) | `reclaim_host()`의 대상 선정을 "최근 puff순"에서 논문 기본 정책 EJF(가장 나중에 생성된 컨테이너부터)로 교체 | 완료 |
+| 7차 | [07-multi-node-cluster.md](07-multi-node-cluster.md) | 논문 §4.3.2 클러스터 레벨 재현 — 마스터 1 + 워커 2 VM, SSH 기반 통신 설계 | 설계만 완료 (구현 전) |
 
 공통 실행 환경(호스트/VM 스펙)은 [`docs/environment.md`](../environment.md)에
 정리돼 있다.
