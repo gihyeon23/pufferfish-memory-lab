@@ -27,6 +27,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import suspend_manager
 from cgroup_utils import CgroupError, docker_inspect, get_container_cgroup_path, read_value
 
 STATE_DIR = Path(__file__).parent / "state"
@@ -36,6 +37,7 @@ PUFF_RATIO = 0.4        # 한 번에 늘리는 비율 (현재 한도 대비)
 HOST_STOP_RATIO = 0.8   # 호스트 메모리의 이 비율까지만 puff 허용
 MIN_PUFF_STEP_MB = 16   # 늘어나는 양이 이보다 작으면 puff를 포기한다
 SWAP_HEADROOM_MB = 128  # docker update --memory-swap = --memory + 이 여유분
+RECLAIM_SAFETY_MARGIN_MB = 32  # reclaim 후 한도가 실사용량보다 이만큼은 위에 있게 함
 
 
 class PuffError(RuntimeError):
@@ -67,6 +69,20 @@ def get_current_memory_limit_mb(container: str) -> int | None:
     return value // (1024 * 1024)
 
 
+def get_current_memory_usage_mb(container: str) -> int:
+    """cgroup memory.current(실제 사용량)를 MiB로 반환한다.
+
+    reclaim()이 이 값보다 낮게 memory.max를 내리면, 커널이 그 자리에서
+    강제로 회수를 시도하다 cgroup OOM killer가 즉시 발동한다(실사용
+    테스트에서 재현됨 — CPU를 suspend해도 막히지 않았다. 커널의 동기적
+    reclaim 경로라 컨테이너의 CPU 쿼터와 무관하기 때문). 그래서 reclaim은
+    이 값 아래로는 절대 내리지 않는다.
+    """
+    cgroup_path = get_container_cgroup_path(container)
+    value = read_value(cgroup_path / "memory.current") or 0
+    return value // (1024 * 1024)
+
+
 def _running_container_names() -> list[str]:
     result = subprocess.run(
         ["docker", "ps", "--format", "{{.Names}}"],
@@ -76,6 +92,22 @@ def _running_container_names() -> list[str]:
     if result.returncode != 0:
         raise PuffError(f"docker ps 실패: {result.stderr.strip()}")
     return [name for name in result.stdout.splitlines() if name]
+
+
+def get_host_budget_mb() -> int:
+    """puff()가 스스로 멈추는 천장(host_total × HOST_STOP_RATIO)."""
+    return int(get_host_memory_total_mb() * HOST_STOP_RATIO)
+
+
+def get_host_free_mb() -> int:
+    """budget(host_total × HOST_STOP_RATIO) 대비 남은 여유(MiB).
+
+    puff()가 넘지 않는 천장과 같은 기준을 쓴다. reclaim/admission이 이걸
+    쓰지 않고 raw host_total 기준으로 "여유"를 계산하면, puff는 80%에서
+    막 거부되기 시작했는데 reclaim/admission은 여전히 "여유 있다"고 판단하는
+    모순이 생긴다(실사용 중 발견한 버그, 03/05 실습 참고).
+    """
+    return get_host_budget_mb() - get_host_assigned_mb()
 
 
 def get_host_assigned_mb() -> int:
@@ -152,6 +184,21 @@ def reclaim(container: str, amount_mb: int | None = None) -> int:
     puff 전 원래 한도(floor) 아래로는 내리지 않는다. amount_mb가 None이면
     원래 한도까지 전부 회수한다. 실제로 회수한 MiB를 반환한다(회수할 게
     없으면 0).
+
+    **실제 사용량(memory.current) 아래로는 절대 내리지 않는다.** 처음에는
+    "CPU를 suspend해서 먼저 낮추면 안전할 것"이라고 가정했지만, 실사용
+    테스트에서 틀렸다고 확인됨 — 이미 suspend된 컨테이너도 한도를 실사용량
+    아래로 내리자마자 즉시 OOM-kill됐다. memory.max를 현재 사용량보다 낮게
+    쓰면 커널이 그 자리에서 동기적으로 회수를 시도하는데, 이건 커널 reclaim
+    경로라 컨테이너의 CPU 쿼터와 무관하게 실패하면 바로 cgroup OOM killer가
+    발동한다. 논문(p.263)도 puff()의 shrink 메커니즘을 "실제 수요보다 큰
+    여유분(slack)만 회수한다"고 설명한다 — 쓰고 있는 메모리까지 강제로
+    뺏으면 안 된다는 원칙은 동일하게 reclaim()에도 적용해야 한다.
+
+    그래도 한도를 줄이기 전에 컨테이너를 suspend(CPU 1%로 제한)해두는 것
+    자체는 유지한다 — OOM을 막아주진 않지만, 이후 회수된 상태에서 계속
+    실행되며 추가로 메모리를 요구하지 않도록 진정시키는 역할은 한다(논문
+    §4.3.1, p.264, "containers under reclaim are suspended").
     """
     state_path = _state_path(container)
     if not state_path.exists():
@@ -163,15 +210,26 @@ def reclaim(container: str, amount_mb: int | None = None) -> int:
     if current_mb is None or current_mb <= floor_mb:
         return 0
 
-    new_mb = floor_mb if amount_mb is None else max(floor_mb, current_mb - amount_mb)
+    usage_mb = get_current_memory_usage_mb(container)
+    safety_floor_mb = max(floor_mb, usage_mb + RECLAIM_SAFETY_MARGIN_MB)
+
+    new_mb = safety_floor_mb if amount_mb is None else max(safety_floor_mb, current_mb - amount_mb)
     if new_mb >= current_mb:
+        print(
+            f"[puff_manager] {container}: 실사용량({usage_mb}MiB)이 이미 커서 "
+            f"reclaim 건너뜀 (한도 {current_mb}MiB 유지)"
+        )
         return 0
+
+    if not suspend_manager.is_suspended(container):
+        suspend_manager.suspend(container)
+        print(f"[puff_manager] {container}: reclaim 전 suspend 적용")
 
     _apply_docker_memory_update(container, new_mb)
     reclaimed = current_mb - new_mb
     print(
         f"[puff_manager] {container}: reclaim 적용 {current_mb}MiB -> {new_mb}MiB "
-        f"(회수 {reclaimed}MiB)"
+        f"(회수 {reclaimed}MiB, 실사용량 {usage_mb}MiB)"
     )
 
     if new_mb <= floor_mb:
@@ -218,22 +276,26 @@ def _sort_reclaim_candidates_ejf(state_paths: list[Path]) -> list[Path]:
 
 
 def reclaim_host(target_free_mb: int) -> int:
-    """호스트 여유 메모리가 target_free_mb 이상이 될 때까지, puff했던
-    컨테이너들을 EJF 우선순위(가장 나중에 생성된 컨테이너부터) 순서로
-    reclaim한다.
+    """budget(host_total × HOST_STOP_RATIO) 대비 여유가 target_free_mb 이상이
+    될 때까지, puff했던 컨테이너들을 EJF 우선순위(가장 나중에 생성된
+    컨테이너부터) 순서로 reclaim한다.
+
+    raw host_total이 아니라 puff()와 같은 budget 기준을 쓴다 — 그렇지 않으면
+    puff는 80%(HOST_STOP_RATIO)에서 스스로 거부하기 시작했는데 reclaim은
+    여전히 100% 기준으로 "여유 있다"고 판단하는 모순이 생긴다(실사용 중
+    발견한 버그, 05 실습 admission.py 라이브 테스트에서 재현됨).
 
     여러 컨테이너에 걸쳐 reclaim할 때(다중 컨테이너 환경) 쓰는 host 레벨
     진입점이다. 실제로 회수한 총 MiB를 반환한다.
     """
     STATE_DIR.mkdir(parents=True, exist_ok=True)
-    host_total = get_host_memory_total_mb()
     candidates = _sort_reclaim_candidates_ejf(
         list(STATE_DIR.glob(f"*{MEMORY_STATE_SUFFIX}"))
     )
 
     reclaimed_total = 0
     for state_path in candidates:
-        free = host_total - get_host_assigned_mb()
+        free = get_host_free_mb()
         if free >= target_free_mb:
             break
         container = state_path.name[: -len(MEMORY_STATE_SUFFIX)]

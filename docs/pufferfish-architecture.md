@@ -84,6 +84,7 @@ CLAUDE.md 워크플로에 따라 논문(`docs/papers/pufferfish-paper.pdf`,
 | puff 비율 | ϕ=40%, backoff 있음 | 40%, backoff 없음 | 단순화 (컨테이너 수 적어 아직 불필요) |
 | **reclaim 트리거** | **신규 컨테이너 admission 실패 시 (lazy)** | **호스트 할당량 90% 초과 시 주기적 폴링** (`host_reclaim_daemon.py`) | **논문 재현 아님 — 이 프로젝트가 OOM 예방용으로 독자 설계한 확장 정책** |
 | reclaim 대상 선정 | 최저 우선순위 OCM 컨테이너 (EJF/SJF) | EJF(가장 나중에 생성된 컨테이너부터), `docker inspect .Created` 기준 | 6차에서 EJF로 교체 완료 — SJF는 job 소요시간 추정이 필요해 미구현 |
+| reclaim의 회수 범위 | "여유분(slack)만 회수, 실제 수요는 안 건드림"(p.263) | `memory.current`(실사용량) + 안전마진 아래로는 안 내림 | 8차에서 추가 — 처음엔 안 지켜서 reclaim 직후 즉시 OOM-kill되는 버그가 있었음 |
 
 **결론**: 04번(`host_reclaim_daemon.py`)은 논문의 reclaim 메커니즘이 아니다.
 논문에 가깝게 재현하려면 "신규 컨테이너 실행 요청 → 가용 메모리 부족 확인 →
