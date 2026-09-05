@@ -34,10 +34,15 @@ rm -f controller/state/*.json
 5초 텀을 두는 이유는 `state/<container>_memory.json`의 mtime을 서로 다르게
 만들어 `reclaim_host`의 "최근 puff 우선" 순서를 눈으로 확인하기 위함이다.
 
+`CHUNK_SIZE_MB=8`을 쓴다 — 아래 "시행착오"에서 다루듯 `32`는 청크 버스트로
+puff가 못 따라가 OOM-kill될 위험이 있다(2026-09-05 재현 테스트에서도
+`32`로 돌렸다가 3개 다 죽는 것을 다시 확인했다). "검증 결과" 절의 로그는
+`32`로도 우연히 성공한 기록이지만, 재현성 있게 돌리려면 `8`을 쓴다.
+
 ```bash
 docker run -d --name pf-test-1 \
   --memory=256m --memory-swap=768m \
-  -e CHUNK_SIZE_MB=32 -e INTERVAL_SECONDS=2 -e MAX_ALLOCATION_MB=1024 \
+  -e CHUNK_SIZE_MB=8 -e INTERVAL_SECONDS=2 -e MAX_ALLOCATION_MB=1024 \
   -e JAVA_OPTS="-Xmx1200m" \
   pufferfish/workload-java:latest
 
@@ -45,7 +50,7 @@ sleep 5
 
 docker run -d --name pf-test-2 \
   --memory=256m --memory-swap=768m \
-  -e CHUNK_SIZE_MB=32 -e INTERVAL_SECONDS=2 -e MAX_ALLOCATION_MB=1024 \
+  -e CHUNK_SIZE_MB=8 -e INTERVAL_SECONDS=2 -e MAX_ALLOCATION_MB=1024 \
   -e JAVA_OPTS="-Xmx1200m" \
   pufferfish/workload-java:latest
 
@@ -53,7 +58,7 @@ sleep 5
 
 docker run -d --name pf-test-3 \
   --memory=256m --memory-swap=768m \
-  -e CHUNK_SIZE_MB=32 -e INTERVAL_SECONDS=2 -e MAX_ALLOCATION_MB=1024 \
+  -e CHUNK_SIZE_MB=8 -e INTERVAL_SECONDS=2 -e MAX_ALLOCATION_MB=1024 \
   -e JAVA_OPTS="-Xmx1200m" \
   pufferfish/workload-java:latest
 ```
@@ -140,6 +145,11 @@ swap_max × 0.95`(포화 상태)도 OR 조건으로 추가했다(`SWAP_SATURATIO
 컨테이너를 다시 5초 간격 실행했다. 이번엔 순수하게 **호스트 예산 경쟁** 때문에
 한 개가 죽었다 — 감지 로직 버그가 아니라 이 실습이 원래 확인하려던 상황
 자체가 재현됐다.
+
+> ⚠️ 이 절의 로그는 `CHUNK_SIZE_MB=32`로 성공한 기록이지만, 2026-09-05에
+> 5차(admission) 실습을 위해 같은 값으로 다시 돌렸을 때는 3개 다 청크
+> 버스트로 죽었다 — `32`는 타이밍에 따라 성공하기도 실패하기도 하는
+> **재현성 없는 값**이다. 위 2)번 실행 명령은 `8`로 갱신해뒀다.
 
 - `pf-test-1`, `pf-test-3`는 puff를 여러 차례 반복하며 계속 살아있었다:
   ```
