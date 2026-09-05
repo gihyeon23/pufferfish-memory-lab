@@ -37,13 +37,19 @@
 
 ```bash
 cd controller
-rm -f state/*.json
+
+# rm -f state/*.json 은 "처음부터 새로 시작할 때만" 실행한다 — 이미
+# pf-test-1/2/3을 띄워서 puff가 진행 중이라면 절대 실행하지 말 것.
+# state/*_memory.json이 그 컨테이너들의 원래 한도(floor) 기록이라, 지우면
+# reclaim_host()가 "puff한 적 없음"으로 보고 회수를 안 해준다.
+rm -f state/*.json   # (새로 시작하는 경우에만)
 
 # 기존 컨테이너를 puff시켜 호스트 예산을 채운 상태를 만든 뒤 (예: 03 실습처럼
-# pf-test-1/2/3을 여러 번 puff), 신규 컨테이너 admission을 시도
+# pf-test-1/2/3을 여러 번 puff — CHUNK_SIZE_MB=8 권장, 03번 참고), 신규
+# 컨테이너 admission을 시도
 python3 admission.py pf-test-4 pufferfish/workload-java:latest \
   --request-mb 512 \
-  --env CHUNK_SIZE_MB=32 --env INTERVAL_SECONDS=2 --env MAX_ALLOCATION_MB=512 \
+  --env CHUNK_SIZE_MB=8 --env INTERVAL_SECONDS=2 --env MAX_ALLOCATION_MB=512 \
   --env JAVA_OPTS="-Xmx600m"
 ```
 
