@@ -37,6 +37,7 @@ Pufferfish는 메모리가 부족한 컨테이너를 바로 종료하는 대신,
 | 4차 | 호스트 예산 부족 시 자동 `reclaim_host()` 트리거 (⚠️ 논문 재현 아님, 독자 확장 정책) | 구현 완료 (실습 검증 필요) | [04-host-reclaim-daemon.md](docs/experiments/04-host-reclaim-daemon.md) |
 | 5차 | 신규 컨테이너 admission 시점 `reclaim_host()` 트리거 (논문 §4.3.1 lazy reclaim 재현) | 구현 완료 (실습 검증 필요) | [05-admission-reclaim.md](docs/experiments/05-admission-reclaim.md) |
 | 6차 | `reclaim_host()` 대상 선정을 EJF 우선순위(논문 §4.3.3 기본 정책)로 교체 | 완료 | [06-priority-reclaim.md](docs/experiments/06-priority-reclaim.md) |
+| 7차 | 멀티 노드 클러스터(마스터 1 + 워커 2) — 논문 §4.3.2 클러스터 레벨 재현 | 설계만 완료 (구현 전) | [07-multi-node-cluster.md](docs/experiments/07-multi-node-cluster.md) |
 
 > 위 단계는 논문의 공식 단계 구분이 아니라, 본 재현 실험을 위해 정의한 구현 순서입니다.
 
@@ -222,3 +223,4 @@ pufferfish-memory-lab/
 - [x] 신규 컨테이너 admission 시점에만 `reclaim_host()`를 호출하는 논문 방식 lazy reclaim 재현 (`admission.py`, 구현 완료 — 실습 검증은 예정)
 - [x] `reclaim_host()` 대상 선정을 EJF 우선순위(가장 나중에 생성된 컨테이너부터)로 교체, "최근 puff순" 대비 다르게 동작함을 검증
 - [ ] 고정 메모리 방식과 동적 메모리 방식 비교
+- [ ] 멀티 노드 클러스터(마스터 1 + 워커 2) — 논문 §4.3.2 클러스터 레벨 재현 (설계 완료, VM 세팅·구현은 예정)
