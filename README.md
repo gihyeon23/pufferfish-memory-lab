@@ -36,6 +36,7 @@ Pufferfish는 메모리가 부족한 컨테이너를 바로 종료하는 대신,
 | 3차 | 다중 컨테이너 환경에서 `reclaim()` 시나리오 검증 | 부분 완료 | [03-multi-container-reclaim.md](docs/experiments/03-multi-container-reclaim.md) |
 | 4차 | 호스트 예산 부족 시 자동 `reclaim_host()` 트리거 (⚠️ 논문 재현 아님, 독자 확장 정책) | 구현 완료 (실습 검증 필요) | [04-host-reclaim-daemon.md](docs/experiments/04-host-reclaim-daemon.md) |
 | 5차 | 신규 컨테이너 admission 시점 `reclaim_host()` 트리거 (논문 §4.3.1 lazy reclaim 재현) | 구현 완료 (실습 검증 필요) | [05-admission-reclaim.md](docs/experiments/05-admission-reclaim.md) |
+| 6차 | `reclaim_host()` 대상 선정을 EJF 우선순위(논문 §4.3.3 기본 정책)로 교체 | 완료 | [06-priority-reclaim.md](docs/experiments/06-priority-reclaim.md) |
 
 > 위 단계는 논문의 공식 단계 구분이 아니라, 본 재현 실험을 위해 정의한 구현 순서입니다.
 
@@ -134,7 +135,7 @@ Allocated: 96 MB
 | `swap_preflight.py` | 본 실험 전 dry-run — `memory.swap.current`가 실제로 0에서 증가하는지 확인. 증가하지 않으면 host/VM swap 설정부터 진단해야 한다 |
 | `container_monitor.py` | 500ms 주기로 `memory.current`/`memory.max`/`memory.swap.current`/`memory.events`/`memory.stat`/`cpu.stat`을 폴링하고 OCM 여부를 판정 |
 | `suspend_manager.py` | OCM 감지 시 CPU를 1%(cpuset 0번 코어)로 제한(`suspend`)하고, 저장해둔 원래 설정으로 복구(`resume`)하는 인터페이스 |
-| `puff_manager.py` | OCM 감지 시 호스트에 여유가 있으면 컨테이너의 `memory.max`를 늘리고(`puff`), 필요하면 원래 한도까지 다시 줄이는(`reclaim`/`reclaim-host`) 인터페이스 |
+| `puff_manager.py` | OCM 감지 시 호스트에 여유가 있으면 컨테이너의 `memory.max`를 늘리고(`puff`), 필요하면 원래 한도까지 다시 줄이는(`reclaim`/`reclaim-host`) 인터페이스. `reclaim-host`의 대상 선정은 EJF(가장 나중에 생성된 컨테이너부터) 정책을 따름 |
 | `host_reclaim_daemon.py` | 호스트 메모리 예산이 부족해지면 `puff_manager.reclaim_host()`를 자동으로 호출하는 감시 데몬 (컨테이너별이 아니라 호스트당 하나만 실행, ⚠️ 논문 재현 아님 — 이 프로젝트의 독자 확장 정책) |
 | `admission.py` | 신규 컨테이너를 `docker run`으로 띄우기 전 가용 메모리를 확인하고, 부족하면 `reclaim_host()`를 호출한 뒤 실행하는 래퍼 (논문 §4.3.1의 실제 reclaim 트리거 재현) |
 
@@ -190,7 +191,8 @@ pufferfish-memory-lab/
 │       ├── 02-puff-reclaim-single.md
 │       ├── 03-multi-container-reclaim.md
 │       ├── 04-host-reclaim-daemon.md
-│       └── 05-admission-reclaim.md
+│       ├── 05-admission-reclaim.md
+│       └── 06-priority-reclaim.md
 └── README.md
 ```
 
@@ -218,4 +220,5 @@ pufferfish-memory-lab/
 - [x] 다중 컨테이너 puff 경쟁 상황 재현, OCM 판정 로직의 swap 포화 blind spot 발견·수정
 - [x] 호스트 예산 부족 시 자동으로 `reclaim_host()`를 호출하는 호스트 레벨 데몬 (`host_reclaim_daemon.py`, 구현 완료 — ⚠️ 논문 재현이 아닌 독자 확장 정책, 다중 컨테이너 경쟁 상황에서의 실습 검증은 예정)
 - [x] 신규 컨테이너 admission 시점에만 `reclaim_host()`를 호출하는 논문 방식 lazy reclaim 재현 (`admission.py`, 구현 완료 — 실습 검증은 예정)
+- [x] `reclaim_host()` 대상 선정을 EJF 우선순위(가장 나중에 생성된 컨테이너부터)로 교체, "최근 puff순" 대비 다르게 동작함을 검증
 - [ ] 고정 메모리 방식과 동적 메모리 방식 비교
