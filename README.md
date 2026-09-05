@@ -34,7 +34,7 @@ Pufferfish는 메모리가 부족한 컨테이너를 바로 종료하는 대신,
 | 1차 | 논문 3장의 CPU 1% 제한 동작 재현 | 완료 | [01-ocm-suspend.md](docs/experiments/01-ocm-suspend.md) |
 | 2차 | 논문 4장의 `puff()`/`reclaim()` 구현 | 완료 | [02-puff-reclaim-single.md](docs/experiments/02-puff-reclaim-single.md) |
 | 3차 | 다중 컨테이너 환경에서 `reclaim()` 시나리오 검증 | 부분 완료 | [03-multi-container-reclaim.md](docs/experiments/03-multi-container-reclaim.md) |
-| 4차 | 호스트 예산 부족 시 자동 `reclaim_host()` 트리거 (⚠️ 논문 재현 아님, 독자 확장 정책) | 구현 완료 (실습 검증 필요) | [04-host-reclaim-daemon.md](docs/experiments/04-host-reclaim-daemon.md) |
+| 4차 | 호스트 예산 부족 시 자동 `reclaim_host()` 트리거 (⚠️ 논문 재현 아님, 독자 확장 정책) | 구현만 완료, **후속 과제로 보류** (논문 재현이 우선) | [04-host-reclaim-daemon.md](docs/experiments/04-host-reclaim-daemon.md) |
 | 5차 | 신규 컨테이너 admission 시점 `reclaim_host()` 트리거 (논문 §4.3.1 lazy reclaim 재현) | 라이브 검증 완료 | [05-admission-reclaim.md](docs/experiments/05-admission-reclaim.md) |
 | 6차 | `reclaim_host()` 대상 선정을 EJF 우선순위(논문 §4.3.3 기본 정책)로 교체 | 완료 | [06-priority-reclaim.md](docs/experiments/06-priority-reclaim.md) |
 | 7차 | 멀티 노드 클러스터(마스터 1 + 워커 2) — 논문 §4.3.2 클러스터 레벨 재현 | 설계만 완료 (구현 전) | [07-multi-node-cluster.md](docs/experiments/07-multi-node-cluster.md) |
@@ -222,7 +222,7 @@ pufferfish-memory-lab/
 - [x] 메모리 부족 상황에서 CPU 사용률 1% 제한 (`suspend_manager.py`)
 - [x] `puff()`/`reclaim()`을 통한 메모리 한도 증감 (`puff_manager.py`, 단일 컨테이너 기준 단위 동작·자동 트리거 모두 검증됨)
 - [x] 다중 컨테이너 puff 경쟁 상황 재현, OCM 판정 로직의 swap 포화 blind spot 발견·수정
-- [x] 호스트 예산 부족 시 자동으로 `reclaim_host()`를 호출하는 호스트 레벨 데몬 (`host_reclaim_daemon.py`, 구현 완료 — ⚠️ 논문 재현이 아닌 독자 확장 정책, 다중 컨테이너 경쟁 상황에서의 실습 검증은 예정)
+- [x] 호스트 예산 부족 시 자동으로 `reclaim_host()`를 호출하는 호스트 레벨 데몬 (`host_reclaim_daemon.py`, 구현만 완료 — ⚠️ 논문 재현이 아닌 독자 확장 정책이라 논문 재현 트랙이 끝날 때까지 검증은 후속으로 보류)
 - [x] 신규 컨테이너 admission 시점에만 `reclaim_host()`를 호출하는 논문 방식 lazy reclaim 재현 (`admission.py`, 구현 완료 — 실습 검증은 예정)
 - [x] `reclaim_host()` 대상 선정을 EJF 우선순위(가장 나중에 생성된 컨테이너부터)로 교체, "최근 puff순" 대비 다르게 동작함을 검증
 - [x] `reclaim()`이 실사용량(memory.current) 아래로 못 내려가게 하는 안전 하한선 추가 — reclaim 직후 즉시 OOM-kill되던 버그를 라이브 테스트로 발견·수정
