@@ -84,11 +84,14 @@ CLI로 직접 확인했다.
 
 [1차 실습](01-ocm-suspend.md#직접-실습해보기-단계별) 절차처럼 `pf-test`를
 띄우고 모니터를 실행하면, OCM 감지 시 로그에
-`puff 완료, 새 메모리 한도 ...MiB`가 찍히는 것을 확인했다. 다만 워크로드가
-청크(예: 32MiB)를 한 번에 다 터치하면서 순간적으로 `memory.current +
-memory.swap.current`가 급증할 수 있는데, 이 증가가 monitor의 폴링 주기
-(500ms)와 `puff()` 내부 `docker update` 실행 시간보다 빠르면 실제 커널
-cgroup OOM killer가 puff보다 먼저 컨테이너를 SIGKILL할 수 있다
+`puff 완료, 새 메모리 한도 ...MiB`가 찍히는 것을 확인했다. 다만 청크(예:
+32MiB)가 `Arrays.fill()`로 반복 터치되며 `memory.current +
+memory.swap.current`가 계속 누적되는데(청크 하나가 한 번에 헤드룸을
+넘겨서가 아니라, **누적되는 속도**의 문제다), 이 누적 속도가 monitor의
+폴링 주기(이 실습에선 `container_monitor.py --interval 0.5` = 500ms, 이건
+CLI 기본값이지 고정 시스템 상수가 아니다)와 `puff()` 내부 `docker update`
+실행 시간을 합친 반응 속도보다 빠르면, 실제 커널 cgroup OOM killer가
+puff보다 먼저 컨테이너를 SIGKILL할 수 있다
 (`docker inspect <container> --format 'OOMKilled={{.State.OOMKilled}}
 ExitCode={{.State.ExitCode}}'`로 확인 가능, `ExitCode=137`이면 SIGKILL).
 
