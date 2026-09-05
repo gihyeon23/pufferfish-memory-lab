@@ -113,9 +113,14 @@ python3 puff_manager.py reclaim-host --target-free-mb 500
 `CHUNK_SIZE_MB=32`로 처음 돌렸을 때, 3개 중 2개(`pf-test-1`, `pf-test-2`)가
 실행 65초 만에 `OOMKilled=true, ExitCode=137`로 죽고 `pf-test-3` 혼자
 살아남았다. 원인은 [02-puff-reclaim-single.md](02-puff-reclaim-single.md#자동-puff-검증-container_monitorpy-연동)에
-정리한 것과 동일 — `Arrays.fill()`이 32MiB를 한 번에 터치하면서 128MiB
-swap 헤드룸을 폴링 주기(500ms)보다 빠르게 넘겨버렸다. `CHUNK_SIZE_MB=8`로
-줄여서 재시도했더니 이 문제는 사라졌다(3개 다 첫 ramp‑up을 넘김).
+정리한 것과 동일 — **"청크 한 번이 128MiB 헤드룸을 한 방에 넘긴다"는 뜻이
+아니라**, `Arrays.fill()`로 청크가 반복 터치되며 `memory.current +
+memory.swap.current`가 누적되는 속도가 monitor의 감지(폴링 주기, 이
+실습에선 `container_monitor.py --interval 0.5` = 500ms)와 `puff()`의
+대응(`docker update` 반영)보다 빨라서, **감지·대응이 따라잡기 전에 여러
+청크가 누적돼** 128MiB swap 헤드룸을 넘기고 커널 cgroup OOM killer가 먼저
+발동한 것이다. `CHUNK_SIZE_MB=8`로 줄여서 재시도했더니 이 문제는
+사라졌다(3개 다 첫 ramp‑up을 넘김).
 
 ### 문제 2 — OCM 판정 로직의 blind spot (swap 포화)
 
