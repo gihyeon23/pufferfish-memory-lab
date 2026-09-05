@@ -21,7 +21,9 @@ import puff_manager
 
 DEFAULT_INTERVAL_SECONDS = 5
 RECLAIM_TRIGGER_RATIO = 0.9   # HOST_STOP_RATIO(0.8)보다 빡빡하게 잡아 puff와 안 부딪히게 함
-RECLAIM_TARGET_FREE_MB = 300  # 회수해서 확보하고 싶은 최소 여유
+RECLAIM_TARGET_FREE_MB = 300  # reclaim_host()에 전달하는 목표치. reclaim_host()가
+                              # budget(host_total×HOST_STOP_RATIO) 기준으로 여유를
+                              # 계산하므로, 이 값도 budget 대비 확보하고 싶은 여유다.
 
 
 def watch(interval: float) -> None:

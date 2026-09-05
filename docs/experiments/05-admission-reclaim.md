@@ -13,7 +13,8 @@
 
 - `controller/admission.py` 신설 — `docker run`을 감싸는 래퍼.
   1. 요청 메모리(`--request-mb`)와 현재 호스트 가용 메모리
-     (`host_total - get_host_assigned_mb()`)를 비교
+     (`puff_manager.get_host_free_mb()`, budget 기준 — 아래 "발견된 버그"
+     참고)를 비교
   2. 부족하면 `puff_manager.reclaim_host()` 호출 (이미 검증된 함수 재사용,
      cgroup 직접 조작 없음 — 04번과 동일한 원칙)
   3. 확보된 여유로 `docker run` 실행
@@ -47,6 +48,26 @@ python3 admission.py pf-test-4 pufferfish/workload-java:latest \
 여유가 이미 충분하면 `reclaim` 없이 바로 `docker run`만 실행되는 로그를
 확인할 수 있고, 부족하면 `reclaim_host` 호출 로그가 먼저 찍힌 뒤 실행된다.
 
+## 발견된 버그: budget 계산 불일치 (라이브 테스트에서 발견, 수정 완료)
+
+실제 3개 컨테이너를 puff시켜 호스트 할당량을 정확히 `budget(=host_total×
+HOST_STOP_RATIO=0.8)`까지 채운 뒤 `admission.py`를 실행했더니, 이미
+`assigned=3119MiB=budget`(사실상 puff가 더는 못 늘리는 한계)인데도
+"여유 충분(free=780MiB)"이라고 판단해 reclaim을 한 번도 안 부르는 문제를
+발견했다.
+
+원인: `admission.py`(및 `puff_manager.reclaim_host()`)가 여유를 계산할 때
+`host_total - assigned`(raw 100% 기준)를 썼다 — `puff()`가 스스로 멈추는
+기준인 `HOST_STOP_RATIO=0.8` budget과 다른 천장이었다. 그 결과 puff는
+80%에서 거부되기 시작하는데 reclaim/admission은 100%까지는 "괜찮다"고
+판단하는 모순이 생겼다.
+
+수정: `puff_manager.get_host_budget_mb()`/`get_host_free_mb()`를 신설해
+`reclaim_host()`와 `admission.py`의 `free_mb()`가 모두 budget 기준으로
+통일하도록 고쳤다. monkeypatch로 `assigned==budget`(3119MiB) 상황을
+재현해, 수정 전 `free_mb()=780MiB`(오판) → 수정 후 `free_mb()=0MiB`
+(정확)로 바뀌는 것을 확인했다.
+
 ## 확인 포인트
 
 - [ ] 호스트 여유가 충분할 때: reclaim 호출 없이 바로 컨테이너가 뜨는지
@@ -61,5 +82,7 @@ python3 admission.py pf-test-4 pufferfish/workload-java:latest \
 
 ## 상태
 
-구현·`py_compile` 확인만 끝났고, 실제 다중 컨테이너 경쟁 상황에서 admission
-트리거가 의도대로 동작하는지는 아직 검증 전이다.
+라이브 테스트(3개 컨테이너 puff → budget 도달 → admission 시도)로 위
+budget 계산 불일치 버그를 발견·수정했다. 수정한 로직 자체는 monkeypatch로
+검증됐지만, **수정된 코드로 다시 다중 컨테이너 경쟁 상황을 재현해 실제로
+reclaim이 트리거되는지**는 아직 재검증 전이다.

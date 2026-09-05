@@ -42,7 +42,15 @@ import puff_manager
 
 
 def free_mb() -> int:
-    return puff_manager.get_host_memory_total_mb() - puff_manager.get_host_assigned_mb()
+    """budget(host_total × HOST_STOP_RATIO) 대비 남은 여유(MiB).
+
+    raw host_total 기준이 아니다 — puff()가 스스로 멈추는 천장과 같은
+    기준을 써야, host 할당량이 puff의 80% 한도에 도달했을 때 admission도
+    "여유 없음"으로 정확히 판단한다(라이브 테스트에서 raw 기준으로
+    계산했다가 80% 도달 시에도 "여유 충분"으로 잘못 판단하는 버그를
+    발견해 고쳤다).
+    """
+    return puff_manager.get_host_free_mb()
 
 
 def ensure_capacity(request_mb: int) -> int:

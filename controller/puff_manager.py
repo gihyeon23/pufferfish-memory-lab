@@ -78,6 +78,22 @@ def _running_container_names() -> list[str]:
     return [name for name in result.stdout.splitlines() if name]
 
 
+def get_host_budget_mb() -> int:
+    """puff()가 스스로 멈추는 천장(host_total × HOST_STOP_RATIO)."""
+    return int(get_host_memory_total_mb() * HOST_STOP_RATIO)
+
+
+def get_host_free_mb() -> int:
+    """budget(host_total × HOST_STOP_RATIO) 대비 남은 여유(MiB).
+
+    puff()가 넘지 않는 천장과 같은 기준을 쓴다. reclaim/admission이 이걸
+    쓰지 않고 raw host_total 기준으로 "여유"를 계산하면, puff는 80%에서
+    막 거부되기 시작했는데 reclaim/admission은 여전히 "여유 있다"고 판단하는
+    모순이 생긴다(실사용 중 발견한 버그, 03/05 실습 참고).
+    """
+    return get_host_budget_mb() - get_host_assigned_mb()
+
+
 def get_host_assigned_mb() -> int:
     """실행 중인 모든 컨테이너의 memory.max 합(MiB).
 
@@ -218,22 +234,26 @@ def _sort_reclaim_candidates_ejf(state_paths: list[Path]) -> list[Path]:
 
 
 def reclaim_host(target_free_mb: int) -> int:
-    """호스트 여유 메모리가 target_free_mb 이상이 될 때까지, puff했던
-    컨테이너들을 EJF 우선순위(가장 나중에 생성된 컨테이너부터) 순서로
-    reclaim한다.
+    """budget(host_total × HOST_STOP_RATIO) 대비 여유가 target_free_mb 이상이
+    될 때까지, puff했던 컨테이너들을 EJF 우선순위(가장 나중에 생성된
+    컨테이너부터) 순서로 reclaim한다.
+
+    raw host_total이 아니라 puff()와 같은 budget 기준을 쓴다 — 그렇지 않으면
+    puff는 80%(HOST_STOP_RATIO)에서 스스로 거부하기 시작했는데 reclaim은
+    여전히 100% 기준으로 "여유 있다"고 판단하는 모순이 생긴다(실사용 중
+    발견한 버그, 05 실습 admission.py 라이브 테스트에서 재현됨).
 
     여러 컨테이너에 걸쳐 reclaim할 때(다중 컨테이너 환경) 쓰는 host 레벨
     진입점이다. 실제로 회수한 총 MiB를 반환한다.
     """
     STATE_DIR.mkdir(parents=True, exist_ok=True)
-    host_total = get_host_memory_total_mb()
     candidates = _sort_reclaim_candidates_ejf(
         list(STATE_DIR.glob(f"*{MEMORY_STATE_SUFFIX}"))
     )
 
     reclaimed_total = 0
     for state_path in candidates:
-        free = host_total - get_host_assigned_mb()
+        free = get_host_free_mb()
         if free >= target_free_mb:
             break
         container = state_path.name[: -len(MEMORY_STATE_SUFFIX)]
