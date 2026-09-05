@@ -68,21 +68,41 @@ HOST_STOP_RATIO=0.8)`까지 채운 뒤 `admission.py`를 실행했더니, 이미
 재현해, 수정 전 `free_mb()=780MiB`(오판) → 수정 후 `free_mb()=0MiB`
 (정확)로 바뀌는 것을 확인했다.
 
+수정 후 실제 CLI로도 재현: 컨테이너 3개(`--memory=900m`)를 띄우고 2개를
+puff시켜 `assigned=budget=3119MiB`(free=0)를 만든 뒤
+`admission.py pf-fix-new alpine --request-mb 200` 실행 —
+
+```
+[admission] 여유 부족 (free=0MiB < request=200MiB) -> reclaim_host 호출
+[puff_manager] pf-fix-b: reclaim 적용 959MiB -> 900MiB (회수 59MiB)
+[puff_manager] pf-fix-b: 원래 한도로 완전히 복구되어 puff 상태 해제
+[puff_manager] pf-fix-a: reclaim 적용 1260MiB -> 1119MiB (회수 141MiB)
+[admission] reclaim 200MiB 회수, reclaim 후 여유 200MiB
+[admission] 실행: docker run -d --name pf-fix-new --memory 200m ...
+[admission] 컨테이너 시작됨: 7ec78f36...
+```
+
+`pf-fix-b`(더 나중에 생성됨)가 EJF 순서대로 먼저 reclaim되고, 부족분은
+`pf-fix-a`에서 마저 회수해 정확히 200MiB를 확보한 뒤 신규 컨테이너가
+정상 실행됐다. 테스트 컨테이너는 종료 후 정리했다.
+
 ## 확인 포인트
 
-- [ ] 호스트 여유가 충분할 때: reclaim 호출 없이 바로 컨테이너가 뜨는지
-- [ ] 호스트 여유가 부족할 때(기존 컨테이너들을 먼저 puff시켜 예산을 채운 뒤):
+- [x] 호스트 여유가 충분할 때: reclaim 호출 없이 바로 컨테이너가 뜨는지
+      (2개 컨테이너만 puff한 상태 — `free=599MiB >= request=200MiB` —
+      에서 reclaim 없이 바로 실행되는 것을 확인)
+- [x] 호스트 여유가 부족할 때(기존 컨테이너들을 먼저 puff시켜 예산을 채운 뒤):
       `admission.py`가 `reclaim_host()`를 호출해 여유를 만들고 나서 컨테이너를
-      띄우는지
+      띄우는지 — 위 "발견된 버그" 절의 재현 로그로 확인
 - [ ] reclaim 후에도 여유가 부족하면 경고 로그를 남기고 그래도 실행되는지
-      (admission 지연을 구현하지 않았으므로 의도된 동작)
+      (admission 지연을 구현하지 않았으므로 의도된 동작) — 아직 직접 재현 안 함
 - [ ] 04번 데몬과 동시에 띄워도 서로 충돌 없이 동작하는지 (둘 다
       `reclaim_host()`를 호출할 뿐 상태를 공유하므로 원칙적으로는 안전할 것으로
       예상 — 실습에서 확인 필요)
 
 ## 상태
 
-라이브 테스트(3개 컨테이너 puff → budget 도달 → admission 시도)로 위
-budget 계산 불일치 버그를 발견·수정했다. 수정한 로직 자체는 monkeypatch로
-검증됐지만, **수정된 코드로 다시 다중 컨테이너 경쟁 상황을 재현해 실제로
-reclaim이 트리거되는지**는 아직 재검증 전이다.
+라이브 테스트(3개 컨테이너 puff → budget 도달 → admission 시도)로 budget
+계산 불일치 버그를 발견·수정하고, 수정된 코드로 "여유 충분"/"여유 부족 →
+reclaim 트리거" 두 경로 모두 실제 CLI로 재검증 완료. 남은 건 admission
+지연 동작과 04번 데몬과의 동시 실행 확인.
