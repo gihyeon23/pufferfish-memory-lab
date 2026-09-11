@@ -95,6 +95,12 @@ puff보다 먼저 컨테이너를 SIGKILL할 수 있다
 (`docker inspect <container> --format 'OOMKilled={{.State.OOMKilled}}
 ExitCode={{.State.ExitCode}}'`로 확인 가능, `ExitCode=137`이면 SIGKILL).
 
+> ⚠️ **귀속 주의**: `SWAP_HEADROOM_MB=128`(MiB)은 **이 프로젝트가 정한
+> 값**이다. 원 저자 공개 구현은 최초 실행에 `--memory-swap -1`(무제한),
+> puff 후 갱신에 `memory + 131072`MiB(약 128GiB) 여유를 쓴다(1024배 차이).
+> 아래의 "헤드룸 대비 청크 크기" 문제는 우리 재현 환경 고유의 제약이다
+> ([pufferfish-architecture.md](../pufferfish-architecture.md) §2.5).
+
 즉 `SWAP_HEADROOM_MB`(고정 128MiB)와 `CHUNK_SIZE_MB`, monitor `--interval`
 사이의 비율이 puff의 안정성에 직접 영향을 준다 — 청크 크기가 헤드룸 대비
 너무 크거나 폴링 주기가 너무 길면, puff가 따라잡기 전에 OOM-kill이 먼저

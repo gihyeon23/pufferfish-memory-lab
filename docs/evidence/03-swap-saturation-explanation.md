@@ -5,6 +5,18 @@
 "delta_swap_current=0이 문제였다는 게 진짜냐, 아니면 화면 출력(디스플레이)
 문제 아니냐"는 질문에 답하기 위한 원본 증거.
 
+> ⚠️ **귀속 주의 (먼저 읽을 것)**: 아래에서 다루는 `delta_swap_current` 기반
+> 판정과 128MiB swap 상한은 **모두 이 프로젝트의 cgroup v2 재현 구현에서
+> 나온 것**이며, Pufferfish 원본의 동작이 아니다.
+> - 논문(§3.2)은 OCM을 `mem+swap > limit AND swapping activities`로만
+>   서술하고 **측정 방법을 명시하지 않는다**
+> - 원 저자 공개 구현(`ContainerImpl.getIsOutofMemory()`)은
+>   `memory+swap > limit` **단일 조건만** 쓰고 delta를 전혀 쓰지 않는다
+> - 원 구현의 swap 여유는 최초 `--memory-swap -1`(무제한), 갱신 후
+>   약 128GiB로 우리(128MiB)보다 1024배 크다
+>
+> 자세한 대조: [pufferfish-architecture.md](../pufferfish-architecture.md) §2.5
+
 - 원본 로그 전체: [03-swap-saturation-raw-monitor-2.log](03-swap-saturation-raw-monitor-2.log)
   (422줄, 컨테이너 `pf-test-2`를 500ms 간격으로 폴링한 실제 기록)
 - git 커밋 `e81c26b`(`docs: 3차 다중 컨테이너 실습 로그 갱신`)에서 그대로
@@ -61,7 +73,8 @@ current=980.7MiB swap=127.8MiB max=981.0MiB delta_swap_current=0       swap_satu
 못 늘어나니(포화), 늘어나는 메모리 수요가 고스란히 `current`로 쌓이다가
 `memory.max`(981MiB)에 닿아 OOM-kill됐다.
 
-당시 OCM 판정 로직(`over_limit AND swap_activity`)은 `delta_swap_current`가
+당시 **이 프로젝트의** OCM 판정 로직(`over_limit AND swap_activity`)은
+`delta_swap_current`가
 0이면 "swap 활동 없음 = 문제없음"으로 오판했다 — 실제로는 "더 도망갈
 곳이 없어서 활동을 못 하는 것"인데. 이 blind spot을 고치기 위해
 `swap_saturated`(swap.current가 swap.max의 95% 이상) 조건을 OR로

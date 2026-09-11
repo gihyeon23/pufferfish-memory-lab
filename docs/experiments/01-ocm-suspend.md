@@ -133,6 +133,16 @@ rm -f controller/state/*.json
 
 ## OCM 판정 로직
 
+> ⚠️ **귀속 주의**: 논문(§3.2)은 OCM 조건을
+> `memory usage + swap usage > memory limit` **AND** `swapping activities
+> detected`로만 서술하고, **swapping activity를 어떤 카운터/delta로
+> 측정하는지는 명시하지 않는다.** 또한 원 저자 공개 구현
+> (`ContainerImpl.getIsOutofMemory()`)은 `currentUsedMemory +
+> currentUsedSwap > limitedMemory` **단일 조건만** 검사하며 delta를 전혀
+> 쓰지 않는다. 따라서 아래의 delta 기반 판정은 **논문/원 구현을 옮긴 것이
+> 아니라, 이 프로젝트가 cgroup v2 환경에서 내린 해석**이다. 자세한 대조는
+> [docs/pufferfish-architecture.md](../pufferfish-architecture.md) §2.5 참고.
+
 `memory.current + memory.swap.current > memory.max` 이면서
 (swapping activity가 있거나, swap이 이미 포화 상태일 때) OCM으로 판정한다.
 swapping activity는 우선 `memory.stat`의 `pswpin`/`pswpout` delta로 판단하되,
@@ -141,7 +151,8 @@ delta > 0을 fallback으로 사용한다(이 프로젝트의 실험 환경, 커�
 확인됨). `workingset_refault_anon`은 판정에 쓰지 않고 참고용으로만 로그에
 남긴다.
 
-> **업데이트 (3차 다중 컨테이너 실습 중 발견)**: `memory.swap.current`가 이미
+> **업데이트 (3차 다중 컨테이너 실습 중 발견 — 우리 delta 해석의 사각지대)**:
+> `memory.swap.current`가 이미
 > `memory.swap.max`에 도달해 더 늘어날 수 없는 상태가 되면 delta가 영구히
 > 0이 되어 "swapping activity 없음"으로 오판됐다. 이 경우 실제로는 가장 위험한
 > 상황(swap도 꽉 찼는데 `memory.current`만 한도로 계속 올라가는 중)인데도 OCM이
