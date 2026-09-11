@@ -140,6 +140,47 @@ commandMemory.add(memory_swap.toString()+"m");
 기본 동작이 아니라, 이 프로젝트가 cgroup v2 재현 과정에서 추가한 작은 swap
 상한 때문에 발생한 현상이다.**
 
+### ⚠️ cgroup 버전은 논문에 명시되지 않는다
+
+논문 전체에서 cgroup 언급은 4곳뿐이며(p.259 "via Linux cgroup", p.260
+"through the cgroup subsystem", p.263, p.266) **전부 버전 표기가 없다**
+(`cgroup v1`/`v2` 문자열 검색 0건). 원 공개 구현도 Docker/YARN 기반이라
+2019년 시점상 v1 추정은 가능하지만 **코드에 명시된 근거는 없다**.
+
+따라서 발표·문서에서 **"논문은 cgroup v1 기반"이라고 단정하면 안 된다.**
+정확한 표현:
+
+| 구분 | cgroup 버전 |
+|---|---|
+| 논문 본문 | **미명시** |
+| 원 공개 구현 | 미명시 (Docker/YARN, 2019년 시점) |
+| 현재 프로젝트 | **cgroup v2** (확인됨) |
+
+### 원 설계의 thrashing 대응은 suspend다 (trade-off 정리)
+
+"원 구현은 swap 상한이 사실상 없으니 thrashing에 취약하다"고만 쓰면
+**부정확하다.** 논문 **§3.2의 제목 자체가 "Suppressing Memory
+Thrashing"**이고, p.260에 다음과 같이 명시돼 있다:
+
+> "...its CPU resource to a very low level such that **thrashing is
+> throttled**"
+
+즉 원 설계는 **"사실상 무제한 swap + CPU 1% suspend + `--oom-kill-disable`"
+이 한 세트**로 동작하며, suspend가 thrashing의 **속도**를 억제한다
+(Figure 3에서 reclaim 시 2GB/s였던 디스크 I/O가 CPU 1% 적용 후 1MB/s
+이하로 떨어지는 것을 실측, p.261).
+
+다만 suspend는 **총 swap 사용량 자체를 제한하지는 않으므로**, 컨테이너
+수가 늘어나면 호스트 swap 용량이라는 물리적 한계는 남는다. 두 방식의
+trade-off를 정리하면:
+
+| 방식 | 억제하는 것 | 남는 위험 |
+|---|---|---|
+| 무제한 swap + suspend (원 설계) | thrashing **속도** (CPU 스로틀) | 호스트 swap **총량** 고갈 |
+| `SWAP_HEADROOM_MB=128` 고정 (현재 프로젝트) | 컨테이너별 swap **총량** | 컨테이너 **조기 OOM-kill** |
+
+이 대비가 이 프로젝트의 후속 연구 질문으로 이어진다(§4.3).
+
 ### 슬랙 축소 조건 — 실사용량 기준
 
 원 구현에도 `SLACK_FACTOR = 1.1`과
@@ -160,6 +201,9 @@ commandMemory.add(memory_swap.toString()+"m");
 | swap 제한 | 구체적 수치 미명시 | 최초 무제한(`-1`), 갱신 후 약 128GiB 여유 | 고정 128MiB 여유 |
 | 증가율 `M(t+δ)/M(t)` 사용 | **puff 비율 ϕ 결정용** | 40% 기본 비율 | 향후 OCM 보조 신호로 검토(미구현) |
 | `delta=0` 사각지대 | 직접 다루지 않음 | delta를 안 쓰므로 해당 없음 | **우리 초기 구현에서 발생** |
+| OOM killer | 언급 없음 | `--oom-kill-disable`로 비활성 | 활성(기본값) |
+| thrashing 대응 | **CPU 1% suspend로 억제**(§3.2) | 동일(suspend 구현) | 동일(suspend 구현) |
+| cgroup 버전 | **미명시** | 미명시(Docker/YARN, 2019) | cgroup v2 |
 
 ### 3.2 기존 항목별 비교
 
@@ -201,3 +245,28 @@ commandMemory.add(memory_swap.toString()+"m");
   puff 크기 결정 보조값으로만 쓸 것.
   ⚠️ 논문의 `M(t+δ)/M(t)`는 **ϕ(puff 비율) 결정 방법**이므로(p.263),
   이를 "논문이 제시한 OCM 개선 방법"이라고 쓰면 안 된다.
+
+### 4.3 도출된 연구 질문
+
+§2.5의 trade-off 표(무제한 swap + suspend vs. 고정 128MiB)에서 다음 질문이
+나온다:
+
+> **컨테이너 생존성과 호스트 안전성을 동시에 만족하는 swap 정책은
+> 무엇인가?**
+
+- 원 설계(무제한 + suspend): 컨테이너는 살지만 호스트 swap 총량이 무보호
+- 현재 프로젝트(128MiB 고정): 호스트는 보호되나 컨테이너가 조기 OOM-kill
+
+후속 과제(우선순위 순):
+
+1. `memory.swap.events`의 `max`/`fail`로 **swap 상한 충돌을 커널에서 직접
+   감지** — 고정 95% 비율을 대체
+2. 고정 임계값 대신 **커널 이벤트 기반 OCM 판정**으로 전환
+3. **워크로드 수요에 따른 동적 swap headroom** (고정 128MiB 대신
+   `memory.max`에 비례 또는 실측 수요 기반)
+4. **호스트 전체 swap 예산 + 컨테이너별 상한 결합** (두 축을 동시에 제약)
+5. **동일 로그에 3가지 판정 비교** — 논문/원 구현 방식(`mem+swap>limit`
+   단일 조건), 우리 OLD(delta), 우리 NEW(delta+포화).
+   → 이미 [docs/evidence/05-ab-test-script.py](evidence/05-ab-test-script.py)가
+   OLD/NEW 2종 비교를 하므로, **판정 함수 하나만 추가하면 바로 실행
+   가능**하다

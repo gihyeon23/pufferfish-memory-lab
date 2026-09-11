@@ -57,6 +57,29 @@ current=0.3MiB
 사라졌다는 뜻). 화면 출력 버그라면 이런 물리적 붕괴 패턴이 나올 수
 없다.
 
+## 이 로그가 증명하는 것 / 증명하지 않는 것
+
+| | 내용 |
+|---|---|
+| ✅ 증명함 | swap이 128MiB 부근에서 **정체**하고 `memory.current`는 계속 증가했다 |
+| ✅ 증명함 | 커널이 **실제로** OOM-kill했다 (`memory.events` `oom_kill=1`, `current` 붕괴) |
+| ✅ 증명함 | 화면 출력·버퍼링 문제가 아니다 (`cpu.usage_usec` 단조 증가) |
+| ❌ 증명하지 **않음** | "**128MiB 상한이 원인**"까지는 이 로그만으로 말할 수 없다 |
+
+마지막 항목이 중요하다. 이 로그는 **"swap이 128MiB에서 멈췄다"**는
+현상까지만 보여준다. **"128MiB가 부족했기 때문이다"**라는 인과는
+swap 상한을 풀어보는 별도 실험
+([04-swap-headroom-increase-experiment.md](04-swap-headroom-increase-experiment.md))과
+합쳐야 성립한다:
+
+```
+[실험 1: 이 로그]  swap 128MiB 정체 + current 상승 + 실제 OOM-kill
+[실험 2: 상한 확대] 상한 풀면 실제로 183~191MiB까지 사용
+        ↓ 두 실험을 합치면
+128MiB 상한 → 필요한 swap을 못 씀 → memory.current 증가
+            → memory.max 도달 → OOM-kill
+```
+
 ## 핵심 구간: swap 포화 → OCM 미감지 상태 지속
 
 ```
