@@ -1,0 +1,27 @@
+설정: CHUNK_SIZE_MB=8, INTERVAL_SECONDS=2, MAX_ALLOCATION_MB=1024
+[2026-09-18 04:46:13.885] 할당 #1 | +8MiB | 누적 8MiB | alloc_fill=18.939ms | JVM used=9MiB committed=15MiB max=1160MiB
+[2026-09-18 04:46:15.904] 할당 #2 | +8MiB | 누적 16MiB | alloc_fill=17.008ms | JVM used=17MiB committed=31MiB max=1160MiB
+[2026-09-18 04:46:17.926] 할당 #3 | +8MiB | 누적 24MiB | alloc_fill=20.817ms | JVM used=25MiB committed=42MiB max=1160MiB
+[2026-09-18 04:46:19.933] 할당 #4 | +8MiB | 누적 32MiB | alloc_fill=5.369ms | JVM used=33MiB committed=42MiB max=1160MiB
+[2026-09-18 04:46:21.966] 할당 #5 | +8MiB | 누적 40MiB | alloc_fill=31.487ms | JVM used=41MiB committed=81MiB max=1160MiB
+[2026-09-18 04:46:23.987] 할당 #6 | +8MiB | 누적 48MiB | alloc_fill=18.672ms | JVM used=50MiB committed=81MiB max=1160MiB
+[2026-09-18 04:46:26.021] 할당 #7 | +8MiB | 누적 56MiB | alloc_fill=29.802ms | JVM used=57MiB committed=81MiB max=1160MiB
+[2026-09-18 04:46:28.025] 할당 #8 | +8MiB | 누적 64MiB | alloc_fill=0.513ms | JVM used=66MiB committed=81MiB max=1160MiB
+[2026-09-18 04:46:30.067] 할당 #9 | +8MiB | 누적 72MiB | alloc_fill=41.477ms | JVM used=73MiB committed=158MiB max=1160MiB
+[2026-09-18 04:46:32.071] 할당 #10 | +8MiB | 누적 80MiB | alloc_fill=1.404ms | JVM used=82MiB committed=158MiB max=1160MiB
+[2026-09-18 04:46:34.077] 할당 #11 | +8MiB | 누적 88MiB | alloc_fill=4.616ms | JVM used=90MiB committed=158MiB max=1160MiB
+[2026-09-18 04:46:36.086] 할당 #12 | +8MiB | 누적 96MiB | alloc_fill=7.460ms | JVM used=98MiB committed=158MiB max=1160MiB
+[2026-09-18 04:46:38.100] 할당 #13 | +8MiB | 누적 104MiB | alloc_fill=12.352ms | JVM used=106MiB committed=158MiB max=1160MiB
+[2026-09-18 04:46:40.133] 할당 #14 | +8MiB | 누적 112MiB | alloc_fill=31.531ms | JVM used=113MiB committed=158MiB max=1160MiB
+[2026-09-18 04:46:42.136] 할당 #15 | +8MiB | 누적 120MiB | alloc_fill=1.084ms | JVM used=122MiB committed=158MiB max=1160MiB
+[2026-09-18 04:46:44.139] 할당 #16 | +8MiB | 누적 128MiB | alloc_fill=1.125ms | JVM used=130MiB committed=158MiB max=1160MiB
+[2026-09-18 04:46:46.142] 할당 #17 | +8MiB | 누적 136MiB | alloc_fill=1.336ms | JVM used=138MiB committed=158MiB max=1160MiB
+[2026-09-18 04:46:48.146] 할당 #18 | +8MiB | 누적 144MiB | alloc_fill=1.102ms | JVM used=146MiB committed=158MiB max=1160MiB
+[2026-09-18 04:46:50.226] 할당 #19 | +8MiB | 누적 152MiB | alloc_fill=76.619ms | JVM used=153MiB committed=352MiB max=1160MiB
+[2026-09-18 04:46:52.232] 할당 #20 | +8MiB | 누적 160MiB | alloc_fill=4.133ms | JVM used=163MiB committed=352MiB max=1160MiB
+[2026-09-18 04:46:54.243] 할당 #21 | +8MiB | 누적 168MiB | alloc_fill=8.850ms | JVM used=171MiB committed=352MiB max=1160MiB
+[2026-09-18 04:46:56.253] 할당 #22 | +8MiB | 누적 176MiB | alloc_fill=5.387ms | JVM used=179MiB committed=352MiB max=1160MiB
+[2026-09-18 04:46:58.263] 할당 #23 | +8MiB | 누적 184MiB | alloc_fill=6.955ms | JVM used=187MiB committed=352MiB max=1160MiB
+[2026-09-18 04:47:00.272] 할당 #24 | +8MiB | 누적 192MiB | alloc_fill=7.121ms | JVM used=195MiB committed=352MiB max=1160MiB
+[2026-09-18 04:47:02.289] 할당 #25 | +8MiB | 누적 200MiB | alloc_fill=15.778ms | JVM used=203MiB committed=352MiB max=1160MiB
+[2026-09-18 04:47:04.303] 할당 #26 | +8MiB | 누적 208MiB | alloc_fill=12.551ms | JVM used=211MiB committed=352MiB max=1160MiB

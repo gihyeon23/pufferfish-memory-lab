@@ -18,7 +18,7 @@ import java.util.List;
 public final class MemoryGrowthWorkload {
 
     private static final DateTimeFormatter TIMESTAMP_FORMAT =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
     private static final long BYTES_PER_MB = 1024L * 1024L;
 
@@ -53,14 +53,20 @@ public final class MemoryGrowthWorkload {
                             now(), config.maxAllocationMb);
                 } else {
                     try {
+                        // 할당 + 전 페이지 터치에 걸린 실제 시간을 측정한다.
+                        // swap이 걸리면 fill() 안에서 page fault -> 디스크 I/O가
+                        // 동기적으로 발생하므로 이 값이 크게 늘어난다.
+                        long startNanos = System.nanoTime();
                         byte[] chunk = new byte[(int) chunkSizeBytes];
                         fill(chunk);
+                        long elapsedMicros = (System.nanoTime() - startNanos) / 1_000L;
+
                         retainedChunks.add(chunk);
                         totalAllocatedBytes += chunkSizeBytes;
                         allocationCount++;
 
                         logAllocation(memoryBean, allocationCount, config.chunkSizeMb,
-                                totalAllocatedBytes);
+                                totalAllocatedBytes, elapsedMicros);
                     } catch (OutOfMemoryError e) {
                         System.err.printf(
                                 "[%s] OutOfMemoryError 발생. 누적 할당량: %d MiB (%d회 할당)%n",
@@ -87,14 +93,15 @@ public final class MemoryGrowthWorkload {
     }
 
     private static void logAllocation(MemoryMXBean memoryBean, int allocationCount,
-            long chunkSizeMb, long totalAllocatedBytes) {
+            long chunkSizeMb, long totalAllocatedBytes, long elapsedMicros) {
         MemoryUsage heapUsage = memoryBean.getHeapMemoryUsage();
         System.out.printf(
-                "[%s] 할당 #%d | +%dMiB | 누적 %dMiB | JVM used=%dMiB committed=%dMiB max=%dMiB%n",
+                "[%s] 할당 #%d | +%dMiB | 누적 %dMiB | alloc_fill=%.3fms | JVM used=%dMiB committed=%dMiB max=%dMiB%n",
                 now(),
                 allocationCount,
                 chunkSizeMb,
                 totalAllocatedBytes / BYTES_PER_MB,
+                elapsedMicros / 1000.0,
                 heapUsage.getUsed() / BYTES_PER_MB,
                 heapUsage.getCommitted() / BYTES_PER_MB,
                 heapUsage.getMax() / BYTES_PER_MB);
