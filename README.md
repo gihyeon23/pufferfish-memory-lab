@@ -190,8 +190,8 @@ pufferfish-memory-lab/
 │   ├── evidence/
 │   ├── lab-meetings/
 │   │   └── 2026-09-21/        # 랩미팅 날짜별 패키지
-│   │       ├── 2026-09-21.md
-│   │       └── (실험 로그·결과)
+│   │       ├── 2026-09-21.md          # 랩미팅 메인(작업 1·2·3)
+│   │       └── 01-swap-off-latency/   # 실험 패키지(설계·결과·원본 로그)
 │   └── experiments/
 │       ├── README.md
 │       ├── 01-ocm-suspend.md
