@@ -189,7 +189,9 @@ pufferfish-memory-lab/
 │   ├── pufferfish-architecture.md
 │   ├── evidence/
 │   ├── lab-meetings/
-│   │   └── 2026-09-21.md
+│   │   └── 2026-09-21/        # 랩미팅 날짜별 패키지
+│   │       ├── 2026-09-21.md
+│   │       └── (실험 로그·결과)
 │   └── experiments/
 │       ├── README.md
 │       ├── 01-ocm-suspend.md
@@ -232,7 +234,7 @@ pufferfish-memory-lab/
 - [x] 신규 컨테이너 admission 시점에만 `reclaim_host()`를 호출하는 논문 방식 lazy reclaim 재현 (`admission.py`, 구현 완료 — 실습 검증은 예정)
 - [x] `reclaim_host()` 대상 선정을 EJF 우선순위(가장 나중에 생성된 컨테이너부터)로 교체, "최근 puff순" 대비 다르게 동작함을 검증
 - [x] `reclaim()`이 실사용량(memory.current) 아래로 못 내려가게 하는 안전 하한선 추가 — reclaim 직후 즉시 OOM-kill되던 버그를 라이브 테스트로 발견·수정
-- [ ] **(9/21 랩미팅)** swap 차단(쿠버네티스 조건)에서 OOM killer 동작 확인 + 할당 응답시간 측정 — [lab-meetings/2026-09-21.md](docs/lab-meetings/2026-09-21.md)
+- [ ] **(9/21 랩미팅)** swap 차단(쿠버네티스 조건)에서 OOM killer 동작 확인 + 할당 응답시간 측정 — [lab-meetings/2026-09-21.md](docs/lab-meetings/2026-09-21/2026-09-21.md)
 - [x] **(9/21 랩미팅)** 원 논문이 admission controller인지 검증 → 아니며 "elastic memory manager"임을 확인
 - [x] **(9/21 랩미팅)** EJF 우선순위 심화 조사 → 논문은 우선순위를 3곳에 쓰나 현재는 reclaim 순서 1곳만 구현했음을 확인
 - [ ] 고정 메모리 방식과 동적 메모리 방식 비교
