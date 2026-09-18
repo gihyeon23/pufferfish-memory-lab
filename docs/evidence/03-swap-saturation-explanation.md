@@ -5,6 +5,18 @@
 "delta_swap_current=0이 문제였다는 게 진짜냐, 아니면 화면 출력(디스플레이)
 문제 아니냐"는 질문에 답하기 위한 원본 증거.
 
+> ⚠️ **귀속 주의 (먼저 읽을 것)**: 아래에서 다루는 `delta_swap_current` 기반
+> 판정과 128MiB swap 상한은 **모두 이 프로젝트의 cgroup v2 재현 구현에서
+> 나온 것**이며, Pufferfish 원본의 동작이 아니다.
+> - 논문(§3.2)은 OCM을 `mem+swap > limit AND swapping activities`로만
+>   서술하고 **측정 방법을 명시하지 않는다**
+> - 원 저자 공개 구현(`ContainerImpl.getIsOutofMemory()`)은
+>   `memory+swap > limit` **단일 조건만** 쓰고 delta를 전혀 쓰지 않는다
+> - 원 구현의 swap 여유는 최초 `--memory-swap -1`(무제한), 갱신 후
+>   약 128GiB로 우리(128MiB)보다 1024배 크다
+>
+> 자세한 대조: [pufferfish-architecture.md](../pufferfish-architecture.md) §2.5
+
 - 원본 로그 전체: [03-swap-saturation-raw-monitor-2.log](03-swap-saturation-raw-monitor-2.log)
   (422줄, 컨테이너 `pf-test-2`를 500ms 간격으로 폴링한 실제 기록)
 - git 커밋 `e81c26b`(`docs: 3차 다중 컨테이너 실습 로그 갱신`)에서 그대로
@@ -45,6 +57,29 @@ current=0.3MiB
 사라졌다는 뜻). 화면 출력 버그라면 이런 물리적 붕괴 패턴이 나올 수
 없다.
 
+## 이 로그가 증명하는 것 / 증명하지 않는 것
+
+| | 내용 |
+|---|---|
+| ✅ 증명함 | swap이 128MiB 부근에서 **정체**하고 `memory.current`는 계속 증가했다 |
+| ✅ 증명함 | 커널이 **실제로** OOM-kill했다 (`memory.events` `oom_kill=1`, `current` 붕괴) |
+| ✅ 증명함 | 화면 출력·버퍼링 문제가 아니다 (`cpu.usage_usec` 단조 증가) |
+| ❌ 증명하지 **않음** | "**128MiB 상한이 원인**"까지는 이 로그만으로 말할 수 없다 |
+
+마지막 항목이 중요하다. 이 로그는 **"swap이 128MiB에서 멈췄다"**는
+현상까지만 보여준다. **"128MiB가 부족했기 때문이다"**라는 인과는
+swap 상한을 풀어보는 별도 실험
+([04-swap-headroom-increase-experiment.md](04-swap-headroom-increase-experiment.md))과
+합쳐야 성립한다:
+
+```
+[실험 1: 이 로그]  swap 128MiB 정체 + current 상승 + 실제 OOM-kill
+[실험 2: 상한 확대] 상한 풀면 실제로 183~191MiB까지 사용
+        ↓ 두 실험을 합치면
+128MiB 상한 → 필요한 swap을 못 씀 → memory.current 증가
+            → memory.max 도달 → OOM-kill
+```
+
 ## 핵심 구간: swap 포화 → OCM 미감지 상태 지속
 
 ```
@@ -61,7 +96,8 @@ current=980.7MiB swap=127.8MiB max=981.0MiB delta_swap_current=0       swap_satu
 못 늘어나니(포화), 늘어나는 메모리 수요가 고스란히 `current`로 쌓이다가
 `memory.max`(981MiB)에 닿아 OOM-kill됐다.
 
-당시 OCM 판정 로직(`over_limit AND swap_activity`)은 `delta_swap_current`가
+당시 **이 프로젝트의** OCM 판정 로직(`over_limit AND swap_activity`)은
+`delta_swap_current`가
 0이면 "swap 활동 없음 = 문제없음"으로 오판했다 — 실제로는 "더 도망갈
 곳이 없어서 활동을 못 하는 것"인데. 이 blind spot을 고치기 위해
 `swap_saturated`(swap.current가 swap.max의 95% 이상) 조건을 OR로

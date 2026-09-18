@@ -187,6 +187,9 @@ pufferfish-memory-lab/
 ├── docs/
 │   ├── environment.md
 │   ├── pufferfish-architecture.md
+│   ├── evidence/
+│   ├── lab-meetings/
+│   │   └── 2026-09-21.md
 │   └── experiments/
 │       ├── README.md
 │       ├── 01-ocm-suspend.md
@@ -196,7 +199,8 @@ pufferfish-memory-lab/
 │       ├── 05-admission-reclaim.md
 │       ├── 06-priority-reclaim.md
 │       ├── 07-multi-node-cluster.md
-│       └── 08-reclaim-safety-floor.md
+│       ├── 08-reclaim-safety-floor.md
+│       └── 09-single-node-final.md
 └── README.md
 ```
 
@@ -208,6 +212,8 @@ pufferfish-memory-lab/
 | `experiments/results` | 로그 및 측정 결과 (현재 비어 있음) |
 | `docs` | 환경 구성 문서 |
 | `docs/experiments` | 실험 단계별 실행 방법·검증 결과 문서 |
+| `docs/evidence` | 원본 로그 등 검증 근거 자료 (교수님 질문 대응용) |
+| `docs/lab-meetings` | 랩미팅 날짜별 준비/보고 문서 |
 
 > `experiments/`(설정·로그 데이터)와 `docs/experiments/`(실행 방법 문서)는
 > 이름은 비슷하지만 용도가 다르다 — 헷갈리지 않도록 주의.
@@ -221,10 +227,13 @@ pufferfish-memory-lab/
 - [x] cgroup의 메모리·swap·CPU 상태 수집 (`container_monitor.py`)
 - [x] 메모리 부족 상황에서 CPU 사용률 1% 제한 (`suspend_manager.py`)
 - [x] `puff()`/`reclaim()`을 통한 메모리 한도 증감 (`puff_manager.py`, 단일 컨테이너 기준 단위 동작·자동 트리거 모두 검증됨)
-- [x] 다중 컨테이너 puff 경쟁 상황 재현, OCM 판정 로직의 swap 포화 blind spot 발견·수정
+- [x] 다중 컨테이너 puff 경쟁 상황 재현, **이 프로젝트의 delta 기반 OCM 판정**에 있던 swap 포화 blind spot 발견·수정 (논문·원 공개 구현의 결함이 아님 — [pufferfish-architecture.md](docs/pufferfish-architecture.md) §2.5 참고)
 - [x] 호스트 예산 부족 시 자동으로 `reclaim_host()`를 호출하는 호스트 레벨 데몬 (`host_reclaim_daemon.py`, 구현만 완료 — ⚠️ 논문 재현이 아닌 독자 확장 정책이라 논문 재현 트랙이 끝날 때까지 검증은 후속으로 보류)
 - [x] 신규 컨테이너 admission 시점에만 `reclaim_host()`를 호출하는 논문 방식 lazy reclaim 재현 (`admission.py`, 구현 완료 — 실습 검증은 예정)
 - [x] `reclaim_host()` 대상 선정을 EJF 우선순위(가장 나중에 생성된 컨테이너부터)로 교체, "최근 puff순" 대비 다르게 동작함을 검증
 - [x] `reclaim()`이 실사용량(memory.current) 아래로 못 내려가게 하는 안전 하한선 추가 — reclaim 직후 즉시 OOM-kill되던 버그를 라이브 테스트로 발견·수정
+- [ ] **(9/21 랩미팅)** swap 차단(쿠버네티스 조건)에서 OOM killer 동작 확인 + 할당 응답시간 측정 — [lab-meetings/2026-09-21.md](docs/lab-meetings/2026-09-21.md)
+- [x] **(9/21 랩미팅)** 원 논문이 admission controller인지 검증 → 아니며 "elastic memory manager"임을 확인
+- [x] **(9/21 랩미팅)** EJF 우선순위 심화 조사 → 논문은 우선순위를 3곳에 쓰나 현재는 reclaim 순서 1곳만 구현했음을 확인
 - [ ] 고정 메모리 방식과 동적 메모리 방식 비교
 - [ ] 멀티 노드 클러스터(마스터 1 + 워커 2) — 논문 §4.3.2 클러스터 레벨 재현 (설계 완료, VM 세팅·구현은 예정)

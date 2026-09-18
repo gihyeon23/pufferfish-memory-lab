@@ -45,10 +45,43 @@ python3 container_monitor.py pf-swap-2 --interval 0.5 > swap-exp-2.log &
 실제 안정적인 swap 수요가 그 정도라는 뜻). `docker inspect` 결과 두
 컨테이너 다 `OOMKilled=false`로 생존.
 
+## 이 실험이 증명하는 것 / 증명하지 않는 것
+
+| | 내용 |
+|---|---|
+| ✅ 증명함 | **이 프로젝트의** 128MiB 상한이 실제 수요를 잘랐다 |
+| ✅ 증명함 | 이 워크로드는 실제로 183~191MiB의 swap을 썼다 |
+| ❌ 증명하지 **않음** | 원 Pufferfish에도 128MiB swap 상한 문제가 있다 |
+| ❌ 증명하지 **않음** | 이것이 논문 알고리즘의 구조적 결함이다 |
+
+원 저자 공개 구현은 최초 실행에 `--memory-swap -1`(호스트 범위 내 무제한),
+puff 후 갱신에 `memory + 131072`MiB(**약 128GiB** 여유)를 사용한다. 즉
+**128MiB라는 작은 상한 자체가 이 프로젝트의 cgroup v2 재현 과정에서 추가한
+제약**이며, 원 구현보다 1024배 작다
+([pufferfish-architecture.md](../pufferfish-architecture.md) §2.5 참고).
+
+### 그렇다면 "swap을 크게 주면 무조건 안전한가"
+
+아니다 — **두 방식은 서로 다른 위험을 막는 trade-off**다. 원 설계는
+"무제한 swap + CPU 1% suspend + `--oom-kill-disable`"이 한 세트로,
+논문 §3.2("Suppressing Memory Thrashing")가 명시하듯 suspend가 thrashing의
+**속도**를 억제한다. 다만 suspend는 **총 swap 사용량 자체는 제한하지
+않으므로** 컨테이너 수가 늘면 호스트 swap 총량이 한계가 된다.
+
+| 방식 | 억제하는 것 | 남는 위험 |
+|---|---|---|
+| 무제한 swap + suspend (원 설계) | thrashing **속도** | 호스트 swap **총량** 고갈 |
+| 128MiB 고정 (현재 프로젝트) | 컨테이너별 swap **총량** | 컨테이너 **조기 OOM-kill** |
+
+→ 이 대비에서 후속 연구 질문("컨테이너 생존성과 호스트 안전성을 동시에
+만족하는 swap 정책은?")이 나온다
+([pufferfish-architecture.md](../pufferfish-architecture.md) §4.3).
+
 ## 결론
 
 **교수님 질문이 맞았다.** 원래 실험의 `swap=127.9MiB`는 워크로드의 진짜
-수요가 아니라 `SWAP_HEADROOM_MB=128`이라는 인위적 상한에 막힌 값이었다.
+수요가 아니라 `SWAP_HEADROOM_MB=128`(이 프로젝트가 설정한 값)이라는 인위적
+상한에 막힌 값이었다.
 실제 수요는 그보다 40~50% 더 컸다(183~191MiB). 상한을 풀어주자 그 실제
 수요만큼 자연스럽게 안정화됐고, 128MiB로 막혀 있었을 때는 그 초과분이
 swap으로 못 빠지고 `memory.current`로 쌓여 결국 OOM-kill로 이어진

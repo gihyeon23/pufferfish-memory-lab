@@ -13,9 +13,22 @@
 ([05-ab-test-script.py](05-ab-test-script.py)).
 
 ```
-OLD (3차 당시 버그 로직) : over_limit AND swap_activity
-NEW (현재 수정된 로직)    : over_limit AND (swap_activity OR swap_saturated)
+OLD (우리 초기 cgroup v2 해석) : over_limit AND swap_activity(delta 기반)
+NEW (우리 보완 로직)            : over_limit AND (swap_activity OR swap_saturated)
 ```
+
+> ⚠️ **귀속 주의**: 여기서 비교하는 OLD/NEW는 **둘 다 이 프로젝트의 구현**
+> 이다. Pufferfish 원본과는 다음과 같이 다르다:
+> - 논문(§3.2)은 `mem+swap > limit AND swapping activities`로만 서술하고
+>   **측정 방법을 명시하지 않는다**
+> - 원 저자 공개 구현(`ContainerImpl.getIsOutofMemory()`)은
+>   `memory+swap > limit` **단일 조건만** 쓰며 **delta를 전혀 쓰지 않는다**
+>   → 원 구현에는 `delta=0` 사각지대가 애초에 존재하지 않는다
+>
+> 즉 이 실험은 **"논문/원 구현의 결함을 발견한 것"이 아니라, "논문의
+> swapping activity 문장을 delta로 해석한 우리 초기 구현의 사각지대를
+> 확인하고 보완한 것"**이다.
+> ([pufferfish-architecture.md](../pufferfish-architecture.md) §2.5)
 
 같은 시점, 같은 입력값을 쓰므로 "실행 조건이 달라서 결과가 달랐다"는
 반박이 원천 차단된다. 두 판정이 갈리는 폴링이 곧 "옛 로직이 놓쳤던
@@ -73,7 +86,24 @@ NEW (현재 수정된 로직)    : over_limit AND (swap_activity OR swap_saturat
 문제가 아니라 실제로 발생하는 논리적 사각지대이며, `swap_saturated`
 조건이 그것을 메워 실제 개입(puff)을 유발했다**는 것이 직접 증명됐다.
 
-## ⚠️ 함께 발견된 한계 (정직하게 기록)
+### 이 실험이 증명하는 것 / 증명하지 않는 것
+
+| | 내용 |
+|---|---|
+| ✅ 증명함 | 우리 초기 판정(`over_limit AND delta_swap>0`)에 사각지대가 있었다 |
+| ✅ 증명함 | 우리 `swap_saturated` 보완이 이 실험에서 실제로 작동해 puff를 유발했다 |
+| ❌ 증명하지 **않음** | 원 저자 공개 구현도 `delta=0` 때문에 OCM을 놓친다 (원 구현은 delta를 안 씀) |
+| ❌ 증명하지 **않음** | 원 Pufferfish 알고리즘의 결함을 발견했다 |
+
+## ⚠️ 함께 발견된 한계 — **고정 95% 포화 판정의 경계 조건**
+
+> **표현 주의**: 이것은 "puff가 없는 환경의 한계"가 **아니다.** puff 부재는
+> 원인이 아니라 이 사각지대가 **드러난 조건**일 뿐이다. 원인은
+> **`SWAP_SATURATION_RATIO = 0.95`라는 고정 임계값 자체의 경계 조건**이다.
+>
+> 또한 이 한계는 **논문의 한계가 아니라 이 프로젝트가 추가한 보완 로직의
+> 한계**다 — 논문은 포화 임계값 개념을 제시하지 않으며, 원 공개 구현에도
+> 없다(원 구현은 `memory+swap > limit` 단일 조건).
 
 실험 1·2(puff 없이 관찰만)에서는 **불일치가 0회**였다. 이유:
 
@@ -83,12 +113,25 @@ NEW (현재 수정된 로직)    : over_limit AND (swap_activity OR swap_saturat
 - 실험 2에서는 한도 초과(`over=1`) 폴링 166회 중 **158회를 두 로직 모두
   미감지**했다
 
-즉 이 수정은 **swap이 상한의 95%를 실제로 넘겼을 때만 작동**하며, 그
-아래에서 멈추면 여전히 사각지대가 남는다. puff가 함께 돌 때는 memory.max가
-계속 커지며 swap을 반복적으로 상한까지 밀어붙여 포화가 자주 발생하지만
-(실험 3에서 266회), puff가 없거나 swap이 애매하게 멈추는 경우에는
-감지되지 않는다.
+즉 이 보완은 **swap이 상한의 95%를 실제로 넘겼을 때만 작동**하며, 그 바로
+아래(예: 94.9%)에서 멈추면 사각지대가 그대로 남는다 — **고정 비율
+임계값이 갖는 구조적 경계 조건**이다.
 
-**향후 개선 방향(미구현)**: `SWAP_SATURATION_RATIO`를 낮추거나, swap 수치
-대신 "`memory.current`가 `memory.max`에 근접하며 상승 중"이라는 더 견고한
-신호를 추가하는 것.
+puff가 함께 도는 환경(실험 3)에서는 `memory.max`가 계속 커지며 swap을
+반복적으로 상한까지 밀어붙이므로 포화가 자주 발생해(266회) 이 경계 문제가
+잘 드러나지 않았고, puff 없이 관찰만 한 실험 1·2에서 비로소 드러났다.
+**즉 puff 부재가 원인이 아니라, 임계값 경계가 원인이고 puff 부재는 그것이
+노출된 조건이다.**
+
+**향후 개선 방향(미구현, 전부 이 프로젝트의 아이디어)**:
+
+- 커널이 직접 주는 신호로 교체 — `memory.swap.events`의 `max`/`fail`
+  (swap 할당 실패), `memory.events`의 `max`, PSI
+  (95% 포화 비율은 이런 직접 신호를 못 쓸 때의 **fallback**이다)
+- `SWAP_SATURATION_RATIO` 하향 조정
+- `memory.current` 상승 추세: **OCM 단독 근거가 아니라** 조기 경고 또는
+  puff 크기 결정 보조값으로만.
+  ⚠️ 논문의 `M(t+δ)/M(t)`는 **ϕ(puff 비율) 결정 방법**이므로(p.263),
+  이를 "논문이 제시한 OCM 개선 방법"으로 쓰면 안 된다.
+- 논문 충실 재현 방향으로는, 원 공개 구현과 동일한 판정
+  (`memory+swap > limit` 단일 조건)을 별도 기준으로 두고 비교하는 실험

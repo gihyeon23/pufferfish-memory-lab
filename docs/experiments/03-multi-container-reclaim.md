@@ -122,7 +122,16 @@ memory.swap.current`가 누적되는 속도가 monitor의 감지(폴링 주기, 
 발동한 것이다. `CHUNK_SIZE_MB=8`로 줄여서 재시도했더니 이 문제는
 사라졌다(3개 다 첫 ramp‑up을 넘김).
 
-### 문제 2 — OCM 판정 로직의 blind spot (swap 포화)
+### 문제 2 — 우리 delta 기반 OCM 판정의 blind spot (swap 포화)
+
+> ⚠️ **귀속 주의**: 이 사각지대는 **Pufferfish 원본(논문·저자 공개 구현)의
+> 결함이 아니다.** 논문은 swapping activity 측정법을 명시하지 않으며, 원
+> 공개 구현(`ContainerImpl.getIsOutofMemory()`)은 delta를 쓰지 않고
+> `memory+swap > limit` 순간값만 본다. 아래 문제는 **논문의 "swapping
+> activities" 문장을 delta로 해석한 이 프로젝트 초기 구현에서 발생한
+> 것**이다. 또한 아래 128MiB swap 상한도 우리 설정이며, 원 구현은 최초
+> `--memory-swap -1`(무제한)/갱신 후 약 128GiB 여유를 쓴다
+> ([pufferfish-architecture.md](../pufferfish-architecture.md) §2.5).
 
 청크를 줄인 뒤에도 이번엔 3개가 **비슷한 시점에 동시에** 죽었다. 로그를 보면
 공통적으로:
