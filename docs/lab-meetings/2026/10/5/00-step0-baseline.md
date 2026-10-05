@@ -74,7 +74,9 @@ getent hosts pufferfish-lab
 - 측정 시점은 **VM 1대(4GB)만 돌던 상태**인데 macOS가 이미 **swap 7GB를 쓰고 있다**
 - 여기에 VM을 2대 더(+6GB) 올리면 호스트가 심하게 thrashing → **측정값 자체가 오염된다**
   (Step 6~9에서 "메모리 압박 때문에 느려진 것"인지 "맥이 스왑해서 느려진 것"인지 구분 불가)
-- 측정 당시 Docker Desktop·브라우저 등이 떠 있었을 가능성이 큼 → **정리 후 재측정 필요**
+- 측정 당시 Docker Desktop·브라우저 등이 떠 있었을 가능성이 큼 → 정리 후 재측정하되,
+  macOS swap은 앱 종료 후에도 바로 줄지 않으므로 **절대값이 아니라 VM 기동 전/후 증가량과
+  `memory_pressure` 추세**를 지표로 쓴다
 
 ### 디스크
 
@@ -89,7 +91,7 @@ getent hosts pufferfish-lab
 
 | 노드 | vCPU | RAM | 근거 |
 |---|---:|---:|---|
-| control | 2 | **1536 MB** | NameNode + ResourceManager만. 워크로드 컨테이너 없음 |
+| control | 2 | **1536 MB** | NameNode + ResourceManager만. 워크로드 컨테이너 없음. **기동용 예산** — Hadoop 기동 후 부족하면 Step 2에서 상향 |
 | worker1 | 3 | **3584 MB** | NodeManager + DataNode + executor |
 | worker2 | 3 | **3584 MB** | 동일 |
 | **합계** | **8 / 10** | **8.5 GB / 16 GB** | macOS에 7.5GB 확보 |
@@ -129,6 +131,8 @@ getent hosts pufferfish-lab
 - [x] macOS 호스트 실측 (RAM 16GB / 10코어 / swap 7GB 사용 중 / 디스크 107GB 여유)
 - [x] VM 3대 자원 배분 확정 (control 2vCPU·1536MB, worker 3vCPU·3584MB ×2)
 - [ ] 맥 정리(Docker Desktop 등 종료) 후 swap 재측정
+  - ⚠️ macOS swap은 앱을 종료해도 **즉시 줄지 않는다**(지연 회수 + 메모리 압축).
+    절대값이 아니라 **VM 기동 전/후 증가량과 `memory_pressure` 추세**로 판단한다
 - [x] 기존 `pufferfish-lab` VM 처리 방침 확정 → **보존**
 - [x] P1 `/etc/hosts` 수정 (2026-10-05 완료 — `getent hosts pufferfish-lab` → `127.0.1.1` 확인)
 - [x] P2 네트워크 모드 확정 → **NAT Network + 고정 IP**
