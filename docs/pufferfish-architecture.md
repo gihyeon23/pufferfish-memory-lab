@@ -134,7 +134,8 @@ commandMemory.add(memory_swap.toString()+"m");
 ```
 
 `m`(MiB) 접미사가 붙으므로 추가 swap 여유는 **131072MiB ≈ 128GiB**.
-현재 프로젝트의 `SWAP_HEADROOM_MB = 128`(MiB)과 비교하면 **1024배 차이**다.
+현재 프로젝트의 `SWAP_HEADROOM_MB = 512`(MiB, 10차에서 128 → 512)와 비교하면
+**256배 차이**다(128MiB였을 때는 1024배).
 
 ➡️ **결론: 우리 실습에서 관찰된 "128MiB swap 포화" 현상은 원 Pufferfish의
 기본 동작이 아니라, 이 프로젝트가 cgroup v2 재현 과정에서 추가한 작은 swap
@@ -177,7 +178,7 @@ trade-off를 정리하면:
 | 방식 | 억제하는 것 | 남는 위험 |
 |---|---|---|
 | 무제한 swap + suspend (원 설계) | thrashing **속도** (CPU 스로틀) | 호스트 swap **총량** 고갈 |
-| `SWAP_HEADROOM_MB=128` 고정 (현재 프로젝트) | 컨테이너별 swap **총량** | 컨테이너 **조기 OOM-kill** |
+| `SWAP_HEADROOM_MB=512` 고정 (현재 프로젝트, 10차 이전에는 128) | 컨테이너별 swap **총량** | 컨테이너 **조기 OOM-kill**(128일 때 실제 발생) |
 
 이 대비가 이 프로젝트의 후속 연구 질문으로 이어진다(§4.3).
 
@@ -215,7 +216,7 @@ trade-off를 정리하면:
 | **reclaim 트리거** | **신규 컨테이너 admission 실패 시 (lazy)** | **호스트 할당량 90% 초과 시 주기적 폴링** (`host_reclaim_daemon.py`) | **논문 재현 아님 — 이 프로젝트가 OOM 예방용으로 독자 설계한 확장 정책** |
 | reclaim 대상 선정 | 최저 우선순위 OCM 컨테이너 (EJF/SJF) | EJF(가장 나중에 생성된 컨테이너부터), `docker inspect .Created` 기준 | 6차에서 EJF로 교체 완료 — SJF는 job 소요시간 추정이 필요해 미구현 |
 | reclaim의 회수 범위 | "여유분(slack)만 회수, 실제 수요는 안 건드림"(p.263) | `memory.current`(실사용량) + 안전마진 아래로는 안 내림 | 8차에서 추가 — 처음엔 안 지켜서 reclaim 직후 즉시 OOM-kill되는 버그가 있었음. 원 공개 구현도 `SLACK_FACTOR=1.1` 기반 실사용량 비교를 하므로 취지는 동일 |
-| swap 여유(headroom) | 구체적 수치 미명시 | `SWAP_HEADROOM_MB=128`(MiB) 고정 | **논문·원 구현 어느 쪽도 아닌 우리 설정** — 원 구현은 최초 `-1`(무제한), 갱신 후 약 128GiB (§2.5) |
+| swap 여유(headroom) | 구체적 수치 미명시 | `SWAP_HEADROOM_MB=512`(MiB) 고정 (10차에서 128 → 512) | **논문·원 구현 어느 쪽도 아닌 우리 설정** — 원 구현은 최초 `-1`(무제한), 갱신 후 약 128GiB (§2.5). 변경 근거는 [10-swap-headroom-512.md](experiments/10-swap-headroom-512.md) |
 | OOM killer | 언급 없음 | 활성(기본값) | 원 구현은 `--oom-kill-disable`로 비활성화 — 우리 실습의 OOM-kill 관찰은 이 차이에서 비롯됨 |
 
 **결론**: 04번(`host_reclaim_daemon.py`)은 논문의 reclaim 메커니즘이 아니다.
