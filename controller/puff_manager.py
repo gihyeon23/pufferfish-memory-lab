@@ -36,7 +36,13 @@ MEMORY_STATE_SUFFIX = "_memory.json"
 PUFF_RATIO = 0.4        # 한 번에 늘리는 비율 (현재 한도 대비)
 HOST_STOP_RATIO = 0.8   # 호스트 메모리의 이 비율까지만 puff 허용
 MIN_PUFF_STEP_MB = 16   # 늘어나는 양이 이보다 작으면 puff를 포기한다
-SWAP_HEADROOM_MB = 128  # docker update --memory-swap = --memory + 이 여유분
+SWAP_HEADROOM_MB = 512  # docker update --memory-swap = --memory + 이 여유분
+                        # 128 -> 512 (10차). 128은 워크로드 실수요(183~191MiB)를
+                        # 잘라 조기 OOM-kill을 유발했고(docs/evidence/04), 실습
+                        # 기동 명령이 주는 swap(--memory-swap=768m - --memory=256m
+                        # = 512MiB)을 puff가 도리어 128MiB로 줄이고 있었다.
+                        # 512도 논문·원 구현의 값이 아닌 이 프로젝트의 선택이다
+                        # (원 구현은 최초 -1=무제한, 갱신 후 약 128GiB).
 RECLAIM_SAFETY_MARGIN_MB = 32  # reclaim 후 한도가 실사용량보다 이만큼은 위에 있게 함
 
 

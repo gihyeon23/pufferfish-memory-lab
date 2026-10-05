@@ -13,6 +13,8 @@
 | 6차 | [06-priority-reclaim.md](06-priority-reclaim.md) | `reclaim_host()`의 대상 선정을 "최근 puff순"에서 논문 기본 정책 EJF(가장 나중에 생성된 컨테이너부터)로 교체 | 완료 |
 | 7차 | [07-multi-node-cluster.md](07-multi-node-cluster.md) | 논문 §4.3.2 클러스터 레벨 재현 — 마스터 1 + 워커 2 VM, SSH 기반 통신 설계 | 설계만 완료 (구현 전) |
 | 8차 | [08-reclaim-safety-floor.md](08-reclaim-safety-floor.md) | `reclaim()`이 실사용량(memory.current) 아래로 못 내려가게 하는 안전 하한선 추가 — reclaim 직후 즉시 OOM-kill되던 버그 수정 | 완료 |
+| 9차 | [09-single-node-final.md](09-single-node-final.md) | 5·6·8차를 실제 Java 워크로드 하나로 통합한 단일 노드 최종 검증 | 완료 |
+| 10차 | [10-swap-headroom-512.md](10-swap-headroom-512.md) | 컨테이너별 swap 상한(`SWAP_HEADROOM_MB`) 128 → 512MiB — 실수요 절단과 "puff가 기동 설정을 도리어 줄이는" 부작용 제거 | 라이브 검증 완료 (3대 전원 생존, OOM 0, `swap_saturated` 0회) |
 
 공통 실행 환경(호스트/VM 스펙)은 [`docs/environment.md`](../environment.md)에
 정리돼 있다.
