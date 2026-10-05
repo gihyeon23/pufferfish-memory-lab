@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!-- Step 2: HDFS. NameNode = pf-control -->
+<configuration>
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://pf-control:9000</value>
+  </property>
+  <property>
+    <name>hadoop.tmp.dir</name>
+    <value>/home/gihyeon/hadoop-data/tmp</value>
+  </property>
+</configuration>
