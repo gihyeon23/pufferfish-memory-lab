@@ -194,10 +194,10 @@ pufferfish-memory-lab/
 │   │   ├── 2026-09-21/        # 랩미팅 날짜별 패키지
 │   │   │   ├── 2026-09-21.md          # 랩미팅 메인(작업 1·2·3)
 │   │   │   └── 01-swap-off-latency/   # 실험 패키지(설계·결과·원본 로그)
-│   │   └── 2026/10/5/         # 연/월/일 구조 (10/5부터 이 형식)
+│   │   └── 2026-10-05/
 │   │       ├── 2026-10-05.md          # 2단계 로드맵(YARN + HiBench Kmeans)
 │   │       ├── 00-step0-baseline.md   # Step 0 기준선 측정·자원 예산
-│   │       └── 01-step1-vm-setup.md   # Step 1 VM 3대 구성 절차
+│   │       └── 01-step1-vm-setup.md   # Step 1 VM 3대 구성 절차·검증 결과 (완료)
 │   └── experiments/
 │       ├── README.md
 │       ├── 01-ocm-suspend.md
@@ -248,4 +248,4 @@ pufferfish-memory-lab/
 - [ ] 멀티 노드 클러스터(마스터 1 + 워커 2) — 논문 §4.3.2 클러스터 레벨 재현 (설계 완료, VM 세팅·구현은 예정)
 - [ ] **(2단계 로드맵, 10/5)** YARN 클러스터(control 1 + worker 2) 구축 + 워크로드를 HiBench Kmeans로 교체,
       기존 controller를 외부 데몬(A안)으로 연결 — Step 0~9 작업 순서·버전 제약·리스크는
-      [lab-meetings/2026/10/5/2026-10-05.md](docs/lab-meetings/2026/10/5/2026-10-05.md) 참고
+      [lab-meetings/2026-10-05/2026-10-05.md](docs/lab-meetings/2026-10-05/2026-10-05.md) 참고
