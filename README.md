@@ -191,9 +191,13 @@ pufferfish-memory-lab/
 │   ├── pufferfish-architecture.md
 │   ├── evidence/
 │   ├── lab-meetings/
-│   │   └── 2026-09-21/        # 랩미팅 날짜별 패키지
-│   │       ├── 2026-09-21.md          # 랩미팅 메인(작업 1·2·3)
-│   │       └── 01-swap-off-latency/   # 실험 패키지(설계·결과·원본 로그)
+│   │   ├── 2026-09-21/        # 랩미팅 날짜별 패키지
+│   │   │   ├── 2026-09-21.md          # 랩미팅 메인(작업 1·2·3)
+│   │   │   └── 01-swap-off-latency/   # 실험 패키지(설계·결과·원본 로그)
+│   │   └── 2026/10/5/         # 연/월/일 구조 (10/5부터 이 형식)
+│   │       ├── 2026-10-05.md          # 2단계 로드맵(YARN + HiBench Kmeans)
+│   │       ├── 00-step0-baseline.md   # Step 0 기준선 측정·자원 예산
+│   │       └── 01-step1-vm-setup.md   # Step 1 VM 3대 구성 절차
 │   └── experiments/
 │       ├── README.md
 │       ├── 01-ocm-suspend.md
@@ -242,3 +246,6 @@ pufferfish-memory-lab/
 - [x] 컨테이너별 swap 상한을 128 → 512MiB로 조정 (`SWAP_HEADROOM_MB`) — puff가 기동 시 swap 설정(512MiB)을 128MiB로 줄이던 부작용 제거. **라이브 재검증 완료**: 3대 전원 1024MiB 할당 완주·OOM 0, swap 실수요는 317~386MiB로 관측(2대 때 183~191MiB보다 큼 — puff로 한도가 커지면 swap 수요도 함께 커짐)
 - [ ] 고정 메모리 방식과 동적 메모리 방식 비교
 - [ ] 멀티 노드 클러스터(마스터 1 + 워커 2) — 논문 §4.3.2 클러스터 레벨 재현 (설계 완료, VM 세팅·구현은 예정)
+- [ ] **(2단계 로드맵, 10/5)** YARN 클러스터(control 1 + worker 2) 구축 + 워크로드를 HiBench Kmeans로 교체,
+      기존 controller를 외부 데몬(A안)으로 연결 — Step 0~9 작업 순서·버전 제약·리스크는
+      [lab-meetings/2026/10/5/2026-10-05.md](docs/lab-meetings/2026/10/5/2026-10-05.md) 참고
