@@ -185,7 +185,7 @@ pufferfish-memory-lab/
 │   └── admission.py
 ├── experiments/
 │   ├── configs/
-│   │   └── hadoop/            # Step 2~ Hadoop 설정 원본 (core-site, hdfs-site, workers)
+│   │   └── hadoop/            # Step 2~ Hadoop 설정 원본 (core/hdfs/yarn/mapred-site, workers)
 │   └── results/
 ├── docs/
 │   ├── environment.md
@@ -199,7 +199,9 @@ pufferfish-memory-lab/
 │   │       ├── 2026-10-05.md          # 2단계 로드맵(YARN + HiBench Kmeans)
 │   │       ├── 00-step0-baseline.md   # Step 0 기준선 측정·자원 예산
 │   │       ├── 01-step1-vm-setup.md   # Step 1 VM 3대 구성 절차·검증 결과 (완료)
-│   │       └── 02-step2-hdfs.md       # Step 2 JDK 17 + Hadoop 3.5.0 + HDFS (완료)
+│   │       ├── 02-step2-hdfs.md       # Step 2 JDK 17 + Hadoop 3.5.0 + HDFS (완료)
+│   │       ├── 03-step3-yarn.md       # Step 3 YARN 기동, NM 2대 + pi job (완료)
+│   │       └── talking-points.md      # 발표 메모: 교수님께 짚을 사항·예상 질문 (PPT 기준)
 │   └── experiments/
 │       ├── README.md
 │       ├── 01-ocm-suspend.md
@@ -218,7 +220,7 @@ pufferfish-memory-lab/
 |---|---|
 | `workload-java` | 메모리 사용량을 증가시키는 Java 워크로드와 컨테이너 이미지 |
 | `controller` | 모니터링, suspend/resume, puff/reclaim 제어 스크립트 |
-| `experiments/configs` | 실험별 설정 파일 (`hadoop/`: Step 2 HDFS 설정 원본) |
+| `experiments/configs` | 실험별 설정 파일 (`hadoop/`: Step 2 HDFS·Step 3 YARN 설정 원본) |
 | `experiments/results` | 로그 및 측정 결과 (현재 비어 있음) |
 | `docs` | 환경 구성 문서 |
 | `docs/experiments` | 실험 단계별 실행 방법·검증 결과 문서 |

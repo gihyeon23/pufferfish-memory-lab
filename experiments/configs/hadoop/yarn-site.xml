@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!-- Step 3: YARN. ResourceManager = pf-control, NodeManager = worker 2대.
+     cgroup 설정은 아직 끈다 (DefaultContainerExecutor) — Step 8에서 LCE + cgroup v2로 교체 -->
+<configuration>
+  <property>
+    <name>yarn.resourcemanager.hostname</name>
+    <value>pf-control</value>
+  </property>
+
+  <!-- MapReduce shuffle (pi 예제 등 MR job에 필요) -->
+  <property>
+    <name>yarn.nodemanager.aux-services</name>
+    <value>mapreduce_shuffle</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.env-whitelist</name>
+    <value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_HOME,PATH,LANG,TZ,HADOOP_MAPRED_HOME</value>
+  </property>
+
+  <property>
+    <name>yarn.nodemanager.container-executor.class</name>
+    <value>org.apache.hadoop.yarn.server.nodemanager.DefaultContainerExecutor</value>
+  </property>
+
+  <!-- NM당 자원: worker RAM 3584 MB 중 HDFS 기동 후 available ≈ 2830 MB.
+       NodeManager 자체 JVM(수백 MB) 몫을 빼고 2048 MB만 컨테이너용으로 선언 -->
+  <property>
+    <name>yarn.nodemanager.resource.memory-mb</name>
+    <value>2048</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.resource.cpu-vcores</name>
+    <value>3</value>
+  </property>
+
+  <property>
+    <name>yarn.scheduler.minimum-allocation-mb</name>
+    <value>256</value>
+  </property>
+  <property>
+    <name>yarn.scheduler.maximum-allocation-mb</name>
+    <value>2048</value>
+  </property>
+  <property>
+    <name>yarn.scheduler.maximum-allocation-vcores</name>
+    <value>3</value>
+  </property>
+
+  <!-- 가상 메모리 검사 끔: JDK 17 JVM은 vmem을 크게 잡아 작은 컨테이너가
+       "running beyond virtual memory limits"로 죽는 경우가 흔함. 물리 메모리 검사는 유지 -->
+  <property>
+    <name>yarn.nodemanager.vmem-check-enabled</name>
+    <value>false</value>
+  </property>
+
+  <property>
+    <name>yarn.nodemanager.local-dirs</name>
+    <value>/home/gihyeon/hadoop-data/nm-local</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.log-dirs</name>
+    <value>/home/gihyeon/hadoop-data/nm-logs</value>
+  </property>
+</configuration>
