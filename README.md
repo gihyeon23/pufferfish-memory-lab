@@ -24,23 +24,23 @@ Pufferfish는 메모리가 부족한 컨테이너를 바로 종료하는 대신,
 
 ## 구현 단계
 
-각 단계의 실행 방법·검증 결과는 [`docs/experiments/`](docs/experiments/)에
+각 단계의 실행 방법·검증 결과는 [`reimpl-single-node/experiments/`](reimpl-single-node/experiments/)에
 단계별 문서로 정리돼 있다.
 
 | 단계 | 내용 | 상태 | 문서 |
 |---|---|---|---|
-| 사전 준비 | Ubuntu VM, Docker Engine, cgroup v2 환경 구축 | 완료 | [environment.md](docs/environment.md) |
+| 사전 준비 | Ubuntu VM, Docker Engine, cgroup v2 환경 구축 | 완료 | [environment.md](common/environment.md) |
 | 사전 준비 | 32MB씩 점진적으로 메모리를 할당하는 Java 워크로드 | 완료 | 아래 [현재 구현](#현재-구현-메모리-증가-워크로드) 참고 |
-| 1차 | 논문 3장의 CPU 1% 제한 동작 재현 | 완료 | [01-ocm-suspend.md](docs/experiments/01-ocm-suspend.md) |
-| 2차 | 논문 4장의 `puff()`/`reclaim()` 구현 | 완료 | [02-puff-reclaim-single.md](docs/experiments/02-puff-reclaim-single.md) |
-| 3차 | 다중 컨테이너 환경에서 `reclaim()` 시나리오 검증 | 부분 완료 | [03-multi-container-reclaim.md](docs/experiments/03-multi-container-reclaim.md) |
-| 4차 | 호스트 예산 부족 시 자동 `reclaim_host()` 트리거 (⚠️ 논문 재현 아님, 독자 확장 정책) | 구현만 완료, **후속 과제로 보류** (논문 재현이 우선) | [04-host-reclaim-daemon.md](docs/experiments/04-host-reclaim-daemon.md) |
-| 5차 | 신규 컨테이너 admission 시점 `reclaim_host()` 트리거 (논문 §4.3.1 lazy reclaim 재현) | 라이브 검증 완료 | [05-admission-reclaim.md](docs/experiments/05-admission-reclaim.md) |
-| 6차 | `reclaim_host()` 대상 선정을 EJF 우선순위(논문 §4.3.3 기본 정책)로 교체 | 완료 | [06-priority-reclaim.md](docs/experiments/06-priority-reclaim.md) |
-| 7차 | 멀티 노드 클러스터(마스터 1 + 워커 2) — 논문 §4.3.2 클러스터 레벨 재현 | 설계만 완료 (구현 전) | [07-multi-node-cluster.md](docs/experiments/07-multi-node-cluster.md) |
-| 8차 | `reclaim()`이 실사용량 아래로 못 내려가게 하는 안전 하한선 추가 (즉시 OOM-kill 버그 수정) | 완료 | [08-reclaim-safety-floor.md](docs/experiments/08-reclaim-safety-floor.md) |
-| 9차 | 5·6·8차 통합 단일 노드 최종 검증 | 완료 | [09-single-node-final.md](docs/experiments/09-single-node-final.md) |
-| 10차 | 컨테이너별 swap 상한(`SWAP_HEADROOM_MB`) 128 → 512MiB | 라이브 검증 완료 | [10-swap-headroom-512.md](docs/experiments/10-swap-headroom-512.md) |
+| 1차 | 논문 3장의 CPU 1% 제한 동작 재현 | 완료 | [01-ocm-suspend.md](reimpl-single-node/experiments/01-ocm-suspend.md) |
+| 2차 | 논문 4장의 `puff()`/`reclaim()` 구현 | 완료 | [02-puff-reclaim-single.md](reimpl-single-node/experiments/02-puff-reclaim-single.md) |
+| 3차 | 다중 컨테이너 환경에서 `reclaim()` 시나리오 검증 | 부분 완료 | [03-multi-container-reclaim.md](reimpl-single-node/experiments/03-multi-container-reclaim.md) |
+| 4차 | 호스트 예산 부족 시 자동 `reclaim_host()` 트리거 (⚠️ 논문 재현 아님, 독자 확장 정책) | 구현만 완료, **후속 과제로 보류** (논문 재현이 우선) | [04-host-reclaim-daemon.md](reimpl-single-node/experiments/04-host-reclaim-daemon.md) |
+| 5차 | 신규 컨테이너 admission 시점 `reclaim_host()` 트리거 (논문 §4.3.1 lazy reclaim 재현) | 라이브 검증 완료 | [05-admission-reclaim.md](reimpl-single-node/experiments/05-admission-reclaim.md) |
+| 6차 | `reclaim_host()` 대상 선정을 EJF 우선순위(논문 §4.3.3 기본 정책)로 교체 | 완료 | [06-priority-reclaim.md](reimpl-single-node/experiments/06-priority-reclaim.md) |
+| 7차 | 멀티 노드 클러스터(마스터 1 + 워커 2) — 논문 §4.3.2 클러스터 레벨 재현 | 설계만 완료 (구현 전) | [07-multi-node-cluster.md](reimpl-hadoop3/docs/07-multi-node-cluster.md) |
+| 8차 | `reclaim()`이 실사용량 아래로 못 내려가게 하는 안전 하한선 추가 (즉시 OOM-kill 버그 수정) | 완료 | [08-reclaim-safety-floor.md](reimpl-single-node/experiments/08-reclaim-safety-floor.md) |
+| 9차 | 5·6·8차 통합 단일 노드 최종 검증 | 완료 | [09-single-node-final.md](reimpl-single-node/experiments/09-single-node-final.md) |
+| 10차 | 컨테이너별 swap 상한(`SWAP_HEADROOM_MB`) 128 → 512MiB | 라이브 검증 완료 | [10-swap-headroom-512.md](reimpl-single-node/experiments/10-swap-headroom-512.md) |
 
 > 위 단계는 논문의 공식 단계 구분이 아니라, 본 재현 실험을 위해 정의한 구현 순서입니다.
 
@@ -60,7 +60,7 @@ Pufferfish는 메모리가 부족한 컨테이너를 바로 종료하는 대신,
 | Resource Control | cgroup v2 |
 | 개발 환경 | VS Code Remote-SSH |
 
-환경 구성에 대한 자세한 내용은 [`docs/environment.md`](docs/environment.md)에서 확인할 수 있습니다.
+환경 구성에 대한 자세한 내용은 [`common/environment.md`](common/environment.md)에서 확인할 수 있습니다.
 
 ---
 
@@ -92,7 +92,7 @@ Java 힙 메모리 사용량을 점진적으로 증가시킵니다.
 ### 컴파일
 
 ```bash
-cd workload-java
+cd reimpl-single-node/workload-java
 
 mkdir -p out
 
@@ -129,7 +129,7 @@ Allocated: 96 MB
 
 ## controller (Python)
 
-`controller/` 아래 스크립트는 컨테이너의 PID를 통해 `/proc/<pid>/cgroup`을
+`reimpl-single-node/controller/` 아래 스크립트는 컨테이너의 PID를 통해 `/proc/<pid>/cgroup`을
 읽어 cgroup v2 경로를 알아낸다(cgroupfs/systemd 드라이버 어느 쪽이든 동작).
 
 | 스크립트 | 역할 |
@@ -144,7 +144,7 @@ Allocated: 96 MB
 | `admission.py` | 신규 컨테이너를 `docker run`으로 띄우기 전 가용 메모리를 확인하고, 부족하면 `reclaim_host()`를 호출한 뒤 실행하는 래퍼 (논문 §4.3.1의 실제 reclaim 트리거 재현) |
 
 ```bash
-cd controller
+cd reimpl-single-node/controller
 python3 cgroup_precheck.py pf-test     # 사전 점검
 python3 swap_preflight.py pf-test      # swap 발생 여부 dry-run
 python3 container_monitor.py pf-test   # OCM 감지 + 자동 suspend + 자동 puff
@@ -161,74 +161,42 @@ python3 admission.py pf-test-new pufferfish/workload-java:latest --request-mb 51
 ```
 
 이미지 빌드, 컨테이너 실행, 단계별 실습, 검증 결과 등 실험별 상세 절차는
-[`docs/experiments/`](docs/experiments/)를 참고한다.
+[`reimpl-single-node/experiments/`](reimpl-single-node/experiments/)를 참고한다.
 
 ---
 
 ## 프로젝트 구조
 
+작업 방식별로 3개 패키지 + 공통 폴더로 나눈다.
+
+| 폴더 | 내용 | 상태 |
+|---|---|---|
+| [`reimpl-single-node/`](reimpl-single-node/) | Python controller로 OCM 감지·suspend·puff·reclaim을 직접 재구현, 단일 호스트(Docker + cgroup v2) 실험 1~10차 | 완료 |
+| [`reimpl-hadoop3/`](reimpl-hadoop3/) | 최신 Hadoop 3.5.0 YARN 클러스터(VM 3대)에 controller를 외부 데몬으로 연결 — Step 0~3 | **중단** (원 코드 재현으로 전환) |
+| [`original-hadoop2.7/`](original-hadoop2.7/) | 원 저자 코드(YARN 2.7.3) + 논문 소프트웨어 환경(Ubuntu 16.04 · Docker 1.12.1 · cgroup v1) 재현 | 진행 중 |
+| [`common/`](common/) | 논문 원본·분석 요약(`pufferfish-architecture.md`), 호스트/VM 환경(`environment.md`) | — |
+
 ```text
 pufferfish-memory-lab/
-├── workload-java/
-│   ├── src/main/java/lab/pufferfish/
-│   │   └── MemoryGrowthWorkload.java
-│   ├── Dockerfile
-│   └── README.md
-├── controller/
-│   ├── cgroup_utils.py
-│   ├── cgroup_precheck.py
-│   ├── swap_preflight.py
-│   ├── container_monitor.py
-│   ├── suspend_manager.py
-│   ├── puff_manager.py
-│   ├── host_reclaim_daemon.py
-│   └── admission.py
-├── experiments/
-│   ├── configs/
-│   │   └── hadoop/            # Step 2~ Hadoop 설정 원본 (core/hdfs/yarn/mapred-site, workers)
-│   └── results/
-├── docs/
-│   ├── environment.md
-│   ├── pufferfish-architecture.md
-│   ├── evidence/
-│   ├── lab-meetings/
-│   │   ├── 2026-09-21/        # 랩미팅 날짜별 패키지
-│   │   │   ├── 2026-09-21.md          # 랩미팅 메인(작업 1·2·3)
-│   │   │   └── 01-swap-off-latency/   # 실험 패키지(설계·결과·원본 로그)
-│   │   └── 2026-10-05/
-│   │       ├── 2026-10-05.md          # 2단계 로드맵(YARN + HiBench Kmeans)
-│   │       ├── 00-step0-baseline.md   # Step 0 기준선 측정·자원 예산
-│   │       ├── 01-step1-vm-setup.md   # Step 1 VM 3대 구성 절차·검증 결과 (완료)
-│   │       ├── 02-step2-hdfs.md       # Step 2 JDK 17 + Hadoop 3.5.0 + HDFS (완료)
-│   │       ├── 03-step3-yarn.md       # Step 3 YARN 기동, NM 2대 + pi job (완료)
-│   │       └── talking-points.md      # 발표 메모: 교수님께 짚을 사항·예상 질문 (PPT 기준)
-│   └── experiments/
-│       ├── README.md
-│       ├── 01-ocm-suspend.md
-│       ├── 02-puff-reclaim-single.md
-│       ├── 03-multi-container-reclaim.md
-│       ├── 04-host-reclaim-daemon.md
-│       ├── 05-admission-reclaim.md
-│       ├── 06-priority-reclaim.md
-│       ├── 07-multi-node-cluster.md
-│       ├── 08-reclaim-safety-floor.md
-│       └── 09-single-node-final.md
-└── README.md
+├── README.md  CLAUDE.md
+├── common/
+│   ├── papers/                     # 논문 원본(pdf/txt)·리뷰 컨텍스트
+│   ├── pufferfish-architecture.md  # 논문 분석 요약 (논문보다 먼저 참고)
+│   └── environment.md              # 맥/VM 스펙
+├── reimpl-single-node/
+│   ├── controller/                 # cgroup 모니터·suspend·puff/reclaim·admission (Python)
+│   ├── workload-java/              # 메모리 증가 Java 워크로드 + 이미지
+│   ├── experiments/                # 1~10차 실행 방법·검증 결과 (07차는 reimpl-hadoop3로)
+│   ├── evidence/                   # 원본 로그 등 검증 근거
+│   └── lab-meetings/2026-09-21/
+├── reimpl-hadoop3/
+│   ├── docs/07-multi-node-cluster.md   # 다중 노드 초기 설계 (SSH 기반)
+│   ├── configs/hadoop/             # Step 2~3 Hadoop 3.5.0 설정 원본
+│   └── lab-meetings/2026-10-05/    # 2단계 로드맵 + Step 0~3 기록
+└── original-hadoop2.7/
+    ├── legacy-2.7.3/               # task 이미지 Dockerfile, conf, 빌드·비교 스크립트
+    └── lab-meetings/2026-10-26/    # 원 코드 빌드·16.04 환경·이미지 기록
 ```
-
-| 디렉터리 | 역할 |
-|---|---|
-| `workload-java` | 메모리 사용량을 증가시키는 Java 워크로드와 컨테이너 이미지 |
-| `controller` | 모니터링, suspend/resume, puff/reclaim 제어 스크립트 |
-| `experiments/configs` | 실험별 설정 파일 (`hadoop/`: Step 2 HDFS·Step 3 YARN 설정 원본) |
-| `experiments/results` | 로그 및 측정 결과 (현재 비어 있음) |
-| `docs` | 환경 구성 문서 |
-| `docs/experiments` | 실험 단계별 실행 방법·검증 결과 문서 |
-| `docs/evidence` | 원본 로그 등 검증 근거 자료 (교수님 질문 대응용) |
-| `docs/lab-meetings` | 랩미팅 날짜별 준비/보고 문서 |
-
-> `experiments/`(설정·로그 데이터)와 `docs/experiments/`(실행 방법 문서)는
-> 이름은 비슷하지만 용도가 다르다 — 헷갈리지 않도록 주의.
 
 ---
 
@@ -239,12 +207,12 @@ pufferfish-memory-lab/
 - [x] cgroup의 메모리·swap·CPU 상태 수집 (`container_monitor.py`)
 - [x] 메모리 부족 상황에서 CPU 사용률 1% 제한 (`suspend_manager.py`)
 - [x] `puff()`/`reclaim()`을 통한 메모리 한도 증감 (`puff_manager.py`, 단일 컨테이너 기준 단위 동작·자동 트리거 모두 검증됨)
-- [x] 다중 컨테이너 puff 경쟁 상황 재현, **이 프로젝트의 delta 기반 OCM 판정**에 있던 swap 포화 blind spot 발견·수정 (논문·원 공개 구현의 결함이 아님 — [pufferfish-architecture.md](docs/pufferfish-architecture.md) §2.5 참고)
+- [x] 다중 컨테이너 puff 경쟁 상황 재현, **이 프로젝트의 delta 기반 OCM 판정**에 있던 swap 포화 blind spot 발견·수정 (논문·원 공개 구현의 결함이 아님 — [pufferfish-architecture.md](common/pufferfish-architecture.md) §2.5 참고)
 - [x] 호스트 예산 부족 시 자동으로 `reclaim_host()`를 호출하는 호스트 레벨 데몬 (`host_reclaim_daemon.py`, 구현만 완료 — ⚠️ 논문 재현이 아닌 독자 확장 정책이라 논문 재현 트랙이 끝날 때까지 검증은 후속으로 보류)
 - [x] 신규 컨테이너 admission 시점에만 `reclaim_host()`를 호출하는 논문 방식 lazy reclaim 재현 (`admission.py`, 구현 완료 — 실습 검증은 예정)
 - [x] `reclaim_host()` 대상 선정을 EJF 우선순위(가장 나중에 생성된 컨테이너부터)로 교체, "최근 puff순" 대비 다르게 동작함을 검증
 - [x] `reclaim()`이 실사용량(memory.current) 아래로 못 내려가게 하는 안전 하한선 추가 — reclaim 직후 즉시 OOM-kill되던 버그를 라이브 테스트로 발견·수정
-- [ ] **(9/21 랩미팅)** swap 차단(쿠버네티스 조건)에서 OOM killer 동작 확인 + 할당 응답시간 측정 — [lab-meetings/2026-09-21.md](docs/lab-meetings/2026-09-21/2026-09-21.md)
+- [ ] **(9/21 랩미팅)** swap 차단(쿠버네티스 조건)에서 OOM killer 동작 확인 + 할당 응답시간 측정 — [lab-meetings/2026-09-21.md](reimpl-single-node/lab-meetings/2026-09-21/2026-09-21.md)
 - [x] **(9/21 랩미팅)** 원 논문이 admission controller인지 검증 → 아니며 "elastic memory manager"임을 확인
 - [x] **(9/21 랩미팅)** EJF 우선순위 심화 조사 → 논문은 우선순위를 3곳에 쓰나 현재는 reclaim 순서 1곳만 구현했음을 확인
 - [x] 컨테이너별 swap 상한을 128 → 512MiB로 조정 (`SWAP_HEADROOM_MB`) — puff가 기동 시 swap 설정(512MiB)을 128MiB로 줄이던 부작용 제거. **라이브 재검증 완료**: 3대 전원 1024MiB 할당 완주·OOM 0, swap 실수요는 317~386MiB로 관측(2대 때 183~191MiB보다 큼 — puff로 한도가 커지면 swap 수요도 함께 커짐)
@@ -252,4 +220,4 @@ pufferfish-memory-lab/
 - [ ] 멀티 노드 클러스터(마스터 1 + 워커 2) — 논문 §4.3.2 클러스터 레벨 재현 (설계 완료, VM 세팅·구현은 예정)
 - [ ] **(2단계 로드맵, 10/5)** YARN 클러스터(control 1 + worker 2) 구축 + 워크로드를 HiBench Kmeans로 교체,
       기존 controller를 외부 데몬(A안)으로 연결 — Step 0~9 작업 순서·버전 제약·리스크는
-      [lab-meetings/2026-10-05/2026-10-05.md](docs/lab-meetings/2026-10-05/2026-10-05.md) 참고
+      [lab-meetings/2026-10-05/2026-10-05.md](reimpl-hadoop3/lab-meetings/2026-10-05/2026-10-05.md) 참고

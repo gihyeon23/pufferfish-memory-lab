@@ -4,9 +4,9 @@ build/
 out/
 .vscode/
 
-experiments/results/*.csv
-experiments/results/*.log
+reimpl-single-node/experiments/results/*.csv
+reimpl-single-node/experiments/results/*.log
 
 __pycache__/
 *.pyc
-controller/state/
+reimpl-single-node/controller/state/
