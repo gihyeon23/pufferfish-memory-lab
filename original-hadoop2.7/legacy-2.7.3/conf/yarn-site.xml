@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!-- 원 구현(YARN 2.7.3) 단일 노드 — 호스트와 task 이미지가 같은 파일을 씀 -->
+<configuration>
+  <property>
+    <name>yarn.resourcemanager.hostname</name>
+    <value>pf16-worker1</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.aux-services</name>
+    <value>mapreduce_shuffle</value>
+  </property>
+
+  <!-- DockerContainerExecutor: task를 Docker 컨테이너에서 실행 (원 README) -->
+  <property>
+    <name>yarn.nodemanager.container-executor.class</name>
+    <value>org.apache.hadoop.yarn.server.nodemanager.DockerContainerExecutor</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.docker-container-executor.exec-name</name>
+    <value>/usr/bin/docker</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.docker-container-executor.image-name</name>
+    <value>local/hadoop-docker:2.7.3</value>
+  </property>
+
+  <!-- 노드 자원: VM 3GB 중 2GB를 YARN에 -->
+  <property>
+    <name>yarn.nodemanager.resource.memory-mb</name>
+    <value>2048</value>
+  </property>
+  <property>
+    <name>yarn.scheduler.minimum-allocation-mb</name>
+    <value>256</value>
+  </property>
+  <property>
+    <name>yarn.nodemanager.vmem-check-enabled</name>
+    <value>false</value>
+  </property>
+
+  <!-- Pufferfish 파라미터(balloon.*)는 원 코드 기본값 사용:
+       ratio 0.4 / stop 0.8 / reclaim 0.9 / jvm-mb 65536 / memory-mb -1 -->
+</configuration>

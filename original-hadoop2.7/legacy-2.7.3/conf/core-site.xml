@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!-- 원 구현(YARN 2.7.3) 단일 노드 — 호스트와 task 이미지가 같은 파일을 씀 -->
+<configuration>
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://pf16-worker1:9000</value>
+  </property>
+  <property>
+    <name>hadoop.tmp.dir</name>
+    <value>/home/gihyeon/hadoop-data</value>
+  </property>
+</configuration>

@@ -1,0 +1,65 @@
+JAR                                                         class   same   diff   only
+hadoop-common-2.7.3.jar                                      2010   2009      1      0
+    diff: public class org.apache.hadoop.util.JvmPauseMonitor {
+hadoop-nfs-2.7.3.jar                                          133    133      0      0
+hadoop-hdfs-2.7.3.jar                                        3341   3340      1      0
+    diff: class org.apache.hadoop.hdfs.server.balancer.Dispatcher$Task {
+hadoop-hdfs-nfs-2.7.3.jar                                      34     34      0      0
+hadoop-mapreduce-client-app-2.7.3.jar                         288    287      1      0
+    diff: public class org.apache.hadoop.mapreduce.v2.app.rm.RMContainerAllocator extends org.apache.hadoop.mapreduce.v2
+hadoop-mapreduce-client-common-2.7.3.jar                      360    360      0      0
+hadoop-mapreduce-client-core-2.7.3.jar                        875    874      1      0
+    diff: class org.apache.hadoop.mapred.BackupStore$MemoryCache {
+hadoop-mapreduce-client-hs-2.7.3.jar                           75     75      0      0
+hadoop-mapreduce-client-hs-plugins-2.7.3.jar                    1      1      0      0
+hadoop-mapreduce-client-jobclient-2.7.3.jar                     8      8      0      0
+hadoop-mapreduce-client-shuffle-2.7.3.jar                      18     18      0      0
+hadoop-mapreduce-examples-2.7.3.jar                           149    149      0      0
+hadoop-yarn-api-2.7.3.jar                                     872    871      1      0
+    diff: public class org.apache.hadoop.yarn.conf.YarnConfiguration extends org.apache.hadoop.conf.Configuration {
+hadoop-yarn-applications-distributedshell-2.7.3.jar            12     12      0      0
+hadoop-yarn-applications-unmanaged-am-launcher-2.7.3.jar        3      3      0      0
+hadoop-yarn-client-2.7.3.jar                                   57     57      0      0
+hadoop-yarn-common-2.7.3.jar                                  713    713      0      0
+hadoop-yarn-registry-2.7.3.jar                                 52     52      0      0
+hadoop-yarn-server-applicationhistoryservice-2.7.3.jar         88     88      0      0
+hadoop-yarn-server-common-2.7.3.jar                           180    152     26      2
+    diff: public final class org.apache.hadoop.yarn.proto.YarnServerCommonServiceProtos$SCMUploaderCanUploadResponseProt
+    diff: public final class org.apache.hadoop.yarn.proto.YarnServerCommonServiceProtos$SCMUploaderCanUploadRequestProto
+    diff: public final class org.apache.hadoop.yarn.proto.YarnServerCommonServiceProtos$NMContainerStatusProto extends c
+    diff: public final class org.apache.hadoop.yarn.proto.YarnServerCommonProtos$VersionProto$Builder extends com.google
+    diff: public final class org.apache.hadoop.yarn.proto.YarnServerCommonServiceProtos$NodeHeartbeatResponseProto$Build
+    diff: public class org.apache.hadoop.yarn.server.api.protocolrecords.impl.pb.NodeHeartbeatResponsePBImpl extends org
+    diff: public final class org.apache.hadoop.yarn.proto.YarnServerCommonServiceProtos$NodeHeartbeatResponseProto exten
+    diff: public interface org.apache.hadoop.yarn.proto.YarnServerCommonProtos$NodeHealthStatusProtoOrBuilder extends co
+    only-source: org.apache.hadoop.yarn.server.api.protocolrecords.impl.pb.NodeHeartbeatResponsePBImpl$4
+    only-source: org.apache.hadoop.yarn.server.api.protocolrecords.impl.pb.NodeHeartbeatResponsePBImpl$4$1
+hadoop-yarn-server-nodemanager-2.7.3.jar                      351    328     15      8
+    diff: public interface org.apache.hadoop.yarn.server.nodemanager.containermanager.container.Container extends org.ap
+    diff: public class org.apache.hadoop.yarn.server.nodemanager.containermanager.launcher.ContainerLaunch implements ja
+    diff: public abstract class org.apache.hadoop.yarn.server.nodemanager.ContainerExecutor implements org.apache.hadoop
+    diff: public abstract class org.apache.hadoop.yarn.server.nodemanager.containermanager.launcher.ContainerLaunch$Shel
+    diff: public interface org.apache.hadoop.yarn.server.nodemanager.containermanager.application.Application extends or
+    diff: final class org.apache.hadoop.yarn.server.nodemanager.containermanager.launcher.ContainerLaunch$UnixShellScrip
+    diff: public class org.apache.hadoop.yarn.server.nodemanager.NodeManager extends org.apache.hadoop.service.Composite
+    diff: public class org.apache.hadoop.yarn.server.nodemanager.containermanager.monitor.ContainersMonitorImpl extends 
+    only-source: org.apache.hadoop.yarn.server.nodemanager.containermanager.NodeMemoryManager
+    only-source: org.apache.hadoop.yarn.server.nodemanager.containermanager.NodeMemoryManager$1
+    only-source: org.apache.hadoop.yarn.server.nodemanager.containermanager.NodeMemoryManager$2
+    only-source: org.apache.hadoop.yarn.server.nodemanager.containermanager.NodeMemoryManager$3
+    only-source: org.apache.hadoop.yarn.server.nodemanager.containermanager.container.ContainerImpl$ContainerMemoryEvent
+    only-source: org.apache.hadoop.yarn.server.nodemanager.containermanager.container.ContainerImpl$ContainerMonitor
+    only-source: org.apache.hadoop.yarn.server.nodemanager.containermanager.container.ContainerMemoryState
+    only-source: org.apache.hadoop.yarn.server.nodemanager.containermanager.launcher.ContainerLaunch$1
+hadoop-yarn-server-resourcemanager-2.7.3.jar                  598    586     12      0
+    diff: public interface org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity.CapacitySchedulerContext {
+    diff: public interface org.apache.hadoop.yarn.server.resourcemanager.rmapp.RMApp extends org.apache.hadoop.yarn.even
+    diff: public class org.apache.hadoop.yarn.server.resourcemanager.ApplicationMasterService extends org.apache.hadoop.
+    diff: public interface org.apache.hadoop.yarn.server.resourcemanager.rmcontainer.RMContainer extends org.apache.hado
+    diff: public class org.apache.hadoop.yarn.server.resourcemanager.rmcontainer.RMContainerImpl implements org.apache.h
+    diff: public class org.apache.hadoop.yarn.server.resourcemanager.scheduler.SchedulerApplicationAttempt {
+    diff: public abstract class org.apache.hadoop.yarn.server.resourcemanager.scheduler.SchedulerNode {
+    diff: public interface org.apache.hadoop.yarn.server.resourcemanager.rmnode.RMNode {
+hadoop-yarn-server-sharedcachemanager-2.7.3.jar                25     25      0      0
+hadoop-yarn-server-tests-2.7.3.jar                             10     10      0      0
+hadoop-yarn-server-web-proxy-2.7.3.jar                         17     17      0      0
