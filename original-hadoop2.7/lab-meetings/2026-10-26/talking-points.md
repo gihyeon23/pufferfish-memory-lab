@@ -20,7 +20,7 @@
 | 4 | 논문 환경 | 26노드, Ubuntu 16.04, YARN 2.7.3, Spark 2.0.1, Docker 1.12.1, `sequenceiq/hadoop-docker` | 02 §1 |
 | 5 | 맞춘 것 | Ubuntu 16.04.7, Docker 1.12.1(2016년 빌드), cgroup v1 + swap accounting, YARN 2.7.3 | 03, 04 |
 | 6 | **빌드 이슈 — 테스트 코드** | 아래 §3-1 | 01, 04 §5 |
-| 7 | task 이미지 문제 | 원래 이미지 사용 불가 이유 2가지 + 대안 | 04 §2 |
+| 7 | task 이미지 문제 | 원래 이미지 사용 불가 이유 2가지 + 직접 만든 이미지, **JDK 7→8 차이와 JDK 7 대안** | 04 §2, 05 §6 |
 | 8 | 못 맞춘 것과 영향 | CPU(ARM), 하드웨어 규모, 안쪽 OS(CentOS 6.5) — 영향 큰 순서 표 | 02 §2·§3 |
 | 9 | 다음 단계 | 실행용 Hadoop 구성 → task 이미지 → 단일 노드 기동·pi → 3대 확장 | 04 남은 단계 |
 | 10 | 확인 요청 | 아래 §5 | — |
@@ -72,7 +72,13 @@
   - x86 전용 [실측: Docker Hub]
   - Docker 1.12.1이 지금 Docker Hub에서 이미지를 못 받음(`missing signature key`) [실측]
 - CentOS 6.5는 ARM판 자체가 없음 (보관소에 i386·x86_64만) [실측]
-- 대안: **CentOS 7(ARM) + OpenJDK 7** — JDK 7 계열 유지가 중요(Pufferfish가 JVM 메모리 사용 패턴을 감시하므로) [추측]
+- 현재 구축: **Ubuntu 16.04 + OpenJDK 8 + Hadoop 2.7.3** 이미지 (`local/hadoop-docker:2.7.3`) [실측, 05 §5]
+  - 원 저자 실제 사용 이미지는 `sequenceiq/hadoop-docker:2.4.0` [원 구현: README] → 안쪽 Hadoop도 2.4.0
+- ⚠️ **JDK가 7 → 8로 바뀐 것이 가장 큰 차이** — Pufferfish가 감시하는 컨테이너 메모리 구성이 달라짐(PermGen → Metaspace) [추측]
+  - ARM64용 OpenJDK 7 확보 가능 확인 (Ubuntu 14.04 7u211 / CentOS 7 1.7.0.261) [실측] → JDK 7 이미지로 바꿀지 확인 요청 (§5)
+- Pufferfish 동작 자체는 컨테이너 바깥(NM + cgroup)이라 이미지와 무관 [원 구현]
+  - 단, 원 코드가 Flex 컨테이너 `-Xmx`를 64GB로 치환 → **JVM 힙 확장 패턴이 OCM·puff 횟수를 좌우** → JDK가 입력을 바꿈 [추측, 05 §7]
+  - 결정: **JDK 7 계열(CentOS 7 + OpenJDK 7)로 진행**, JDK 7/8 비교로 영향 실측 예정
 
 ### 3-5. 영향 정리 (결과에 미치는 영향 큰 순서) [추측]
 
@@ -80,9 +86,10 @@
 |---|---|---|
 | 하드웨어 규모 (26노드·128GB → VM·3GB) | 큼 | ❌ 비율만 유지 |
 | CPU (x86 → ARM) | 중간 | ❌ |
-| JDK (Oracle 7u71 → OpenJDK 7/8) | 중간 | ✅ OpenJDK 7 |
+| JDK (Oracle 7u71 → 현재 OpenJDK 8) | 중간 | ✅ ARM64 OpenJDK 7 확보 가능 |
 | 네이티브 라이브러리 없음 | 중간 (I/O 작업) | ✅ ARM 빌드 시도 |
-| 안쪽 OS (CentOS 6.5 → 7) | 작음 | ⚠️ CentOS 7까지 |
+| 안쪽 Hadoop (2.4.0 → 2.7.3) | 작음 (MR task 쪽만) | ✅ 2.4.0 이미지 가능 [추측] |
+| 안쪽 OS (CentOS 6.5 → Ubuntu 16.04) | 작음 | ⚠️ CentOS 7까지 |
 
 - 따라서 성능 **절대값**은 논문과 직접 비교 불가 → 같은 환경에서 "YARN만 vs YARN + Pufferfish" **상대 비교**로 경향 확인이 목표
 
@@ -92,7 +99,8 @@
 |---|---|
 | 원 코드가 컴파일이 안 된다는 건가? | 아니다. 실행 코드는 수정 없이 성공. 테스트 코드 1곳만 원 저자 실수로 실패, 실행용 Hadoop에는 안 들어감 (§3-1) |
 | 테스트 코드를 고치면 되지 않나? | 고치면 소스가 원본과 달라짐. 원본 무수정 원칙 때문에 공식 바이너리 + 원 저자 YARN jar 방식 선택 |
-| 공식 바이너리를 섞어도 원 구현과 같은가? | 원 저자는 YARN만 수정. HDFS·Common jar를 직접 비교해 검증할 예정 |
+| 공식 바이너리를 섞어도 원 구현과 같은가? | 같다. Common·HDFS·MR 약 7,300 class를 시그니처 비교 → 차이 4개는 전부 컴파일러 자동 생성 `access$` 메서드(JDK 7/8 차이) [실측, 05 §3] |
+| task 이미지가 다르면 결과도 달라지나? | Pufferfish 동작은 컨테이너 바깥이라 그대로. 컨테이너 안 JVM 메모리 사용이 달라질 수 있어 JDK 7 이미지 대안 준비 (§3-4) |
 | 공개 코드가 논문 실험 코드가 맞나? | 논문 p.263이 직접 지정한 저장소, 2018-02 이후 코드 변경 없음 |
 | 왜 Docker를 이렇게 옛날 걸로? | 논문 명시 버전(1.12.1). 원 코드가 쓰는 `--oom-kill-disable` 등은 cgroup v1 + 당시 Docker 기준 |
 | 하드웨어가 다른데 의미가 있나? | 절대값 비교는 불가. 같은 환경에서 baseline 대비 경향 확인이 목표 |
@@ -100,8 +108,8 @@
 ## 5. 교수님께 확인받을 것
 
 - [ ] **연구실 x86 서버 사용 가능 여부** — 있으면 CentOS 6.5·원래 이미지(`sequenceiq/hadoop-docker`)·Oracle JDK 7까지 맞출 수 있음
-- [ ] 공식 바이너리 + 원 저자 YARN jar 조합 방식으로 진행해도 되는지
-- [ ] task 이미지를 CentOS 7 + OpenJDK 7로 대체하는 것
+- [ ] 공식 바이너리 + 원 저자 YARN jar 조합 방식으로 진행해도 되는지 (동일성 검증 완료)
+- [ ] **task 이미지 JDK**: 현재 OpenJDK 8로 구축 → 원 저자와 같은 JDK 7 계열(ARM64 OpenJDK 7, Ubuntu 14.04 또는 CentOS 7)로 바꿀지
 
 ## 6. 업데이트 규칙
 
