@@ -1,6 +1,6 @@
 # Step 0 — 호스트 기준선 측정 + 자원 예산 확정
 
-> 로드맵: [2026-10-05.md](2026-10-05.md) §3 Step 0
+> 로드맵: [2026-10-05.md](../../common/lab-meetings/2026-10-05/2026-10-05.md) §3 Step 0
 
 ## 1. 게스트(현 VM `pufferfish-lab`) 실측 — 2026-10-05 완료
 
@@ -45,7 +45,7 @@ getent hosts pufferfish-lab
 ### P2. 네트워크가 NAT — VM 3대가 서로 통신할 수 없음
 
 - VirtualBox **NAT**는 각 VM이 독립된 `10.0.2.0/24`를 받아 **VM 간 통신이 불가능**
-- 7차 설계([07-multi-node-cluster.md](../../docs/07-multi-node-cluster.md))는 **Bridged Adapter** 전제
+- 7차 설계([07-multi-node-cluster.md](../docs/07-multi-node-cluster.md))는 **Bridged Adapter** 전제
 - Step 1 전에 어댑터를 **Bridged** 또는 **NAT Network**로 변경해야 함
 
 ### P3. 디스크 여유 8.7G

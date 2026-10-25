@@ -1,6 +1,8 @@
 # task 이미지 — sequenceiq/hadoop-docker와 같은 역할 (Java + Hadoop + 설정)
 # DCE는 호스트의 Hadoop/JDK를 마운트하지 않으므로 이미지 안에 같은 경로로 둔다
 FROM local/ubuntu:16.04
+# 호스트와 같은 JDK 8 경로 (build-image.sh가 arch에 맞춰 전달)
+ARG JAVA8_HOME=/usr/lib/jvm/java-8-openjdk-arm64
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends openjdk-8-jdk-headless \
@@ -10,11 +12,11 @@ RUN apt-get update \
 ADD hadoop-2.7.3-pufferfish.tar.gz /opt/
 COPY conf/*.xml /opt/hadoop-2.7.3/etc/hadoop/
 
-ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-arm64 \
+ENV JAVA_HOME=${JAVA8_HOME} \
     HADOOP_PREFIX=/opt/hadoop-2.7.3 \
     HADOOP_COMMON_HOME=/opt/hadoop-2.7.3 \
     HADOOP_HDFS_HOME=/opt/hadoop-2.7.3 \
     HADOOP_MAPRED_HOME=/opt/hadoop-2.7.3 \
     HADOOP_YARN_HOME=/opt/hadoop-2.7.3 \
     HADOOP_CONF_DIR=/opt/hadoop-2.7.3/etc/hadoop \
-    PATH=/opt/hadoop-2.7.3/bin:/usr/lib/jvm/java-8-openjdk-arm64/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+    PATH=/opt/hadoop-2.7.3/bin:${JAVA8_HOME}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin

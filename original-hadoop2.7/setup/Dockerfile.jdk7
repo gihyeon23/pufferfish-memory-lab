@@ -1,0 +1,31 @@
+# task 이미지 (JDK 7) — 원 저자 sequenceiq/hadoop-docker(CentOS 6.5 + JDK 7)에 가장 가까운 구성
+# CentOS 6은 ARM64판이 없어 CentOS 7, Oracle JDK 7u71 대신 OpenJDK 7 (05 §6·§7)
+# base: CentOS Cloud SIG aarch64 rootfs를 xattr 없이 재import한 local/centos:7 (06 참고)
+FROM local/centos:7
+# build-image.sh가 공통으로 넘기는 값 (Docker 1.12는 안 쓰는 build-arg가 있으면 빌드 실패 → 선언만)
+ARG JAVA8_HOME
+
+# CentOS 7 지원 종료 → vault 저장소 (build-image.sh가 arch에 맞춰 생성)
+COPY vault.repo /etc/yum.repos.d/
+RUN rm -f /etc/yum.repos.d/CentOS-*.repo \
+ && yum -y install java-1.7.0-openjdk-devel which \
+ && yum clean all
+
+# 공식 2.7.3 + 원 저자 YARN jar 13개 교체본 (build-image.sh가 컨텍스트에 복사)
+ADD hadoop-2.7.3-pufferfish.tar.gz /opt/
+COPY conf/*.xml /opt/hadoop-2.7.3/etc/hadoop/
+# 호스트용 JAVA_HOME(JDK 8) 고정 줄 제거 → *-env.sh가 아래 ENV의 JDK 7을 따름
+RUN sed -i '/^export JAVA_HOME=\/usr\/lib\/jvm\/java-8-openjdk-/d' \
+      /opt/hadoop-2.7.3/etc/hadoop/hadoop-env.sh \
+      /opt/hadoop-2.7.3/etc/hadoop/yarn-env.sh \
+      /opt/hadoop-2.7.3/etc/hadoop/mapred-env.sh
+
+# JAVA_HOME은 호스트(JDK 8)와 경로가 달라 NM env-whitelist에서 제외 → 이 값이 쓰임
+ENV JAVA_HOME=/usr/lib/jvm/java-1.7.0-openjdk \
+    HADOOP_PREFIX=/opt/hadoop-2.7.3 \
+    HADOOP_COMMON_HOME=/opt/hadoop-2.7.3 \
+    HADOOP_HDFS_HOME=/opt/hadoop-2.7.3 \
+    HADOOP_MAPRED_HOME=/opt/hadoop-2.7.3 \
+    HADOOP_YARN_HOME=/opt/hadoop-2.7.3 \
+    HADOOP_CONF_DIR=/opt/hadoop-2.7.3/etc/hadoop \
+    PATH=/opt/hadoop-2.7.3/bin:/usr/lib/jvm/java-1.7.0-openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin

@@ -1,6 +1,6 @@
 # Step 3 — YARN 기동, worker 2대 인식
 
-> 로드맵: [2026-10-05.md](2026-10-05.md) §3 Step 3 / 이전 단계: [02-step2-hdfs.md](02-step2-hdfs.md)
+> 로드맵: [2026-10-05.md](../../common/lab-meetings/2026-10-05/2026-10-05.md) §3 Step 3 / 이전 단계: [02-step2-hdfs.md](02-step2-hdfs.md)
 >
 > ✅ **완료 (2026-10-06)** — 확인 포인트 4개 모두 통과
 
@@ -75,7 +75,7 @@
 - `pi 2 10` 기준: AM 512 + map 512 × 2 = 1536 MB → 한 worker에 다 들어가도 2048 이하
 - 추정치는 기동 후 `free -m`·`ps`로 실측해서 아래 검증 결과에 채운다
 
-설정 원본: [reimpl-hadoop3/configs/hadoop/](../../configs/hadoop/)
+설정 원본: [reimpl-hadoop3/configs/hadoop/](../configs/hadoop/)
 (`yarn-site.xml`, `mapred-site.xml` 추가. Step 2의 `core-site.xml`·`hdfs-site.xml`·`workers`는 그대로)
 
 ## 실행 방법

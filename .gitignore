@@ -10,3 +10,6 @@ reimpl-single-node/experiments/results/*.log
 __pycache__/
 *.pyc
 reimpl-single-node/controller/state/
+
+# 랩미팅 발표 자료 — 로컬 전용 (GitHub에 올리지 않음)
+common/lab-meetings/

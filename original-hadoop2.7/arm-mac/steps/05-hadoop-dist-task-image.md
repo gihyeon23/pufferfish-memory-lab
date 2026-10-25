@@ -9,7 +9,7 @@
 **한 줄 요약: 원 코드를 수정하지 않고 실행용 Hadoop 묶음(`/opt/hadoop-2.7.3`)과 task 이미지(`local/hadoop-docker:2.7.3`)를 만든다.**
 
 - 소스 전체 빌드는 dist 단계에서 실패함 [사실: `build-pass2/A/B.log`] → 공식 2.7.3 바이너리에 원 저자 YARN jar만 교체
-- 파일: [original-hadoop2.7/legacy-2.7.3/](../../legacy-2.7.3/) (Dockerfile, conf, build-image.sh, cmpsig.py)
+- 파일: [original-hadoop2.7/setup/](../../setup/) (Dockerfile, conf, build-image.sh, cmpsig.py)
 
 ## 1. 결정 사항 (2026-10-24)
 
@@ -35,7 +35,7 @@ sha256sum hadoop-2.7.3.tar.gz   # d489df38…b09259c2 — .mds와 일치 [사실
 
 - 바이트 비교(.class sha256)는 Common/HDFS/MR도 60~100% 다름 → 의미 없음
   - 원인 [사실]: 공식 jar `Build-Jdk: 1.7.0_111`, 우리 빌드 `1.8.0_292` (class 버전은 둘 다 51)
-- **javap 시그니처 비교**(클래스·필드·메서드 목록)로 전환: [cmpsig.py](../../legacy-2.7.3/cmpsig.py), 결과 [05-cmpsig.log](05-cmpsig.log)
+- **javap 시그니처 비교**(클래스·필드·메서드 목록)로 전환: [cmpsig.py](../../setup/cmpsig.py), 결과 [05-cmpsig.log](05-cmpsig.log)
 
 | 구분 | 결과 [사실] |
 |---|---|
@@ -66,9 +66,9 @@ sha256sum hadoop-2.7.3.tar.gz   # d489df38…b09259c2 — .mds와 일치 [사실
 
 ```bash
 # 맥에서
-scp -r -P 2214 original-hadoop2.7/legacy-2.7.3 gihyeon@127.0.0.1:legacy/
+scp -r -P 2214 original-hadoop2.7/setup gihyeon@127.0.0.1:legacy/
 # VM에서
-bash ~/legacy/legacy-2.7.3/build-image.sh   # 호스트 conf 반영 → tar → docker build
+bash ~/legacy/setup/build-image.sh   # 호스트 conf 반영 → tar → docker build
 ```
 
 - 구성: `local/ubuntu:16.04` + `openjdk-8-jdk-headless` + 교체본 tar + conf + `JAVA_HOME`/`HADOOP_*` ENV
@@ -143,6 +143,7 @@ bash ~/legacy/legacy-2.7.3/build-image.sh   # 호스트 conf 반영 → tar → 
 | 클래스 메타데이터 | PermGen (힙 영역) | Metaspace (힙 밖 네이티브) |
 
 - `-Xmx`는 64GB로 같지만 **GC 종류·힙 확장 속도**가 달라져 swap 진입 시점·양이 달라짐 [추측]
+- ⚠️ 2026-10-25 실측: 현재 VM은 게스트가 CPU 1개만 인식 → JDK 7·8 모두 기본 GC가 Serial (서버급 판정 실패). 이 VM에서는 GC 차이가 안 나타남 — 06 참고
 
 ### 메커니즘별 영향 [추측]
 
@@ -160,6 +161,7 @@ bash ~/legacy/legacy-2.7.3/build-image.sh   # 호스트 conf 반영 → tar → 
   - CentOS 7은 원 이미지(CentOS 6.5) 계열과도 가까움
 - JDK 8 대안(설정만): `-XX:-UseContainerSupport -XX:+UseParallelGC` — "맞춤"이 아니라 "흉내"라 차선
 - 전제 확인 필요: ARM64 OpenJDK 7이 JIT 포함 Server VM인지 (Zero VM이면 실험 불가 → JDK 8 + 위 옵션으로 후퇴)
+  - ✅ 2026-10-25 확인: `OpenJDK 64-Bit Server VM (build 24.261-b02, mixed mode)` — 이미지 `local/hadoop-docker:2.7.3-jdk7`, 06 참고
 
 ### 검증 계획
 
