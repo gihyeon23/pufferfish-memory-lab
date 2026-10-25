@@ -9,7 +9,7 @@ VM 3대(control 1 + worker 2)에 JDK 17 + Hadoop 3.5.0 YARN을 올리고, reimpl
 | 폴더 | 내용 |
 |---|---|
 | [docs/07-multi-node-cluster.md](docs/07-multi-node-cluster.md) | 다중 노드 초기 설계 (SSH 기반, 원래 실험 7차) |
-| [steps/](steps/) | Step 0~3 기록 (로드맵·발표 메모는 로컬 `common/lab-meetings/2026-10-05/`) |
+| [steps/](steps/) | Step 0~3 기록 (로드맵·발표 메모는 [`common/lab-meetings/2026-10-05/`](../common/lab-meetings/2026-10-05/)) |
 | [configs/hadoop/](configs/hadoop/) | Step 2~3 Hadoop 3.5.0 설정 원본 |
 
 - 완료: Step 0 기준선, Step 1 VM 3대, Step 2 HDFS, Step 3 YARN + pi 5/5

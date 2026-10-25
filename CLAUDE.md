@@ -57,4 +57,3 @@ Management for Data-intensive Applications")의 OCM 감지/puff/reclaim 동작�
   - 실험 기록: 위 패키지 폴더에 단계 번호로 계속 쌓는다.
   - 발표 자료: `common/lab-meetings/<랩미팅 날짜>/`에 그 주 요약·발표 메모·예상 질문을 둔다.
     실험 문서는 복사하지 않고 링크로 가리킨다.
-  - `common/lab-meetings/`는 `.gitignore` 대상(로컬 전용) — 커밋·GitHub에 올리지 않는다.
