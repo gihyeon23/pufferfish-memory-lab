@@ -1,6 +1,6 @@
 # Step 2 — JDK 17 + Hadoop 3.5.0 설치, HDFS 기동
 
-> 로드맵: [2026-10-05.md](2026-10-05.md) §3 Step 2 / 이전 단계: [01-step1-vm-setup.md](01-step1-vm-setup.md)
+> 로드맵: [2026-10-05.md](../../common/lab-meetings/2026-10-05/2026-10-05.md) §3 Step 2 / 이전 단계: [01-step1-vm-setup.md](01-step1-vm-setup.md)
 
 ## 목적
 
@@ -20,7 +20,7 @@
 | `dfs.replication` | 2 | DataNode가 2대 |
 | 데이터 경로 | `/home/gihyeon/hadoop-data/{namenode,datanode,tmp}` | 기본값(`/tmp`)은 재부팅 시 지워짐 |
 
-- 설정 원본은 저장소 [reimpl-hadoop3/configs/hadoop/](../../configs/hadoop/)에 둔다
+- 설정 원본은 저장소 [reimpl-hadoop3/configs/hadoop/](../configs/hadoop/)에 둔다
   (`core-site.xml`, `hdfs-site.xml`, `workers`). 노드에는 `/opt/hadoop/etc/hadoop/`로 복사
 - 설치는 맥에서 SSH로 3대에 병렬 실행했다. 이를 위해 3대에 `/etc/sudoers.d/90-gihyeon`
   (`NOPASSWD`)을 넣었다 — 외부와 막힌 실습용 VM이라 허용. 되돌리려면 이 파일만 지운다

@@ -21,7 +21,13 @@
   </property>
   <property>
     <name>yarn.nodemanager.docker-container-executor.image-name</name>
-    <value>local/hadoop-docker:2.7.3</value>
+    <value>local/hadoop-docker:2.7.3-jdk7</value>
+  </property>
+  <!-- task JDK(7)는 이미지 ENV를 쓰도록 JAVA_HOME을 제외 (호스트 NM은 JDK 8, 경로 다름).
+       기본값: JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,HADOOP_YARN_HOME -->
+  <property>
+    <name>yarn.nodemanager.env-whitelist</name>
+    <value>HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,HADOOP_YARN_HOME</value>
   </property>
 
   <!-- 노드 자원: VM 3GB 중 2GB를 YARN에 -->

@@ -1,6 +1,6 @@
 # Step 1 — VM 3대 기동 (control 1 + worker 2)
 
-> 로드맵: [2026-10-05.md](2026-10-05.md) §3 Step 1 / 기준선: [00-step0-baseline.md](00-step0-baseline.md)
+> 로드맵: [2026-10-05.md](../../common/lab-meetings/2026-10-05/2026-10-05.md) §3 Step 1 / 기준선: [00-step0-baseline.md](00-step0-baseline.md)
 
 ## 목표 구성
 

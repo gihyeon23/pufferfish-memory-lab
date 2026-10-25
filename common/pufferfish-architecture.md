@@ -152,7 +152,7 @@ commandMemory.add(memory_swap.toString()+"m");
 하드코딩**한다(`ContainerImpl.java:764-766`, `/sys/fs/cgroup/memory/docker/<id>/`,
 `memory.limit_in_bytes`·`memory.usage_in_bytes` 등 v1 인터페이스, Docker
 cgroupfs 드라이버 전제). 상세는
-[2026-10-26/01-legacy-build.md](../original-hadoop2.7/lab-meetings/2026-10-26/01-legacy-build.md).
+[2026-10-26/01-legacy-build.md](../original-hadoop2.7/arm-mac/steps/01-legacy-build.md).
 
 따라서 발표·문서에서 **"논문은 cgroup v1 기반"이라고 단정하면 안 된다**
 (논문 본문은 여전히 미명시, v1은 **원 구현**의 사실).
