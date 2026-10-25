@@ -183,7 +183,7 @@ pufferfish-memory-lab/
 │   ├── papers/                     # 논문 원본(pdf/txt)·리뷰 컨텍스트
 │   ├── pufferfish-architecture.md  # 논문 분석 요약 (논문보다 먼저 참고)
 │   ├── environment.md              # 맥/VM 스펙
-│   └── lab-meetings/<날짜>/        # 주차별 발표 자료 (로컬 전용, .gitignore)
+│   └── lab-meetings/<날짜>/        # 주차별 발표 자료 (요약·발표 메모·인계)
 ├── reimpl-single-node/
 │   ├── controller/                 # cgroup 모니터·suspend·puff/reclaim·admission (Python)
 │   ├── workload-java/              # 메모리 증가 Java 워크로드 + 이미지
