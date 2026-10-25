@@ -19,6 +19,7 @@
   4. `original-hadoop2.7/arm-mac/steps/06-single-node-yarn-pi.md` (기동·pi·Flex 발견·CPU 문제)
   5. `common/pufferfish-architecture.md` (논문 vs 원 구현 대조, §2.5)
   6. `talking-points.md` (10/24 기준 발표 메모 — §3-1 빌드 이슈, §4 예상 질문은 여전히 유효)
+- **꼭 별도 슬라이드로 넣을 것**: §3-4(MapReduce로는 puff/suspend 안 됨), **§3-5(JDK 7 vs 8 고민 — 발표자 요청)**, §3-6(CPU 1개 → x86 전환)
 
 ## 1. 한 줄 메시지
 
@@ -70,13 +71,57 @@
 - 원 README는 "MapReduce는 하드코딩해 뒀다"고 하지만 **공개 저장소엔 그 코드가 없음** (MR 모듈 변경 0건)
 - Spark는 `spark.yarn.am.nodeLabelExpression flex`로 가능 → **Pufferfish 동작 확인엔 Spark 2.0.1 필수**
 
-### 3-5. task 이미지 JDK — 7로 결정한 근거 [원 구현 + 추측]
+### 3-5. ★ 고민: task 이미지 JDK 7 vs 8 — 별도 슬라이드 1~2장으로 [원 구현 + 추측]
 
-- puff·reclaim·suspend 판단은 컨테이너 **바깥**(NM + cgroup) → 이미지 OS와 무관
-- 하지만 원 코드가 Flex 컨테이너 `-Xmx`를 **64GB로 강제 치환**(`DockerContainerExecutor.java:353-366`) → JVM이 힙을 늘리는 패턴이 OCM·puff 횟수를 좌우 → **JDK가 메커니즘의 입력을 바꿈**
-- JDK 8u191+는 cgroup 한도를 인식, PermGen → Metaspace 등 차이 [사실]
-- ARM64 OpenJDK 7 확보·**JIT 포함 Server VM 확인** (Zero VM 아님)
-- 지원 종료(EOL) 버전이지만: 프로젝트 전체가 의도적으로 당시 버전, VM은 외부 서비스 아님 → 실험엔 무관
+> 발표자 요청으로 꼭 넣을 내용. "질문 → 분석 → 결정 → 확인" 흐름으로 구성.
+> 원문: `original-hadoop2.7/arm-mac/steps/05-hadoop-dist-task-image.md` §6·§7, 노션 "10월 24일 task 이미지 JDK 7 vs 8 고민"
+
+**① 질문** — task 이미지의 OS·JDK가 원 저자와 다르면 puff·reclaim·CPU 1% suspend 결과가 달라지나?
+
+- 배경: 원 저자 이미지(`sequenceiq/hadoop-docker:2.4.0` = CentOS 6.5 + Oracle JDK 7u71)는 x86 전용 → 맥(ARM)에선 못 씀
+- 처음엔 Ubuntu 16.04 + **JDK 8**로 만들었음 (Ubuntu 16.04 저장소엔 JDK 7이 없어서) → 원래 계획(JDK 7)과 다름을 발견하고 다시 검토
+
+**② 분석 1 — 메커니즘 자체는 이미지와 무관** [원 구현]
+
+- OCM 판정(`memory + swap > limit`)·suspend(`docker update --cpu-quota 1000 --cpuset-cpus 0`)·puff·reclaim은 모두 컨테이너 **바깥**(NodeManager + cgroup v1)이 처리
+- 컨테이너 안 OS는 커널을 공유 → **베이스 OS(CentOS/Ubuntu)는 무관**
+
+**③ 분석 2 — 하지만 JDK는 메커니즘의 "입력"을 바꿈**
+
+- 원 코드가 Flex 컨테이너의 `-Xmx`를 **64GB로 강제 치환** (`DockerContainerExecutor.java:353-366`) [원 구현]
+  → 힙이 컨테이너 한도를 넘어 swap → OCM → puff로 받아내는 설계
+  → **JVM이 힙을 언제·얼마나 늘리는지**가 OCM·puff 횟수를 결정
+
+| 차이 | JDK 7u71 (원 저자) | JDK 8u292 (처음 만든 이미지) |
+|---|---|---|
+| JVM이 보는 메모리 | 호스트 RAM | 컨테이너 한도 (8u191부터 cgroup 인식) [사실] |
+| 기본 GC | Parallel GC | 한도 약 1.8GB 미만이면 Serial GC [추측] |
+| 클래스 메타데이터 | PermGen (힙 영역) | Metaspace (힙 밖) [사실] |
+
+| 메커니즘 | 판단 로직 | 입력 변화의 영향 [추측] |
+|---|---|---|
+| OCM 감지 | 같음 | 감지 시점·횟수 달라짐 (중간) |
+| puff | 같음 | 횟수·최종 크기 달라짐 (중간) |
+| CPU 1% suspend | 같음 | 제한 동작은 같음, 횟수만 달라짐 (작음) |
+| reclaim | 같음 | 트리거 같음, 회수량 간접 영향 (작음~중간) |
+
+**④ 결정** — JDK 7 계열(CentOS 7 + OpenJDK 7)로 복귀
+
+- 메커니즘 입력을 원 저자와 같은 계열로 유지. CentOS도 원 이미지(CentOS 6.5) 계열
+- 대안(JDK 8 + `-XX:-UseContainerSupport -XX:+UseParallelGC`)은 "맞춤"이 아니라 "흉내"라 차선
+
+**⑤ 확인** [실측]
+
+- 걱정 1 — ARM용 JDK 7이 JIT 없는 Zero VM이면 실험 불가 → **Server VM(JIT 포함) 확인**
+- 걱정 2 — JDK 7은 지원 종료(EOL) → 빠지는 건 보안 패치뿐. 환경 전체가 의도적 당시 버전, Hadoop 2.7·Spark 2.0.1 모두 JDK 7 지원
+- JDK 7 이미지로 pi 6/6 성공, task가 실제로 JDK 7로 실행됨 확인
+
+**⑥ 남은 점 (솔직하게)**
+
+- 맥 VM은 CPU 1개라 JDK 7·8 모두 Serial GC → GC 차이는 **아직 실측 못 함** (§3-6)
+- 검증 계획: x86 VM에서 같은 워크로드를 JDK 7/8 이미지로 돌려 OCM·puff 횟수, swap 최대치, 완료 시간 비교
+
+**발표 포인트 (발표자 노트용)**: "이미지가 달라도 Pufferfish 판단 로직은 같지만, 원 코드가 힙을 64GB로 풀어 두는 구조라 JVM 버전이 메커니즘의 입력을 바꿉니다. 그래서 원 저자와 같은 JDK 7 계열로 맞췄고, 실제 영향은 x86에서 7/8 비교로 확인하겠습니다."
 
 ### 3-6. CPU 1개 문제 → x86 VM으로 [실측]
 
