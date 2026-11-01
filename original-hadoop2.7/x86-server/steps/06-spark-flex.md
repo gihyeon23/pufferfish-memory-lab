@@ -152,7 +152,70 @@ grep -E "set to be|out of memory contianer|balloon|update container memory|Conta
     - 우리 워커 규모(수요 수 GB)에서는 10%가 2GB보다 작음 → 논문보다 여유가 적게 남음 (**추측**: 이후 다시 OCM이 날 가능성이 논문보다 큼)
     - 관찰된 shrink는 마지막 puff(15:09:30) 약 14초 뒤 — 논문의 "2분 동안 OCM이 아니면 집합 C에서 제외" [p.264]와는 별개 동작으로 보임 (**추측**)
 - puff 간격은 약 4~5초 (논문 heartbeat 2초 [p.263]보다 김) — **추측**: OCM 판정 후 다음 heartbeat에 puff가 실행돼서 두 주기가 걸림
-- backoff(2순위 컨테이너는 ϕ/Nc) [p.263]는 안 보임: 두 컨테이너 모두 ×1.4 — 원 코드 확인 필요
+- backoff(2순위 컨테이너는 ϕ/Nc) [p.263]는 안 보임: 두 컨테이너 모두 ×1.4 → 원 코드는 **앱 단위** backoff라 정상 (§8에서 확인)
 - 남은 swap: puff 뒤에도 `_02` 585M가 그대로 남음 → swap된 페이지는 다시 접근해야 메모리로 돌아옴
-  - `second pass 0s`: 두 번째 읽기가 배열 길이만 봐서 실제 페이지를 안 건드림 → 스크립트 개선 필요 (바이트 합으로)
+  - `second pass 0s`: 두 번째 읽기가 배열 길이만 봐서 실제 페이지를 안 건드림 → §8에서 스크립트 개선
 - `stop ballooning`·reclaim·kill 없음: 노드 메모리(28GB)에 여유가 있어서 정상 — 메모리 압박 실험은 다음 단계
+
+## 8. 06c — 두 번째 읽기 개선 + backoff 원 코드 확인 (2026-11-01)
+
+### 목적
+
+- 06b의 `second pass 0s` 해결: 두 번째 읽기가 실제 페이지를 건드려 swap-in이 일어나게
+- 06b에서 backoff(ϕ/Nc)가 안 보인 이유를 원 코드로 확인
+- 실행은 Claude가 맥에서 `ssh labvm`으로 VM에서 직접 수행 (06b와 같은 조건)
+
+### 설계 — 스크립트 변경 ([../../setup/ocm-cache.scala](../../setup/ocm-cache.scala))
+
+- 두 번째 읽기: `_.length` 합 → 배열마다 **4KB 간격으로 1바이트씩 더함** (모든 페이지 접근, 1MB당 256번)
+- 출력: `second pass <MB 수> MB (byte sum <합>) in <초>s` — 바이트 합은 항상 0 (JIT가 루프를 없애지 않게 결과를 출력에 씀)
+
+### 원인 — backoff는 앱 단위 [사실: 원 코드 · 논문]
+
+| 논문에 명시된 사실 | 원 코드 | 차이 | 수정 필요 |
+|---|---|---|---|
+| Algorithm 1: `Nc = C.size()`(C = 우선순위로 정렬된 **OCM 컨테이너** 집합), 컨테이너 하나 puff할 때마다 `ϕ /= Nc` [p.264] | 앱을 시작 시각 순으로 정렬, **같은 앱의 컨테이너는 같은 비율**, 앱 하나 처리 후 `balloonRatio /= swappingSize`(= swap 중인 컨테이너가 있는 **앱 수**) (`NodeMemoryManager.java:308-345`) | 나누는 단위가 컨테이너 ↔ 앱. 이번처럼 한 앱의 executor 2개면 논문은 ×1.4, ×1.2 / 원 코드는 둘 다 ×1.4 | 없음 — 원 코드 재현이 목적. 결과 해석 때 명시 |
+| EJF: 컨테이너 우선순위 = 그 컨테이너가 속한 **job의 도착 시각** [p.264] | `getApplicationLaunchTime()` 오름차순 (`NodeMemoryManager.java:202-207`) | 없음 — 같은 job 컨테이너는 우선순위가 같음 | — |
+| puff 양 `min(c.memory × ϕ, (M − A)/2)` [p.264, Algorithm 1 18행] | `min(old × ratio, available/2)`, `available = nodeTotal × balloon.stop − 할당 합` (`NodeMemoryManager.java:326-327`) | M 대신 `M × 0.8` 사용 | 없음 |
+
+- **추측**: 공개 코드는 앱 단위 backoff라 "앱 2개 이상이 동시에 OCM"일 때만 비율이 줄어듦 → 다음 메모리 압박 실험에서 앱 2개로 확인 가능
+
+### 실행 방법 (맥 → VM)
+
+```bash
+scp original-hadoop2.7/setup/ocm-cache.scala labvm:legacy/setup/
+ssh labvm 'cd ~; nohup bash legacy/setup/watch-containers.sh > 06c-watch.log 2>&1 & W=$!;
+  bash legacy/setup/spark-ocm-flex.sh > 06c-spark.log 2>&1; sleep 4; kill $W'
+```
+
+### 결과 (`application_1793511642822_0005`)
+
+- 원본: [06c-watch.log](06c-watch.log), [06c-nm.log](06c-nm.log)
+- Spark 출력: `[06b] cached 6000 MB in 30s`, `[06b] second pass 6000 MB (byte sum 0) in 1s`
+
+| 시각 | 관찰 [사실: 로그] |
+|---|---|
+| 15:41:55 ~ 15:42:18 | OCM → suspend → puff: `_02` 1536 → 2150 → 3010 → 4214 → 5899, `_03` 1536 → 2150 → 3010 → 4214 (06b와 같은 순서·크기) |
+| 15:42:08 | 같은 라운드에서 `_02` 3010 → 4214, `_03` 2150 → 3010 — **둘 다 ×1.4** (앱 단위 backoff와 일치) |
+| 15:42:29 / 15:42:35 | `is removed`(swap 집합에서 빠짐) 직후 shrink: `_03` 4214 → 3639, `_02` 5899 → 4826 |
+| 15:43:18 | 두 번째 읽기: swap `_02` 175 → 171M, `_03` 142 → 134M (거의 그대로) |
+| 15:43:20 ~ 24 | AM·`_03` 종료 후 `_02`만 OCM 재발: mem 4825 / limit 4826, swap 422M → suspend(quota 1000, cpus 0) → puff 4826 → 6756 (×1.4) |
+
+- **shrink = (mem + swap) × 1.1 재확인**: `_03` (3167 + 142) × 1.1 = 3639 ✅, `_02` (4213 + 175) × 1.1 = 4826 ✅
+- **shrink 시점**: `is removed` 바로 뒤 [사실: 로그] — 원 코드는 `SWAP_KEEP_TIME = 5` 라운드 동안 OCM이 없으면 ballooning window를 끄고(`NodeMemoryManager.java:102, 170-177`), 그 뒤에 shrink 가능(`ContainerImpl.java:1198`). 논문은 "2분" [p.264], 코드 주석도 `keep for 2 minute`인데 값은 5 라운드
+- **두 번째 읽기**: 모든 페이지를 건드렸지만(1초) swap은 거의 안 줄었음
+  - **추측**: swap된 페이지는 cache 배열이 아니라 cache를 만들 때 생긴 쓰레기 객체나 JVM의 다른 영역이라, 배열을 다시 읽어도 안 돌아옴
+- **OCM 재발 (15:43:21)**: shrink 후 여유가 10%뿐이라 다시 OCM이 날 수 있다는 §7의 추측과 맞는 현상
+  - 단, 두 번째 읽기가 끝나고 앱이 종료되던 중이라 **원인은 단정 못 함** (**추측**: executor 종료 과정의 메모리 사용)
+- **reclaim**: executor launch마다 `MemoryReclaim` 호출됨(`memory reclaim called … request: 1536`) — 하지만 회수 없음
+  - 원 코드는 `할당 합 + 요청 < nodeTotal(28672)`이면 바로 리턴 (`NodeMemoryManager.java:398-400`)
+  - 로그의 `current assigned: 0`은 `updateMetrics()` 전에 찍은 값 (`NodeMemoryManager.java:393-396`)
+  - `limit: 25804.8` = 28672 × 0.9 (`balloon.reclaim`)는 출력만 하고 판정에는 안 씀
+- `stop ballooning`·kill 없음 (노드 여유 충분)
+
+### 다음 — 메모리 압박 실험 설계 메모 (**추측**, 원 코드 기준)
+
+- puff는 할당 합이 `28672 × 0.8 = 22937MB`에 닿으면 멈추고(`stop ballooning`), `× 0.9 = 25804MB` 이상이면 kill
+- reclaim은 새 컨테이너 launch 때 `할당 합 + 요청 ≥ 28672`일 때만 실제로 회수
+  - RM은 puff를 모르므로(요청량 기준으로만 스케줄) puff로 할당 합이 커진 뒤 새 앱을 넣으면 이 조건을 만들 수 있음
+- 계획: 앱 1이 puff로 할당 합을 0.8 근처까지 올림 → 앱 2(Flex)를 제출해 reclaim + 앱 단위 backoff 확인
