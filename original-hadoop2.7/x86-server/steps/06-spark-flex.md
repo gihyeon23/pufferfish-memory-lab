@@ -174,11 +174,12 @@ grep -E "set to be|out of memory contianer|balloon|update container memory|Conta
 
 | 논문에 명시된 사실 | 원 코드 | 차이 | 수정 필요 |
 |---|---|---|---|
-| Algorithm 1: `Nc = C.size()`(C = 우선순위로 정렬된 **OCM 컨테이너** 집합), 컨테이너 하나 puff할 때마다 `ϕ /= Nc` [p.264] | 앱을 시작 시각 순으로 정렬, **같은 앱의 컨테이너는 같은 비율**, 앱 하나 처리 후 `balloonRatio /= swappingSize`(= swap 중인 컨테이너가 있는 **앱 수**) (`NodeMemoryManager.java:308-345`) | 나누는 단위가 컨테이너 ↔ 앱. 이번처럼 한 앱의 executor 2개면 논문은 ×1.4, ×1.2 / 원 코드는 둘 다 ×1.4 | 없음 — 원 코드 재현이 목적. 결과 해석 때 명시 |
+| 본문: "Pufferfish **assigns the same puff ratio to tasks belonging to the same job**" [p.265] / Algorithm 1 의사코드: `Nc = C.size()`(C = 우선순위로 정렬된 OCM 컨테이너 집합), 컨테이너마다 `ϕ /= Nc` [p.264] | 앱을 시작 시각 순으로 정렬, **같은 앱의 컨테이너는 같은 비율**, 앱 하나 처리 후 `balloonRatio /= swappingSize`(= swap 중인 컨테이너가 있는 **앱 수**) (`NodeMemoryManager.java:308-345`) | **본문과 원 코드는 일치** (같은 job = 같은 비율). Algorithm 1을 문자 그대로 읽으면 컨테이너 단위라 어긋남 — 의사코드가 단순화된 것으로 봄 (**추측**) | 없음 |
 | EJF: 컨테이너 우선순위 = 그 컨테이너가 속한 **job의 도착 시각** [p.264] | `getApplicationLaunchTime()` 오름차순 (`NodeMemoryManager.java:202-207`) | 없음 — 같은 job 컨테이너는 우선순위가 같음 | — |
 | puff 양 `min(c.memory × ϕ, (M − A)/2)` [p.264, Algorithm 1 18행] | `min(old × ratio, available/2)`, `available = nodeTotal × balloon.stop − 할당 합` (`NodeMemoryManager.java:326-327`) | M 대신 `M × 0.8` 사용 | 없음 |
 
-- **추측**: 공개 코드는 앱 단위 backoff라 "앱 2개 이상이 동시에 OCM"일 때만 비율이 줄어듦 → 다음 메모리 압박 실험에서 앱 2개로 확인 가능
+- 정정 (2026-11-01): 처음엔 "논문은 컨테이너 단위"로 적었으나, p.265 본문에서 같은 job은 같은 비율이라고 명시한 것을 확인 → 논문 본문과 원 코드 일치로 고침
+- **추측**: 앱 단위 backoff라 "앱 2개 이상이 동시에 OCM"일 때만 비율이 줄어듦 → 다음 메모리 압박 실험에서 앱 2개로 확인 가능
 
 ### 실행 방법 (맥 → VM)
 

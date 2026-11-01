@@ -38,7 +38,7 @@ CLAUDE.md 워크플로에 따라 논문(`common/papers/pufferfish-paper.pdf`,
   기본 비율 `ϕ`, 2위는 `ϕ/Nc`, 3위는 `ϕ/Nc²`... 로 낮춰서 준다 (메모리 경쟁 완화)
   - Algorithm 1 [p.264]: `Nc = C.size()`(OCM 컨테이너 수), 컨테이너 하나 puff할 때마다 `ϕ /= Nc`.
     puff 양은 `min(c.memory × ϕ, (M − A)/2)` (한 컨테이너가 남은 메모리를 독차지하지 않게)
-  - 원 공개 코드는 **앱 단위**로 나눔 → 아래 "원 공개 구현" 표 참고
+  - 본문은 "같은 job의 task에는 같은 puff 비율" [p.265] → 실제 단위는 job(앱). 원 공개 코드도 **앱 단위** → 아래 "원 공개 구현" 표 참고
 - 노드 메모리가 이미 꽉 찼는데 최우선 컨테이너가 OCM이면, **최저 우선순위
   컨테이너를 kill**한다(재기동 비용이 가장 적으므로) — reclaim이 아니라 kill.
 - **현재 구현과 차이**: [puff_manager.py](../reimpl-single-node/controller/puff_manager.py)의
@@ -214,7 +214,7 @@ trade-off를 정리하면:
 |---|---|---|---|
 | puff 호출 주기 | heartbeat 2초 (p.263) | `ContainersMonitorImpl` 모니터 루프마다 `MemoryBalloon()` 호출(`monitor/ContainersMonitorImpl.java:398`) → 주기 = `yarn.nodemanager.container-monitor.interval-ms` | 설정값 의존 |
 | 우선순위 | EJF 기본 (p.264) | app을 `getApplicationLaunchTime()` 오름차순 정렬 → 먼저 시작한 app부터 puff | ✅ |
-| puff 비율 | ϕ=40%, backoff: 컨테이너마다 `ϕ /= Nc`, Nc = OCM 컨테이너 수 (p.263, Algorithm 1 p.264) | `balloon.ratio`(기본 0.4), **같은 app 컨테이너는 같은 비율**, app 하나 처리 후 `balloonRatio /= swappingSize`(= swap 중인 app 수) (`NodeMemoryManager.java:308-345`) | ⚠️ 컨테이너 ↔ app 단위. x86 06c에서 한 app의 executor 2개가 같은 라운드에 둘 다 ×1.4로 관찰 |
+| puff 비율 | ϕ=40%, backoff ϕ/Nc (p.263). 본문: 같은 job의 task는 같은 비율 (p.265). Algorithm 1 의사코드는 컨테이너마다 `ϕ /= Nc` (p.264) | `balloon.ratio`(기본 0.4), **같은 app 컨테이너는 같은 비율**, app 하나 처리 후 `balloonRatio /= swappingSize`(= swap 중인 app 수) (`NodeMemoryManager.java:308-345`) | ✅ 본문과 일치 (의사코드만 문자 그대로면 어긋남). x86 06c에서 한 app의 executor 2개가 같은 라운드에 둘 다 ×1.4로 관찰 |
 | puff 크기 | `min(c.memory×ϕ, (M−A)/2)` (Algorithm 1 18행, p.264) | `min(old×ratio, available/2)`, `available = nodeTotal×balloon.stop − 할당 합` | ⚠️ M 대신 M×0.8 |
 | puff 정지 | 노드 메모리 소진 | 할당 합 ≥ `balloon.stop`(코드 기본 **0.8**, README는 0.9) | ✅ |
 | 노드 포화 시 kill | 최저 우선순위 kill (p.263) | 할당 합 ≥ `balloon.reclaim`(기본 0.9) → **가장 늦게 시작한 app의 FLEX 컨테이너 kill**(`killContainer()`) | ✅ |
