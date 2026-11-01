@@ -83,7 +83,7 @@
 | 항목 | 내용 |
 |---|---|
 | 베이스 | `sequenceiq/pam:centos-6.5` (CentOS 6.5) — CentOS 6은 ARM64판 없음 |
-| JDK | Oracle JDK 7u71 (x64 RPM) |
+| JDK | Oracle JDK 7u51 (x64 RPM, 2.4.0 태그 기준 — x86-server/steps/03) |
 | Hadoop | 2.7.1 (`/usr/local/hadoop`) + x64 네이티브 라이브러리 |
 | 기타 | 비밀번호 없는 SSH(포트 2122), 의사 분산 모드 설정, `/etc/bootstrap.sh` |
 
@@ -97,7 +97,7 @@
 
 **5) 결과에 미치는 영향**
 
-- 다른 점: 컨테이너 **안쪽** OS(CentOS 6.5 → Ubuntu 16.04), JDK(7u71 → 8), 안쪽 Hadoop(2.4.0 또는 2.7.1 → 2.7.3)
+- 다른 점: 컨테이너 **안쪽** OS(CentOS 6.5 → Ubuntu 16.04), JDK(7u51 → 8), 안쪽 Hadoop(2.4.0 또는 2.7.1 → 2.7.3)
 - Pufferfish 동작(OCM 감지·suspend·puff·reclaim)은 컨테이너 **바깥**(NodeManager + cgroup)에서 일어나므로 영향 작음 [추측]
 - 단, task가 컨테이너 안의 Hadoop jar로 실행될 수 있어 **task 쪽 Hadoop 버전**은 달라짐 [추측: DCE 실행 방식 확인 필요] → 2.7.3으로 통일하는 편이 오히려 일관됨
 

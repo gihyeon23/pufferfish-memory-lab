@@ -13,12 +13,14 @@ case $ARCH in
 esac
 DL=${DL:-$HOME/legacy/dl}
 mkdir -p "$DL/centos7"
+# 진행률 표시 + .part로 받은 뒤 이름 변경 (중간에 끊겨도 다음 실행 때 다시 받음)
+fetch() { [ -f "$1" ] || { wget -q --show-progress -O "$1.part" "$2" && mv "$1.part" "$1"; }; }
 
 if docker images -q local/centos:7 | grep -q .; then
   echo "local/centos:7 이미 있음"
 else
   cd "$DL/centos7"
-  [ -f centos-7-$C7-docker.tar.xz ] || wget -q \
+  fetch centos-7-$C7-docker.tar.xz \
     https://raw.githubusercontent.com/CentOS/sig-cloud-instance-images/CentOS-7-$C7/docker/centos-7-$C7-docker.tar.xz
   sudo rm -rf rootfs && mkdir rootfs
   sudo tar --no-xattrs --no-selinux --no-acls -xJf centos-7-$C7-docker.tar.xz -C rootfs
@@ -32,7 +34,7 @@ if docker images -q local/ubuntu:16.04 | grep -q .; then
   echo "local/ubuntu:16.04 이미 있음"
 else
   cd "$DL"
-  [ -f ubuntu-base-16.04.6-base-$ARCH.tar.gz ] || wget -q \
+  fetch ubuntu-base-16.04.6-base-$ARCH.tar.gz \
     https://cdimage.ubuntu.com/ubuntu-base/releases/16.04/release/ubuntu-base-16.04.6-base-$ARCH.tar.gz
   docker import ubuntu-base-16.04.6-base-$ARCH.tar.gz local/ubuntu:16.04 >/dev/null
   cd - >/dev/null

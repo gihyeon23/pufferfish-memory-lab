@@ -1,0 +1,85 @@
+# 06c NodeManager 로그 발췌 (2026-11-01, application_1793511642822_0005)
+# grep -E "set to be|reclaim|out of memory contianer|balloon|slacking|update container memory|Container (quota|set)|stop ballooning|is removed|add swapping" yarn-*-nodemanager-*.log | grep 0005
+# "out of memory contianer detected: <id> <mem MB> <swap MB> <limit MB>" (ContainerImpl.java:1143, 원문 오타 그대로)
+# 패키지 접두어 org.apache.hadoop.yarn.server.nodemanager.containermanager 생략
+2026-11-01 15:41:35,205 INFO ContainerManagerImpl: container_1793511642822_0005_01_000001 set to be normal
+2026-11-01 15:41:35,206 INFO ContainerManagerImpl: try to reclaim memory for new container: container_1793511642822_0005_01_000001
+2026-11-01 15:41:40,335 INFO ContainerManagerImpl: container_1793511642822_0005_01_000002 set to be flexible
+2026-11-01 15:41:40,336 INFO ContainerManagerImpl: try to reclaim memory for new container: container_1793511642822_0005_01_000002
+2026-11-01 15:41:42,671 INFO ContainerManagerImpl: container_1793511642822_0005_01_000003 set to be flexible
+2026-11-01 15:41:42,673 INFO ContainerManagerImpl: try to reclaim memory for new container: container_1793511642822_0005_01_000003
+2026-11-01 15:41:55,905 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000002 1535 421 1536
+2026-11-01 15:41:57,641 INFO NodeMemoryManager: add swapping containercontainer_1793511642822_0005_01_000002
+2026-11-01 15:41:57,642 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000002 1535 450 1536
+2026-11-01 15:41:57,643 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000002 1535 450 1536
+2026-11-01 15:41:58,227 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000003 1535 636 1536
+2026-11-01 15:41:59,712 INFO ContainerImpl: container_1793511642822_0005_01_000002 balloon
+2026-11-01 15:41:59,712 INFO ContainerImpl: update container memory: container_1793511642822_0005_01_000002 old: 1536new: 2150
+2026-11-01 15:42:00,255 INFO ContainerImpl: balloon-nswap: container_1793511642822_0005_01_000002 from 1536to: 2150
+2026-11-01 15:42:00,256 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000003 1535 682 1536
+2026-11-01 15:42:01,336 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000003 1535 682 1536
+2026-11-01 15:42:01,886 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000002 2149 644 2150
+2026-11-01 15:42:02,780 INFO NodeMemoryManager: add swapping containercontainer_1793511642822_0005_01_000003
+2026-11-01 15:42:02,781 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000003 1535 682 1536
+2026-11-01 15:42:03,367 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000003 1535 682 1536
+2026-11-01 15:42:03,369 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000002 2149 677 2150
+2026-11-01 15:42:03,369 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000002 2149 677 2150
+2026-11-01 15:42:03,782 INFO ContainerImpl: container_1793511642822_0005_01_000003 balloon
+2026-11-01 15:42:03,782 INFO ContainerImpl: update container memory: container_1793511642822_0005_01_000003 old: 1536new: 2150
+2026-11-01 15:42:04,315 INFO ContainerImpl: balloon-nswap: container_1793511642822_0005_01_000003 from 1536to: 2150
+2026-11-01 15:42:04,316 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000003 1536 682 2150
+2026-11-01 15:42:04,369 INFO ContainerImpl: container_1793511642822_0005_01_000002 balloon
+2026-11-01 15:42:04,369 INFO ContainerImpl: update container memory: container_1793511642822_0005_01_000002 old: 2150new: 3010
+2026-11-01 15:42:04,907 INFO ContainerImpl: balloon-nswap: container_1793511642822_0005_01_000002 from 2150to: 3010
+2026-11-01 15:42:06,516 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000002 2532 571 3010
+2026-11-01 15:42:07,604 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000002 2536 567 3010
+2026-11-01 15:42:07,605 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000003 1536 682 2150
+2026-11-01 15:42:07,606 INFO NodeMemoryManager: add swapping containercontainer_1793511642822_0005_01_000002
+2026-11-01 15:42:07,606 INFO NodeMemoryManager: add swapping containercontainer_1793511642822_0005_01_000003
+2026-11-01 15:42:07,606 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000003 1536 682 2150
+2026-11-01 15:42:07,607 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000002 2536 567 3010
+2026-11-01 15:42:08,605 INFO ContainerImpl: container_1793511642822_0005_01_000002 balloon
+2026-11-01 15:42:08,605 INFO ContainerImpl: update container memory: container_1793511642822_0005_01_000002 old: 3010new: 4214
+2026-11-01 15:42:08,606 INFO ContainerImpl: container_1793511642822_0005_01_000003 balloon
+2026-11-01 15:42:08,606 INFO ContainerImpl: update container memory: container_1793511642822_0005_01_000003 old: 2150new: 3010
+2026-11-01 15:42:09,144 INFO ContainerImpl: balloon-nswap: container_1793511642822_0005_01_000002 from 3010to: 4214
+2026-11-01 15:42:09,683 INFO ContainerImpl: balloon-nswap: container_1793511642822_0005_01_000003 from 2150to: 3010
+2026-11-01 15:42:12,931 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000003 2784 464 3010
+2026-11-01 15:42:13,454 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000003 2789 459 3010
+2026-11-01 15:42:13,974 INFO ContainerImpl: container_1793511642822_0005_01_000003 balloon
+2026-11-01 15:42:13,974 INFO ContainerImpl: update container memory: container_1793511642822_0005_01_000003 old: 3010new: 4214
+2026-11-01 15:42:14,517 INFO ContainerImpl: balloon-nswap: container_1793511642822_0005_01_000003 from 3010to: 4214
+2026-11-01 15:42:16,130 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000002 4213 175 4214
+2026-11-01 15:42:17,175 INFO NodeMemoryManager: add swapping containercontainer_1793511642822_0005_01_000002
+2026-11-01 15:42:17,176 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000002 4213 175 4214
+2026-11-01 15:42:17,177 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000002 4213 175 4214
+2026-11-01 15:42:18,178 INFO ContainerImpl: container_1793511642822_0005_01_000002 balloon
+2026-11-01 15:42:18,178 INFO ContainerImpl: update container memory: container_1793511642822_0005_01_000002 old: 4214new: 5899
+2026-11-01 15:42:18,722 INFO ContainerImpl: balloon-nswap: container_1793511642822_0005_01_000002 from 4214to: 5899
+2026-11-01 15:42:29,351 INFO NodeMemoryManager: container_1793511642822_0005_01_000003 is removed
+2026-11-01 15:42:29,355 INFO ContainerImpl: slacking contianer detected: container_1793511642822_0005_01_000003
+2026-11-01 15:42:29,355 INFO ContainerImpl: update container memory: container_1793511642822_0005_01_000003 old: 4214new: 3639
+2026-11-01 15:42:29,895 INFO ContainerImpl: balloon-nswap: container_1793511642822_0005_01_000003 from 4214to: 3639
+2026-11-01 15:42:35,354 INFO NodeMemoryManager: container_1793511642822_0005_01_000002 is removed
+2026-11-01 15:42:35,901 INFO ContainerImpl: slacking contianer detected: container_1793511642822_0005_01_000002
+2026-11-01 15:42:35,901 INFO ContainerImpl: update container memory: container_1793511642822_0005_01_000002 old: 5899new: 4826
+2026-11-01 15:42:36,440 INFO ContainerImpl: balloon-nswap: container_1793511642822_0005_01_000002 from 5899to: 4826
+2026-11-01 15:42:45,453 INFO ContainerImpl: slacking contianer detected: container_1793511642822_0005_01_000003
+2026-11-01 15:42:45,453 INFO ContainerImpl: update container memory: container_1793511642822_0005_01_000003 old: 3639new: 3638
+2026-11-01 15:42:46,011 INFO ContainerImpl: balloon-nswap: container_1793511642822_0005_01_000003 from 3639to: 3638
+2026-11-01 15:43:21,058 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000002 4825 356 4826
+2026-11-01 15:43:22,238 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000002 4825 428 4826
+2026-11-01 15:43:23,240 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000002 4825 429 4826
+2026-11-01 15:43:23,379 INFO NodeMemoryManager: add swapping containercontainer_1793511642822_0005_01_000002
+2026-11-01 15:43:23,380 INFO ContainerImpl: out of memory contianer detected: container_1793511642822_0005_01_000002 4825 429 4826
+2026-11-01 15:43:24,241 INFO ContainerImpl: container_1793511642822_0005_01_000002 balloon
+2026-11-01 15:43:24,241 INFO ContainerImpl: update container memory: container_1793511642822_0005_01_000002 old: 4826new: 6756
+2026-11-01 15:43:24,790 INFO ContainerImpl: balloon-nswap: container_1793511642822_0005_01_000002 from 4826to: 6756
+
+# --- MemoryReclaim 로그 (컨테이너 ID가 없어 위 grep에 안 걸림, 시각으로 매칭: 15:41:35 ~ 15:41:43)
+2026-11-01 15:41:35,206 INFO NodeMemoryManager: memory reclaim called, current assigned: 0  current used: 0 request: 1024
+2026-11-01 15:41:35,206 INFO NodeMemoryManager: limit: 25804.8
+2026-11-01 15:41:40,336 INFO NodeMemoryManager: memory reclaim called, current assigned: 0  current used: 0 request: 1536
+2026-11-01 15:41:40,336 INFO NodeMemoryManager: limit: 25804.8
+2026-11-01 15:41:42,672 INFO NodeMemoryManager: memory reclaim called, current assigned: 0  current used: 0 request: 1536
+2026-11-01 15:41:42,672 INFO NodeMemoryManager: limit: 25804.8

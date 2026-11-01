@@ -36,7 +36,7 @@
 | cgroup | 논문 미명시 / 원 코드 **v1 하드코딩** | **v1** (16.04 기본) + `swapaccount=1` | ✅ | 원 코드 경로·옵션 동작 확인 [사실, [04](04-ubuntu1604-env.md) §3] |
 | Docker | 1.12.1 | **1.12.1** (+ containerd 0.2.3, runc 1.0.0~rc1) | ✅ | Launchpad 보관소의 2016-10-14 xenial arm64 빌드 [사실, [04](04-ubuntu1604-env.md) §2] |
 | Docker cgroup 드라이버 | (원 코드) cgroupfs 전제 | cgroupfs로 설정 | ✅ | 경로 `/docker/<id>` [사실] |
-| 컨테이너 이미지 | `sequenceiq/hadoop-docker` (CentOS 6.5, JDK 7u71, Hadoop 2.7.1 / 원 코드 기본 태그 2.4.0) | `local/ubuntu:16.04` + JDK 8 + Hadoop 2.7.3 직접 제작 예정 | ❌ | 원 이미지 amd64 전용 [사실]. Docker 1.12.1은 현재 Docker Hub에서 pull 불가 [사실]. 쉬운 설명: [04](04-ubuntu1604-env.md) §2 |
+| 컨테이너 이미지 | `sequenceiq/hadoop-docker` (원 README·코드 기본 태그 2.4.0 = CentOS 6.5, Oracle JDK 7u51, Hadoop 2.4.0. 최신 태그 2.7.1은 JDK 7u71 — x86-server/steps/03) | `local/ubuntu:16.04` + JDK 8 + Hadoop 2.7.3 직접 제작 예정 | ❌ | 원 이미지 amd64 전용 [사실]. Docker 1.12.1은 현재 Docker Hub에서 pull 불가 [사실]. 쉬운 설명: [04](04-ubuntu1604-env.md) §2 |
 | Spark | 2.0.1 | 2.0.1 사용 예정 | ✅ 대부분 | JVM 기반. snappy 등 네이티브 라이브러리 ARM 지원은 확인 필요 [추측] |
 | puff 비율 ϕ | 40% | 40% (`balloon.ratio=0.4`) | ✅ | 원 코드 기본값 [사실] |
 | MIN_CONT | 4GB | 축소 필요 | ⚠️ 비율 유지 | worker 3.5GB라 그대로 불가 |

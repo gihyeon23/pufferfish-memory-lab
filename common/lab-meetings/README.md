@@ -9,3 +9,4 @@
 | 2026-09-21 | swap 차단 실험, admission controller 여부 | [2026-09-21.md](2026-09-21/2026-09-21.md) |
 | 2026-10-05 | 2단계 로드맵 (Hadoop 3.5.0 클러스터) | [2026-10-05.md](2026-10-05/2026-10-05.md), [talking-points](2026-10-05/talking-points.md) |
 | 2026-10-26 | 원 구현 첫 실행, 맥(ARM) 한계, x86 VM 전환 | [README.md](2026-10-26/README.md) (다른 AI 인계용), [talking-points](2026-10-26/talking-points.md) |
+| 2026-11-02 | x86 VM 원 저자 환경, 첫 OCM·puff 관찰, shrink ×1.1, 우리가 정한 값(1코어 등) | [README.md](2026-11-02/README.md) (다른 AI 인계용), [talking-points](2026-11-02/talking-points.md) |

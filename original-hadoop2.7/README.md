@@ -7,7 +7,7 @@ cgroup v1)에서 실행한다.
 |---|---|---|
 | [setup/](setup/) | 두 환경 공통: 설치·이미지 빌드 스크립트, conf, Dockerfile, jar 비교 `cmpsig.py` | 사용 중 |
 | [arm-mac/](arm-mac/) | 맥(M4) VirtualBox VM `u1604-test` — 절차 확인·연습용 | 정식 실험 안 함 |
-| [x86-server/](x86-server/) | 연구실 x86 VM — **정식 실험** | VM 할당 대기 |
+| [x86-server/](x86-server/) | 연구실 x86 VM — **정식 실험** | worker 1대 수령, 단일 노드 구성 중 |
 
 ## 환경을 나눈 이유
 
@@ -31,8 +31,19 @@ cgroup v1)에서 실행한다.
 ### x86-server (정식) — [x86-server/](x86-server/)
 
 - [x] 설치 스크립트 준비 (`setup/`)
-- [ ] VM 수령 → 커널 4.4·CPU 수·x86_64 확인
-- [ ] 설치 스크립트로 환경 구성 → pi
-- [ ] task 이미지 방향 결정 (원 `sequenceiq/hadoop-docker` 반입 vs CentOS 6.5 + JDK 7 직접 구성)
-- [ ] Spark 2.0.1 + `spark.yarn.am.nodeLabelExpression flex` → OCM/suspend/puff 로그 확인
+- [x] 클러스터 사양 확정 (master 1 + worker 2, 워커 32GB = 논문 1/4) · 실험 설정 초기안 — [steps/01](x86-server/steps/01-cluster-spec-and-scaling.md)
+- [x] VM 수령 → 커널 4.4·CPU 수·x86_64 확인, install-host.sh 실행, 재부팅 후 swapaccount 확인 — [steps/02](x86-server/steps/02-vm-access-and-install-host.md)
+- [x] 설치 스크립트로 환경 구성 → pi — 원 이미지(`2.7.3-sequenceiq`)로 DCE pi SUCCEEDED (worker 1대 단일 노드, [steps/03](x86-server/steps/03-task-image-sequenceiq.md) §10)
+- [x] swap 32GB swapfile (기존 LVM 980M 끔) — [steps/04](x86-server/steps/04-swap-32gb.md)
+- [x] 워커 메모리 설정 (YARN 28GB, MAX_HEAP 16GB) — [steps/05](x86-server/steps/05-worker-memory-config.md)
+- [x] task 이미지 방향 결정 → 원 `sequenceiq/hadoop-docker:2.4.0`(CentOS 6.5 + Oracle JDK 7u51) 반입 — [steps/03](x86-server/steps/03-task-image-sequenceiq.md)
+- [x] Spark 2.0.1 + `spark.yarn.am.nodeLabelExpression flex` → Flex 판정·`-Xmx16384m` 치환·`--memory-swap -1` 확인 — [steps/06](x86-server/steps/06-spark-flex.md)
+- [x] OCM → suspend → puff(×1.4) → shrink(×1.1) 관찰 — [steps/06](x86-server/steps/06-spark-flex.md) §7
+- [x] 두 번째 읽기 개선 · backoff 원 코드 확인(앱 단위 — 논문 본문 p.265와 일치) · shrink 후 OCM 재발 관찰 — [steps/06](x86-server/steps/06-spark-flex.md) §8
+- [x] HiBench 6.0 빌드 (sparkbench, Spark 2.0) — [steps/07](x86-server/steps/07-hibench.md)
+- [x] HiBench 설정 — executor 1개·1코어·1g, Spark 기본값, 데이터 프로파일 `pfq`(Table 1 Small의 1/4) — [steps/08](x86-server/steps/08-hibench-config.md)
+- [x] PR·KM 데이터 1/4 생성, 단독 예비 실험 (PR 10.4GB·753초, KM 12.4GB·476초) — [steps/09](x86-server/steps/09-fig6a-puff.md) §2
+- [x] **Fig 6(a) puff 재현** — stop ballooning, 최저 우선순위 kill, RM 재시작 차단까지 확인. 단 kill 5번(논문 1번) — [steps/09](x86-server/steps/09-fig6a-puff.md) §5
+- [ ] reclaim 확인 → Fig 6(b)(c) (TPC-H + baseline 필요)
+- [ ] WC·NW 데이터 생성, 데이터 비율 조정 검토 (KM 비중이 논문보다 큼)
 - [ ] baseline(공식 YARN jar) vs Pufferfish 비교 → 3대 구성
