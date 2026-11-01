@@ -42,6 +42,8 @@ cgroup v1)에서 실행한다.
 - [x] 두 번째 읽기 개선 · backoff 원 코드 확인(앱 단위 — 논문 본문 p.265와 일치) · shrink 후 OCM 재발 관찰 — [steps/06](x86-server/steps/06-spark-flex.md) §8
 - [x] HiBench 6.0 빌드 (sparkbench, Spark 2.0) — [steps/07](x86-server/steps/07-hibench.md)
 - [x] HiBench 설정 — executor 1개·1코어·1g, Spark 기본값, 데이터 프로파일 `pfq`(Table 1 Small의 1/4) — [steps/08](x86-server/steps/08-hibench-config.md)
-- [ ] 데이터 1/4 생성 · 입력 규모 예비 실험 (단일 노드)
-- [ ] 메모리 압박에서 `stop ballooning`·reclaim 확인 (앱 2개: 앱 1 puff로 할당 합 0.8 근처 → 앱 2 제출, §8 설계 메모)
+- [x] PR·KM 데이터 1/4 생성, 단독 예비 실험 (PR 10.4GB·753초, KM 12.4GB·476초) — [steps/09](x86-server/steps/09-fig6a-puff.md) §2
+- [x] **Fig 6(a) puff 재현** — stop ballooning, 최저 우선순위 kill, RM 재시작 차단까지 확인. 단 kill 5번(논문 1번) — [steps/09](x86-server/steps/09-fig6a-puff.md) §5
+- [ ] reclaim 확인 → Fig 6(b)(c) (TPC-H + baseline 필요)
+- [ ] WC·NW 데이터 생성, 데이터 비율 조정 검토 (KM 비중이 논문보다 큼)
 - [ ] baseline(공식 YARN jar) vs Pufferfish 비교 → 3대 구성
