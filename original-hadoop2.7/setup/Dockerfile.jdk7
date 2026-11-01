@@ -1,5 +1,5 @@
 # task 이미지 (JDK 7) — 원 저자 sequenceiq/hadoop-docker(CentOS 6.5 + JDK 7)에 가장 가까운 구성
-# CentOS 6은 ARM64판이 없어 CentOS 7, Oracle JDK 7u71 대신 OpenJDK 7 (05 §6·§7)
+# CentOS 6은 ARM64판이 없어 CentOS 7, Oracle JDK 7u51 대신 OpenJDK 7 (05 §6·§7)
 # base: CentOS Cloud SIG aarch64 rootfs를 xattr 없이 재import한 local/centos:7 (06 참고)
 FROM local/centos:7
 # build-image.sh가 공통으로 넘기는 값 (Docker 1.12는 안 쓰는 build-arg가 있으면 빌드 실패 → 선언만)

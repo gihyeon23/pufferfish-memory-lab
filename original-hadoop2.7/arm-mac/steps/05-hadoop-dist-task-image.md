@@ -80,7 +80,7 @@ bash ~/legacy/setup/build-image.sh   # 호스트 conf 반영 → tar → docker 
 |---|---|---|---|
 | 이미지 | `sequenceiq/hadoop-docker:2.4.0` [사실: 원 README "tested 2.4.0"], 논문은 태그 미명시 (p.265) | `local/hadoop-docker:2.7.3` | x86 전용 + Docker 1.12.1은 Docker Hub pull 실패 |
 | 안쪽 OS | CentOS 6.5 | Ubuntu 16.04 | CentOS 6 ARM64판 없음 |
-| JDK | Oracle JDK 7u71 | **OpenJDK 8u292** | xenial에 JDK 7 없음 → 아래 "JDK 7 대안" 참고 |
+| JDK | Oracle JDK 7u51 (2.4.0 태그) | **OpenJDK 8u292** | xenial에 JDK 7 없음 → 아래 "JDK 7 대안" 참고 |
 | 안쪽 Hadoop | 2.4.0 [추측: 태그명] | 2.7.3 (교체본) | 호스트와 통일 |
 | CPU | x86 | ARM | 맥 M4 |
 
@@ -135,7 +135,7 @@ bash ~/legacy/setup/build-image.sh   # 호스트 conf 반영 → tar → docker 
   - 힙이 컨테이너 한도를 넘어 swap → OCM → puff로 받아내는 설계
   - ⇒ **JVM이 힙을 언제·얼마나 늘리는지**가 OCM 시점·횟수를 결정
 
-| 차이 | JDK 7u71 (원 저자) | JDK 8u292 (현재 이미지) |
+| 차이 | JDK 7u51 (원 저자) | JDK 8u292 (현재 이미지) |
 |---|---|---|
 | JVM이 보는 메모리 | 호스트 RAM | **컨테이너 한도** (8u191+ cgroup 인식) [사실] |
 | 기본 GC | Parallel GC (서버급) | 한도 약 1.8GB 미만이면 **Serial GC 가능** [JDK 동작, 실측 확인 필요] |

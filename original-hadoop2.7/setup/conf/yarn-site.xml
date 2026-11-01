@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
-<!-- 원 구현(YARN 2.7.3) 단일 노드 — 호스트와 task 이미지가 같은 파일을 씀 -->
+<!-- 원 구현(YARN 2.7.3) 단일 노드 — 호스트와 task 이미지가 같은 파일을 씀. @HOST@·@HOME@은 build-image.sh가 채움 -->
 <configuration>
   <property>
     <name>yarn.resourcemanager.hostname</name>
-    <value>pf16-worker1</value>
+    <value>@HOST@</value>
   </property>
   <property>
     <name>yarn.nodemanager.aux-services</name>

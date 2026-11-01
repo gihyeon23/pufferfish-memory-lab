@@ -8,8 +8,10 @@ H=/opt/hadoop-2.7.3
 cd $H
 case $1 in
   start)
+    mkdir -p logs
     # 최초 1회만 포맷 (hadoop.tmp.dir = core-site.xml)
-    [ -d "$HOME/hadoop-data/dfs/name/current" ] || bin/hdfs namenode -format -nonInteractive >/dev/null 2>&1
+    [ -d "$HOME/hadoop-data/dfs/name/current" ] || bin/hdfs namenode -format -nonInteractive > logs/format.log 2>&1 \
+      || { echo "namenode 포맷 실패 — $H/logs/format.log"; tail -5 logs/format.log; exit 1; }
     sbin/hadoop-daemon.sh start namenode;  sbin/hadoop-daemon.sh start datanode
     sbin/yarn-daemon.sh start resourcemanager; sbin/yarn-daemon.sh start nodemanager
     bin/hdfs dfsadmin -safemode wait >/dev/null

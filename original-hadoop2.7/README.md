@@ -7,7 +7,7 @@ cgroup v1)에서 실행한다.
 |---|---|---|
 | [setup/](setup/) | 두 환경 공통: 설치·이미지 빌드 스크립트, conf, Dockerfile, jar 비교 `cmpsig.py` | 사용 중 |
 | [arm-mac/](arm-mac/) | 맥(M4) VirtualBox VM `u1604-test` — 절차 확인·연습용 | 정식 실험 안 함 |
-| [x86-server/](x86-server/) | 연구실 x86 VM — **정식 실험** | VM 할당 대기 |
+| [x86-server/](x86-server/) | 연구실 x86 VM — **정식 실험** | worker 1대 수령, 단일 노드 구성 중 |
 
 ## 환경을 나눈 이유
 
@@ -31,8 +31,10 @@ cgroup v1)에서 실행한다.
 ### x86-server (정식) — [x86-server/](x86-server/)
 
 - [x] 설치 스크립트 준비 (`setup/`)
-- [ ] VM 수령 → 커널 4.4·CPU 수·x86_64 확인
-- [ ] 설치 스크립트로 환경 구성 → pi
-- [ ] task 이미지 방향 결정 (원 `sequenceiq/hadoop-docker` 반입 vs CentOS 6.5 + JDK 7 직접 구성)
+- [x] 클러스터 사양 확정 (master 1 + worker 2, 워커 32GB = 논문 1/4) · 실험 설정 초기안 — [steps/01](x86-server/steps/01-cluster-spec-and-scaling.md)
+- [x] VM 수령 → 커널 4.4·CPU 수·x86_64 확인, install-host.sh 실행, 재부팅 후 swapaccount 확인 — [steps/02](x86-server/steps/02-vm-access-and-install-host.md)
+- [x] 설치 스크립트로 환경 구성 → pi — 원 이미지(`2.7.3-sequenceiq`)로 DCE pi SUCCEEDED (worker 1대 단일 노드, [steps/03](x86-server/steps/03-task-image-sequenceiq.md) §10)
+- [x] swap 32GB swapfile (기존 LVM 980M 끔) — [steps/04](x86-server/steps/04-swap-32gb.md)
+- [x] task 이미지 방향 결정 → 원 `sequenceiq/hadoop-docker:2.4.0`(CentOS 6.5 + Oracle JDK 7u51) 반입 — [steps/03](x86-server/steps/03-task-image-sequenceiq.md)
 - [ ] Spark 2.0.1 + `spark.yarn.am.nodeLabelExpression flex` → OCM/suspend/puff 로그 확인
 - [ ] baseline(공식 YARN jar) vs Pufferfish 비교 → 3대 구성
