@@ -32,3 +32,4 @@ bash ~/legacy/setup/hadoop.sh start        # HDFS/YARN 단일 노드
 ## 결정 사항
 
 - task 이미지: 원 `sequenceiq/hadoop-docker:2.4.0` 반입 (A안) — [steps/03](steps/03-task-image-sequenceiq.md). JDK 7/8 비교는 하지 않음 (2026-11-01 결정, steps/03 §2) — `jdk7`·`jdk8` 변형은 arm-mac 기록용으로만 남김
+- HiBench 6.0 — 논문·원 코드에 버전 없음, 원 저자 로그(2017-02) 시점 최신으로 선택 (2026-11-01) — [steps/07](steps/07-hibench.md)

@@ -40,5 +40,7 @@ cgroup v1)에서 실행한다.
 - [x] Spark 2.0.1 + `spark.yarn.am.nodeLabelExpression flex` → Flex 판정·`-Xmx16384m` 치환·`--memory-swap -1` 확인 — [steps/06](x86-server/steps/06-spark-flex.md)
 - [x] OCM → suspend → puff(×1.4) → shrink(×1.1) 관찰 — [steps/06](x86-server/steps/06-spark-flex.md) §7
 - [x] 두 번째 읽기 개선 · backoff 원 코드 확인(앱 단위, 논문은 컨테이너 단위) · shrink 후 OCM 재발 관찰 — [steps/06](x86-server/steps/06-spark-flex.md) §8
+- [x] HiBench 6.0 빌드 (sparkbench, Spark 2.0) — [steps/07](x86-server/steps/07-hibench.md)
+- [ ] HiBench 설정 · 데이터 1/4 생성 · 입력 규모 예비 실험 (단일 노드)
 - [ ] 메모리 압박에서 `stop ballooning`·reclaim 확인 (앱 2개: 앱 1 puff로 할당 합 0.8 근처 → 앱 2 제출, §8 설계 메모)
 - [ ] baseline(공식 YARN jar) vs Pufferfish 비교 → 3대 구성
