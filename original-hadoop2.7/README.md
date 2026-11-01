@@ -35,6 +35,7 @@ cgroup v1)에서 실행한다.
 - [x] VM 수령 → 커널 4.4·CPU 수·x86_64 확인, install-host.sh 실행, 재부팅 후 swapaccount 확인 — [steps/02](x86-server/steps/02-vm-access-and-install-host.md)
 - [x] 설치 스크립트로 환경 구성 → pi — 원 이미지(`2.7.3-sequenceiq`)로 DCE pi SUCCEEDED (worker 1대 단일 노드, [steps/03](x86-server/steps/03-task-image-sequenceiq.md) §10)
 - [x] swap 32GB swapfile (기존 LVM 980M 끔) — [steps/04](x86-server/steps/04-swap-32gb.md)
+- [x] 워커 메모리 설정 (YARN 28GB, MAX_HEAP 16GB) — [steps/05](x86-server/steps/05-worker-memory-config.md)
 - [x] task 이미지 방향 결정 → 원 `sequenceiq/hadoop-docker:2.4.0`(CentOS 6.5 + Oracle JDK 7u51) 반입 — [steps/03](x86-server/steps/03-task-image-sequenceiq.md)
 - [ ] Spark 2.0.1 + `spark.yarn.am.nodeLabelExpression flex` → OCM/suspend/puff 로그 확인
 - [ ] baseline(공식 YARN jar) vs Pufferfish 비교 → 3대 구성

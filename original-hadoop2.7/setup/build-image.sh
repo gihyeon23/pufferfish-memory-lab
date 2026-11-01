@@ -14,11 +14,15 @@ HERE=$(cd "$(dirname "$0")" && pwd)
 # 호스트 NM/RM은 JDK 8로 실행 (task JDK는 이미지 ENV — yarn-site env-whitelist에서 JAVA_HOME 제외)
 JAVA_HOME=/usr/lib/jvm/java-8-openjdk-$ARCH
 
-# 1) 설정 생성: conf/의 @HOST@·@HOME@을 이 VM 값으로 채움 → 호스트·이미지가 같은 파일을 씀
+# 1) 설정 생성: conf/의 @HOST@·@HOME@·@YARN_MB@·@JVM_MB@을 채움 → 호스트·이미지가 같은 파일을 씀
+#    YARN_MB·JVM_MB 기본 = x86 워커(steps/01 §3). 맥 VM: YARN_MB=2048 JVM_MB=65536 bash build-image.sh jdk7
+YARN_MB=${YARN_MB:-28672}
+JVM_MB=${JVM_MB:-16384}
 CTX=$(mktemp -d)
 mkdir "$CTX/conf"
 for f in "$HERE"/conf/*.xml; do
-  sed -e "s#@HOST@#$(hostname)#g" -e "s#@HOME@#$HOME#g" "$f" > "$CTX/conf/$(basename "$f")"
+  sed -e "s#@HOST@#$(hostname)#g" -e "s#@HOME@#$HOME#g" \
+      -e "s#@YARN_MB@#$YARN_MB#g" -e "s#@JVM_MB@#$JVM_MB#g" "$f" > "$CTX/conf/$(basename "$f")"
 done
 # NM이 띄울 task 이미지 = 이번에 빌드하는 이미지
 sed -i "s#local/hadoop-docker:2.7.3-[a-z0-9]*#local/hadoop-docker:2.7.3-$VARIANT#" "$CTX/conf/yarn-site.xml"
