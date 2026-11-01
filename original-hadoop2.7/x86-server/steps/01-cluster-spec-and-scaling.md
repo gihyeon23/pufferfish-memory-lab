@@ -37,7 +37,7 @@
 | puff ratio ϕ `balloon.ratio` | 40% [p.265] | 0.4 | — | 0.4 |
 | puff 중단 `balloon.stop` | 수치 없음 ("노드 메모리 소진 시") | 0.8 | **0.9** (예시) | 0.8 (코드 기본) |
 | reclaim `balloon.reclaim` | 수치 없음 | 0.9 | — | 0.9 |
-| shrink 여유분 | 2GB [p.264] | 확인 필요 | — | 설정 가능하면 0.5GB(1/4), 고정값이면 2GB |
+| shrink 여유분 | 고정 2GB [p.264] | **(mem+swap)×1.1** 하드코딩 (`SLACK_FACTOR`, `ContainerImpl.java:663`) — 설정 불가 | — | 원 코드 그대로 ×1.1 (2026-11-01 확인, [06](06-spark-flex.md) §7) |
 
 - 근거: [05-hadoop-dist-task-image.md](../../arm-mac/steps/05-hadoop-dist-task-image.md) `balloon.*` 표
 

@@ -79,6 +79,13 @@ CLAUDE.md 워크플로에 따라 논문(`common/papers/pufferfish-paper.pdf`,
 
 ## 2.5 원 저자 공개 구현 (논문 본문과 별개로 직접 확인한 사실)
 
+### shrink 여유분 — 논문 2GB 고정 vs 원 코드 10% (2026-11-01 확인)
+
+- 논문 [p.264]: 수요 60GB인데 70GB로 puff된 컨테이너 → "62GB (2GB overhead by default)"로 shrink
+- 원 코드: `limit > (mem + swap) × 1.1`이면 `(mem + swap) × 1.1`로 shrink, `SLACK_FACTOR=1.1` 하드코딩
+  (`ContainerImpl.java:663, 1204, 1217`)
+- x86 실측(`original-hadoop2.7/x86-server/steps/06-spark-flex.md` §7): (4157+585)×1.1 = 5216, (3236+98)×1.1 = 3667 — 원 코드와 일치
+
 출처: <https://github.com/yncxcw/pufferfish> (2026-09-11 직접 대조 확인).
 **논문 본문에 적힌 내용이 아니라, 저자가 공개한 코드에서 확인한 사실**이다.
 

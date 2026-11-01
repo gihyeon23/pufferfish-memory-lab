@@ -142,7 +142,15 @@ grep -E "set to be|out of memory contianer|balloon|update container memory|Conta
 - **shrink = (mem + swap) × 1.1** [사실: 계산 일치]
   - `_02`: (4157 + 585) × 1.1 = 5216 ✅, `_03`: (3236 + 98) × 1.1 = 3667 ✅
   - 원 코드 `SLACK_FACTOR=1.1`, limit > (mem + swap) × 1.1이면 그 값으로 줄임 (`ContainerImpl.java:663, 1204-1217`)
-  - **논문과 차이**: 01 §4에는 shrink 여유분을 "2GB [p.264]"로 적었는데, 원 코드는 고정 2GB가 아니라 **10% 비율** → 비교표에 추가할 것
+  - **논문과 차이 (확인함)**
+
+    | 논문에 명시된 사실 | 원 코드 | 차이 | 수정 필요 |
+    |---|---|---|---|
+    | "puffed from 50GB to 70GB while its actual demand is 60GB … shrinks the container size to 62GB (2GB overhead by default)" [p.264] | `targetSize = (mem + swap) × 1.1`, 조건 `limit > (mem + swap) × 1.1` (`ContainerImpl.java:1204, 1217`), `SLACK_FACTOR=1.1` 하드코딩 (:663) | 고정 2GB ↔ 10% 비율. 논문 예시(수요 60GB)면 62GB ↔ 66GB | 없음 — 원 코드 재현이 목적이라 그대로 씀. 결과 해석 때 명시 |
+
+    - shrink 조건: 한 번이라도 puff된 컨테이너(`balloonedBefore`)이고 puff 진행 중(`isBallooningWindow`)이 아닐 때 (`ContainerImpl.java:1195-1199`)
+    - 우리 워커 규모(수요 수 GB)에서는 10%가 2GB보다 작음 → 논문보다 여유가 적게 남음 (**추측**: 이후 다시 OCM이 날 가능성이 논문보다 큼)
+    - 관찰된 shrink는 마지막 puff(15:09:30) 약 14초 뒤 — 논문의 "2분 동안 OCM이 아니면 집합 C에서 제외" [p.264]와는 별개 동작으로 보임 (**추측**)
 - puff 간격은 약 4~5초 (논문 heartbeat 2초 [p.263]보다 김) — **추측**: OCM 판정 후 다음 heartbeat에 puff가 실행돼서 두 주기가 걸림
 - backoff(2순위 컨테이너는 ϕ/Nc) [p.263]는 안 보임: 두 컨테이너 모두 ×1.4 — 원 코드 확인 필요
 - 남은 swap: puff 뒤에도 `_02` 585M가 그대로 남음 → swap된 페이지는 다시 접근해야 메모리로 돌아옴
