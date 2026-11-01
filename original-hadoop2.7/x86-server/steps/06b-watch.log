@@ -1,0 +1,98 @@
+# 06b watch-containers.sh 출력 (2026-11-01, application_1793511642822_0004, spark-ocm-flex.sh 3000 60)
+# 01 = AM(normal), 02·03 = executor(flexible). swap = memsw.usage - usage (음수는 측정 시점 차이)
+== 15:08:50
+container_1793511642822_0004_01_000001   limit   1024M  mem    122M  swap      0M  quota     -1  cpus 0-7
+== 15:08:53
+container_1793511642822_0004_01_000001   limit   1024M  mem    254M  swap     -1M  quota     -1  cpus 0-7
+== 15:08:55
+container_1793511642822_0004_01_000002   limit   1536M  mem     62M  swap      0M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:08:57
+container_1793511642822_0004_01_000003   limit   1536M  mem    111M  swap      0M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000002   limit   1536M  mem    288M  swap      0M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:08:59
+container_1793511642822_0004_01_000003   limit   1536M  mem    290M  swap      0M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000002   limit   1536M  mem    288M  swap      0M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:01
+container_1793511642822_0004_01_000003   limit   1536M  mem    289M  swap      0M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000002   limit   1536M  mem    285M  swap      0M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:03
+container_1793511642822_0004_01_000003   limit   1536M  mem   1402M  swap      3M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000002   limit   1536M  mem   1414M  swap      3M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:05
+container_1793511642822_0004_01_000003   limit   1536M  mem   1535M  swap    119M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000002   limit   1536M  mem   1535M  swap    134M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:07
+container_1793511642822_0004_01_000003   limit   1536M  mem   1535M  swap    119M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000002   limit   1536M  mem   1535M  swap    134M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:09
+container_1793511642822_0004_01_000003   limit   1536M  mem   1535M  swap    440M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000002   limit   1536M  mem   1535M  swap    134M  quota   1000  cpus 0-7
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:12
+container_1793511642822_0004_01_000003   limit   1536M  mem   1535M  swap    623M  quota   1000  cpus 0-7
+container_1793511642822_0004_01_000002   limit   1536M  mem   1535M  swap    134M  quota   1000  cpus 0
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:14
+container_1793511642822_0004_01_000003   limit   1536M  mem   1535M  swap    623M  quota   1000  cpus 0
+container_1793511642822_0004_01_000002   limit   2150M  mem   2149M  swap    162M  quota     -1  cpus 0
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:16
+container_1793511642822_0004_01_000003   limit   1536M  mem   1535M  swap    623M  quota   1000  cpus 0
+container_1793511642822_0004_01_000002   limit   2150M  mem   2150M  swap    408M  quota   1000  cpus 0
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:18
+container_1793511642822_0004_01_000003   limit   2150M  mem   1538M  swap    624M  quota   1000  cpus 0
+container_1793511642822_0004_01_000002   limit   3010M  mem   2219M  swap    416M  quota     -1  cpus 0
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:20
+container_1793511642822_0004_01_000003   limit   2150M  mem   1559M  swap    623M  quota   1000  cpus 0
+container_1793511642822_0004_01_000002   limit   3010M  mem   3009M  swap    618M  quota   1000  cpus 0
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:22
+container_1793511642822_0004_01_000003   limit   3010M  mem   1566M  swap    623M  quota   1000  cpus 0
+container_1793511642822_0004_01_000002   limit   4214M  mem   3010M  swap    617M  quota   1000  cpus 0
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:24
+container_1793511642822_0004_01_000003   limit   3010M  mem   2715M  swap    585M  quota     -1  cpus 0
+container_1793511642822_0004_01_000002   limit   4214M  mem   3147M  swap    594M  quota     -1  cpus 0
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:26
+container_1793511642822_0004_01_000003   limit   3010M  mem   2903M  swap    397M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000002   limit   4214M  mem   4157M  swap    585M  quota   1000  cpus 0-7
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:28
+container_1793511642822_0004_01_000003   limit   4214M  mem   2965M  swap    334M  quota   1000  cpus 0
+container_1793511642822_0004_01_000002   limit   4214M  mem   4157M  swap    585M  quota   1000  cpus 0
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:31
+container_1793511642822_0004_01_000003   limit   4214M  mem   3209M  swap    100M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000002   limit   5899M  mem   4157M  swap    585M  quota   1000  cpus 0
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:33
+container_1793511642822_0004_01_000003   limit   4214M  mem   3236M  swap     98M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000002   limit   5899M  mem   4157M  swap    585M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:35 ~ 15:09:43 (변화 없음, 5회 생략)
+container_1793511642822_0004_01_000003   limit   4214M  mem   3236M  swap     98M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000002   limit   5899M  mem   4157M  swap    585M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:45
+container_1793511642822_0004_01_000003   limit   3667M  mem   3236M  swap     98M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000002   limit   5216M  mem   4157M  swap    585M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:09:47 ~ 15:10:30 (변화 없음, 21회 생략)
+container_1793511642822_0004_01_000003   limit   3667M  mem   3236M  swap     98M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000002   limit   5216M  mem   4157M  swap    585M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:10:32
+container_1793511642822_0004_01_000003   limit   3667M  mem     59M  swap    -20M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000002   limit   5216M  mem   5139M  swap    567M  quota     -1  cpus 0-7
+container_1793511642822_0004_01_000001   limit   1024M  mem    255M  swap      0M  quota     -1  cpus 0-7
+== 15:10:34 ~ 15:10:54 (컨테이너 없음)

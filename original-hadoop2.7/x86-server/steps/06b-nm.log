@@ -1,0 +1,58 @@
+# 06b NodeManager 로그 발췌 (2026-11-01, application_1793511642822_0004)
+# grep -E "set to be|out of memory contianer|balloon|update container memory|Container (quota|set)|stop ballooning" yarn-*-nodemanager-*.log | grep 0004
+# "out of memory contianer detected: <id> <mem MB> <swap MB> <limit MB>" (ContainerImpl.java:1143, 원문 오타 그대로)
+# 패키지 접두어 org.apache.hadoop.yarn.server.nodemanager.containermanager 생략
+2026-11-01 15:08:48,683 INFO ContainerManagerImpl: container_1793511642822_0004_01_000001 set to be normal
+2026-11-01 15:08:54,329 INFO ContainerManagerImpl: container_1793511642822_0004_01_000002 set to be flexible
+2026-11-01 15:08:55,880 INFO ContainerManagerImpl: container_1793511642822_0004_01_000003 set to be flexible
+2026-11-01 15:09:09,888 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000002 1535 134 1536
+2026-11-01 15:09:11,656 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000002 1535 134 1536
+2026-11-01 15:09:11,656 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000002 1535 134 1536
+2026-11-01 15:09:11,657 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000003 1535 623 1536
+2026-11-01 15:09:12,776 INFO container.ContainerImpl: container_1793511642822_0004_01_000002 balloon
+2026-11-01 15:09:12,776 INFO container.ContainerImpl: update container memory: container_1793511642822_0004_01_000002 old: 1536new: 2150
+2026-11-01 15:09:12,776 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000003 1535 623 1536
+2026-11-01 15:09:13,316 INFO container.ContainerImpl: balloon-nswap: container_1793511642822_0004_01_000002 from 1536to: 2150
+2026-11-01 15:09:15,010 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000003 1535 623 1536
+2026-11-01 15:09:15,011 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000002 2149 392 2150
+2026-11-01 15:09:16,193 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000002 2150 408 2150
+2026-11-01 15:09:16,193 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000003 1535 623 1536
+2026-11-01 15:09:16,193 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000003 1535 623 1536
+2026-11-01 15:09:16,194 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000002 2150 408 2150
+2026-11-01 15:09:17,193 INFO container.ContainerImpl: container_1793511642822_0004_01_000002 balloon
+2026-11-01 15:09:17,193 INFO container.ContainerImpl: update container memory: container_1793511642822_0004_01_000002 old: 2150new: 3010
+2026-11-01 15:09:17,726 INFO container.ContainerImpl: balloon-nswap: container_1793511642822_0004_01_000002 from 2150to: 3010
+2026-11-01 15:09:17,726 INFO container.ContainerImpl: container_1793511642822_0004_01_000003 balloon
+2026-11-01 15:09:17,726 INFO container.ContainerImpl: update container memory: container_1793511642822_0004_01_000003 old: 1536new: 2150
+2026-11-01 15:09:18,271 INFO container.ContainerImpl: balloon-nswap: container_1793511642822_0004_01_000003 from 1536to: 2150
+2026-11-01 15:09:18,273 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000003 1538 624 2150
+2026-11-01 15:09:19,930 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000002 3009 618 3010
+2026-11-01 15:09:21,032 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000002 3009 618 3010
+2026-11-01 15:09:21,032 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000003 1562 623 2150
+2026-11-01 15:09:21,033 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000003 1562 623 2150
+2026-11-01 15:09:21,034 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000002 3009 618 3010
+2026-11-01 15:09:22,033 INFO container.ContainerImpl: container_1793511642822_0004_01_000002 balloon
+2026-11-01 15:09:22,033 INFO container.ContainerImpl: update container memory: container_1793511642822_0004_01_000002 old: 3010new: 4214
+2026-11-01 15:09:22,033 INFO container.ContainerImpl: container_1793511642822_0004_01_000003 balloon
+2026-11-01 15:09:22,033 INFO container.ContainerImpl: update container memory: container_1793511642822_0004_01_000003 old: 2150new: 3010
+2026-11-01 15:09:22,577 INFO container.ContainerImpl: balloon-nswap: container_1793511642822_0004_01_000002 from 3010to: 4214
+2026-11-01 15:09:23,113 INFO container.ContainerImpl: balloon-nswap: container_1793511642822_0004_01_000003 from 2150to: 3010
+2026-11-01 15:09:26,385 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000002 4157 585 4214
+2026-11-01 15:09:26,910 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000003 2906 394 3010
+2026-11-01 15:09:26,910 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000003 2906 394 3010
+2026-11-01 15:09:28,499 INFO container.ContainerImpl: container_1793511642822_0004_01_000003 balloon
+2026-11-01 15:09:28,499 INFO container.ContainerImpl: update container memory: container_1793511642822_0004_01_000003 old: 3010new: 4214
+2026-11-01 15:09:28,500 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000002 4157 585 4214
+2026-11-01 15:09:29,041 INFO container.ContainerImpl: balloon-nswap: container_1793511642822_0004_01_000003 from 3010to: 4214
+2026-11-01 15:09:29,043 INFO container.ContainerImpl: out of memory contianer detected: container_1793511642822_0004_01_000002 4157 585 4214
+2026-11-01 15:09:30,659 INFO container.ContainerImpl: container_1793511642822_0004_01_000002 balloon
+2026-11-01 15:09:30,659 INFO container.ContainerImpl: update container memory: container_1793511642822_0004_01_000002 old: 4214new: 5899
+2026-11-01 15:09:31,179 INFO container.ContainerImpl: balloon-nswap: container_1793511642822_0004_01_000002 from 4214to: 5899
+2026-11-01 15:09:44,808 INFO container.ContainerImpl: update container memory: container_1793511642822_0004_01_000002 old: 5899new: 5216
+2026-11-01 15:09:45,349 INFO container.ContainerImpl: balloon-nswap: container_1793511642822_0004_01_000002 from 5899to: 5216
+2026-11-01 15:09:45,351 INFO container.ContainerImpl: update container memory: container_1793511642822_0004_01_000003 old: 4214new: 3667
+2026-11-01 15:09:45,891 INFO container.ContainerImpl: balloon-nswap: container_1793511642822_0004_01_000003 from 4214to: 3667
+2026-11-01 15:10:32,993 INFO container.ContainerImpl: update container memory: container_1793511642822_0004_01_000002 old: 5216new: 3769
+2026-11-01 15:10:33,546 INFO container.ContainerImpl: balloon-nswap: container_1793511642822_0004_01_000002 from 5216to: 3769
+2026-11-01 15:10:33,547 INFO container.ContainerImpl: update container memory: container_1793511642822_0004_01_000002 old: 5216new: 3769
+2026-11-01 15:10:35,094 INFO container.ContainerImpl: balloon-nswap: container_1793511642822_0004_01_000002 from 5216to: 3769

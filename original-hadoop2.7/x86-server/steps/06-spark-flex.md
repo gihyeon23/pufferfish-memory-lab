@@ -81,3 +81,70 @@ grep -rh "Pi is roughly" /opt/hadoop-2.7.3/logs/userlogs/ ~/hadoop-data/ 2>/dev/
 
 - 06a 결론: Flex 판정 → `-Xmx` 치환 → `docker run --memory --memory-swap -1`까지 원 코드 설계대로 동작. JDK 7u51 컨테이너에서 Spark 2.0.1 cluster 모드 정상
 - 다음 06b: executor 힙을 실제로 키우는 작업으로 OCM → suspend → puff → reclaim 로그 확인
+
+## 7. 06b — OCM → puff 유도
+
+### 설계
+
+- Flex executor는 컨테이너 limit 1.5GB, 힙 상한 16GB (06a) → 힙을 실제로 3GB 채우면 limit을 넘어 swap으로 감
+- [../../setup/ocm-cache.scala](../../setup/ocm-cache.scala): executor마다 1MB 배열 `MB_PER_EXEC`개(기본 3000)를 `MEMORY_ONLY`로 cache → `HOLD_SEC`(60초) 유지 → 다시 읽기
+  - Spark 저장 메모리 = (힙 − 300MB) × 0.6 ≈ 9.6GB (**추측**: 힙 16GB 기준) → 3GB는 evict 없이 캐시됨
+- [../../setup/spark-ocm-flex.sh](../../setup/spark-ocm-flex.sh): `spark-shell -i`(client 모드) + `flex` 라벨
+- [../../setup/watch-containers.sh](../../setup/watch-containers.sh): 2초마다 컨테이너별 cgroup limit·mem·swap·CPU quota·cpuset 출력
+
+### 원 코드 로그 [사실: `ContainerImpl.java`]
+
+| 단계 | 로그 | 위치 |
+|---|---|---|
+| OCM | `out of memory contianer detected: <id> ...` (원문 오타 그대로) | :1143 |
+| puff | `balloon-nswap: <id> from X to: Y`, `update container memory: ...` | :946-949 |
+| 상태 | `$$$  <id> <state>` | :780 |
+| CPU 제한 | `Container quota <id> ...`, `Container set <id> ...` | :1072, :1087 |
+| puff 중단 | `stop ballooning at assign usage: ...` | `NodeMemoryManager.java:303` |
+
+### 실행 방법 (VM, 터미널 2개)
+
+```bash
+# 터미널 2 (먼저)
+bash ~/legacy/setup/watch-containers.sh
+# 터미널 1
+bash ~/legacy/setup/spark-ocm-flex.sh            # 3000MB × executor 2, 60초 유지
+# 끝난 뒤
+grep -E "set to be|out of memory contianer|balloon|update container memory|Container (quota|set)|stop ballooning" \
+  /opt/hadoop-2.7.3/logs/yarn-*-nodemanager-*.log | tail -60
+```
+
+### 확인 포인트 · 기대 (**추측**)
+
+- executor 2개 `set to be flexible` (client 모드에서도 Flex가 되는지)
+- executor mem이 limit 근처에서 멈추고 swap이 늘어남 → OCM 로그
+- limit이 ×1.4씩 늘어남 (1536 → 약 2150 → 3010 → 4214MB, ϕ=0.4) → swap 감소
+- 노드 메모리가 충분하므로 suspend·reclaim은 안 일어나는 게 정상 → 메모리 압박 실험은 다음 단계
+- `[06b] cached 6000 MB`, `second pass` 출력
+
+### 결과 (2026-11-01, `application_1793511642822_0004`) — OCM → suspend → puff → shrink 관찰
+
+- 1차 시도(`_0003`) 실패: `spark-shell -i`가 줄 단위로 해석해서 `.map(...)`로 시작하는 줄이 `illegal start of definition` → 체인을 한 줄로 수정
+- 원본 기록: [06b-watch.log](06b-watch.log) (cgroup 2초 간격), [06b-nm.log](06b-nm.log) (NM 로그 발췌)
+- Spark 출력: `[06b] cached 6000 MB in 30s`, `[06b] second pass 6000.0 MB in 0s`
+
+| 단계 | 관찰 [사실: 로그] | 원 코드 / 논문 |
+|---|---|---|
+| Flex | client 모드에서도 executor `_02`·`_03` `set to be flexible`, AM normal | §2와 일치 |
+| OCM | 15:09:05 mem 1535 / limit 1536, swap 119~134M → 15:09:09.888 `out of memory contianer detected: _02 1535 134 1536` | `mem + swap > limit` (`ContainerImpl.java:1143`) |
+| suspend | 15:09:09 `_02` quota 1000 → 15:09:12 cpus 0 | 논문 "CPU 1%, 코어 1개" [p.260] |
+| puff `_02` | 1536 → 2150 → 3010 → **4214 → 5899**MB (15:09:12 ~ 15:09:30) | ×1.4 정확히 일치 (ϕ=0.4) [p.263] |
+| puff `_03` | 1536 → 2150 → 3010 → **4214**MB (15:09:17 ~ 15:09:28) | 〃 |
+| 재개 | puff 직후 quota -1로 풀림, cpus는 몇 초 뒤 0-7로 복원 | — |
+| shrink | 15:09:44 `_02` 5899 → 5216, `_03` 4214 → 3667 | 아래 참고 |
+| 종료 | 15:10:32 `_03` 종료, `_02` 5216 → 3769, 15:10:34 컨테이너 모두 정리 | — |
+
+- **shrink = (mem + swap) × 1.1** [사실: 계산 일치]
+  - `_02`: (4157 + 585) × 1.1 = 5216 ✅, `_03`: (3236 + 98) × 1.1 = 3667 ✅
+  - 원 코드 `SLACK_FACTOR=1.1`, limit > (mem + swap) × 1.1이면 그 값으로 줄임 (`ContainerImpl.java:663, 1204-1217`)
+  - **논문과 차이**: 01 §4에는 shrink 여유분을 "2GB [p.264]"로 적었는데, 원 코드는 고정 2GB가 아니라 **10% 비율** → 비교표에 추가할 것
+- puff 간격은 약 4~5초 (논문 heartbeat 2초 [p.263]보다 김) — **추측**: OCM 판정 후 다음 heartbeat에 puff가 실행돼서 두 주기가 걸림
+- backoff(2순위 컨테이너는 ϕ/Nc) [p.263]는 안 보임: 두 컨테이너 모두 ×1.4 — 원 코드 확인 필요
+- 남은 swap: puff 뒤에도 `_02` 585M가 그대로 남음 → swap된 페이지는 다시 접근해야 메모리로 돌아옴
+  - `second pass 0s`: 두 번째 읽기가 배열 길이만 봐서 실제 페이지를 안 건드림 → 스크립트 개선 필요 (바이트 합으로)
+- `stop ballooning`·reclaim·kill 없음: 노드 메모리(28GB)에 여유가 있어서 정상 — 메모리 압박 실험은 다음 단계

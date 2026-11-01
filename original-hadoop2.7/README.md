@@ -38,5 +38,6 @@ cgroup v1)에서 실행한다.
 - [x] 워커 메모리 설정 (YARN 28GB, MAX_HEAP 16GB) — [steps/05](x86-server/steps/05-worker-memory-config.md)
 - [x] task 이미지 방향 결정 → 원 `sequenceiq/hadoop-docker:2.4.0`(CentOS 6.5 + Oracle JDK 7u51) 반입 — [steps/03](x86-server/steps/03-task-image-sequenceiq.md)
 - [x] Spark 2.0.1 + `spark.yarn.am.nodeLabelExpression flex` → Flex 판정·`-Xmx16384m` 치환·`--memory-swap -1` 확인 — [steps/06](x86-server/steps/06-spark-flex.md)
-- [ ] OCM → suspend → puff → reclaim 로그 확인 (06b)
+- [x] OCM → suspend → puff(×1.4) → shrink(×1.1) 관찰 — [steps/06](x86-server/steps/06-spark-flex.md) §7
+- [ ] 메모리 압박에서 `stop ballooning`·reclaim 확인
 - [ ] baseline(공식 YARN jar) vs Pufferfish 비교 → 3대 구성
