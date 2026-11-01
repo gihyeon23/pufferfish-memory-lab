@@ -4,6 +4,7 @@
 # sparkbench만 빌드 (WC·KM·PR·NW). -Dspark=2.0이면 Scala 2.11.8. Maven 필요 (apt maven 3.3.9)
 # 여러 번 실행해도 됨. usage: bash install-hibench.sh
 set -e
+HERE=$(cd "$(dirname "$0")" && pwd)
 V=6.0
 DL=${DL:-$HOME/legacy/dl}
 H=/opt/HiBench-$V
@@ -25,3 +26,6 @@ cd $H
 ls sparkbench/assembly/target/*-dist.jar >/dev/null 2>&1 || \
   mvn -q -Psparkbench -Dspark=2.0 clean package -DskipTests
 ls -la autogen/target/*.jar sparkbench/assembly/target/*.jar
+# 우리 설정 (hadoop.conf · spark.conf · pufferfish.conf) — 템플릿 대신 사용
+cp "$HERE/hibench-conf/"*.conf conf/
+ls conf/*.conf
