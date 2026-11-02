@@ -4,7 +4,7 @@
 #   AM 컨테이너(_000001)는 제외. kill 후 relaunch된 executor는 같은 job 색, 컨테이너마다 선을 끊어 그림
 #   nm.log의 "OOM kill: <컨테이너>" 시점에 ×, shrink(slacking 뒤 크기 감소 1GB 이상, 종료 직전 제외)에 ▼ 표시
 #   색 3개만 사용 (PPT 서식 규칙), 라벨은 논문 그래프처럼 영어
-# usage: python3 plot-fig6a.py <결과 폴더> [출력 png]
+# usage: python3 plot-fig6a.py <결과 폴더> [출력 png] [제목 뒤에 붙일 설명]
 import re
 import sys
 from datetime import datetime
@@ -14,7 +14,8 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 d = sys.argv[1]
-out = sys.argv[2] if len(sys.argv) > 2 else d + "/fig6a.png"
+out = sys.argv[2] if len(sys.argv) > 2 and sys.argv[2] else d + "/fig6a.png"
+note = sys.argv[3] if len(sys.argv) > 3 else "1/4 scale, single node"
 
 names = {}  # 앱 번호(0010 등) → job 이름
 for line in open(d + "/apps.txt"):
@@ -101,7 +102,7 @@ ax.set_ylabel("Memory usage (GB)")
 ax.set_ylim(0, 28)  # 노드 YARN 메모리 28GB
 ax.grid(True, ls="--", alpha=0.5)
 ax.legend(ncol=8, loc="upper center", fontsize=9)
-ax.set_title("(a) puff() function — 1/4 scale, single node")
+ax.set_title(f"(a) puff() function — {note}")
 fig.tight_layout()
 fig.savefig(out, dpi=150)
 print(out)

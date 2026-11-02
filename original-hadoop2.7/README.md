@@ -45,6 +45,7 @@ cgroup v1)에서 실행한다.
 - [x] PR·KM 데이터 1/4 생성, 단독 예비 실험 (PR 10.4GB·753초, KM 12.4GB·476초) — [steps/09](x86-server/steps/09-fig6a-puff.md) §2
 - [x] **Fig 6(a) puff 재현** — stop ballooning, 최저 우선순위 kill, RM 재시작 차단까지 확인. 단 kill 5번(논문 1번) — [steps/09](x86-server/steps/09-fig6a-puff.md) §5
 - [ ] **예정**: task 이미지 안쪽 Hadoop을 원본 2.4.0으로 되돌리고 pi·Spark Flex·Fig 6(a) 재확인 (지금은 2.7.3 교체본) — [steps/03](x86-server/steps/03-task-image-sequenceiq.md) §7
+- [x] **Fig 6(a) 비율 맞춤 재실행** — PR 2.5×10⁶ 페이지(단독 55%·1726초): PR 최우선·최장, KM1 kill 없음, KM2만 kill. 단 KM2 kill 6번(즉시 재시작 반복) — [steps/10](x86-server/steps/10-fig6a-ratio.md)
 - [ ] reclaim 확인 → Fig 6(b)(c) (TPC-H + baseline 필요)
 - [ ] WC·NW 데이터 생성 / Fig 6(a) job별 메모리 비율을 맞춰 재실행할지 교수님께 여쭙기 (비율은 논문·원 코드에 없음)
 - [ ] baseline(공식 YARN jar) vs Pufferfish 비교 → 3대 구성
