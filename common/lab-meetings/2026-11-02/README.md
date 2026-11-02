@@ -49,7 +49,7 @@
 | OS·커널 | Ubuntu 16.04 [논문 p.265] | 16.04.7, 커널 4.4, x86_64, vCPU 8개 모두 인식 ✅ |
 | Docker | 1.12.1 [논문 p.265] | 1.12.1, aufs, cgroupfs, cgroup v1 + `swapaccount=1` ✅ |
 | YARN | 원 저자 코드 | 공식 2.7.3 + 원 저자 YARN jar 13개 ✅ |
-| task 이미지 | `sequenceiq/hadoop-docker:2.4.0` [원 구현 README] | **원 이미지 그대로 반입** (CentOS 6.5 + Oracle JDK 7u51) ✅ |
+| task 이미지 | `sequenceiq/hadoop-docker:2.4.0` [원 구현 README] (안쪽 Hadoop 2.4.0) | **원 이미지 그대로 반입** (CentOS 6.5 + Oracle JDK 7u51) ✅<br>단 안쪽 Hadoop은 **2.7.3으로 교체** — NM이 호스트 경로(`HADOOP_*_HOME`)를 컨테이너에 넣어서 호스트와 경로를 맞춤 (steps/03 §4·§7) ⚠️ |
 | Spark | 2.0.1 [논문 p.265] | 2.0.1 ✅ |
 | 메모리 (1/4 축소) | 노드 128GB, YARN 120GB, MAX_HEAP 64GB, MIN_CONT 4GB [논문 p.265] | 32GB, 28GB, 16GB, 1GB [우리: 1/4] |
 
