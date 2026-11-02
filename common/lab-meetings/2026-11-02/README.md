@@ -49,7 +49,7 @@
 | OS·커널 | Ubuntu 16.04 [논문 p.265] | 16.04.7, 커널 4.4, x86_64, vCPU 8개 모두 인식 ✅ |
 | Docker | 1.12.1 [논문 p.265] | 1.12.1, aufs, cgroupfs, cgroup v1 + `swapaccount=1` ✅ |
 | YARN | 원 저자 코드 | 공식 2.7.3 + 원 저자 YARN jar 13개 ✅ |
-| task 이미지 | `sequenceiq/hadoop-docker:2.4.0` [원 구현 README] (안쪽 Hadoop 2.4.0) | **원 이미지 그대로 반입** (CentOS 6.5 + Oracle JDK 7u51) ✅<br>단 안쪽 Hadoop은 **2.7.3으로 교체** — NM이 호스트 경로(`HADOOP_*_HOME`)를 컨테이너에 넣어서 호스트와 경로를 맞춤 (steps/03 §4·§7) ⚠️ |
+| task 이미지 | `sequenceiq/hadoop-docker:2.4.0` [원 구현 README] (안쪽 Hadoop 2.4.0) | **원 이미지 그대로 반입** (CentOS 6.5 + Oracle JDK 7u51) ✅<br>단 안쪽 Hadoop은 **2.7.3으로 교체** — 맥(ARM) 때 정한 방식을 그대로 가져옴. **원본 2.4.0으로 되돌려 재확인 예정** (steps/03 §7) ⚠️ |
 | Spark | 2.0.1 [논문 p.265] | 2.0.1 ✅ |
 | 메모리 (1/4 축소) | 노드 128GB, YARN 120GB, MAX_HEAP 64GB, MIN_CONT 4GB [논문 p.265] | 32GB, 28GB, 16GB, 1GB [우리: 1/4] |
 
@@ -155,6 +155,7 @@
 | 11/01 | shrink ×1.1 등 원 코드 동작은 수정하지 않고 결과 해석 때 명시 |
 | 11/01 | HiBench 6.0, executor 1개·1코어·1g, 나머지 Spark 기본값, 데이터 Table 1 Small의 1/4 |
 | 11/01 | VM 1대로 단일 노드 실험 먼저, 원 코드 문제(reclaim 균등 분할 등)는 환경 세팅 후 |
+| 11/02 | 안쪽 Hadoop을 원본 2.4.0으로 되돌리기로 함 (설정만, 랩미팅 뒤 실행) |
 | 11/01 | Fig 6(a): 제출 간격 120초, HiBench가 만든 spark-submit을 직접 실행(동시 실행 시 출력 폴더 충돌 회피) |
 
 ## 5. 교수님께 확인할 것
@@ -178,6 +179,7 @@
 
 - "reclaim을 확인했다" ❌ → 호출 로그만 봄, 실제 회수는 아직 없음 (Fig 6(a)의 kill은 puff 쪽 kill, reclaim 아님)
 - "Fig 6(a)를 똑같이 재현했다" ❌ → 메커니즘은 재현, kill 횟수(5 vs 1)·메모리 비율은 다름
+- "task 이미지가 원 저자와 완전히 같다" ❌ → OS·JDK는 원본, 안쪽 Hadoop만 2.7.3 (되돌릴 예정)
 - "실행 시간이 논문보다 빠르다/느리다" ❌ → 하드웨어·1/4 규모·1코어라 절대 시간 비교 불가
 - "논문과 원 코드의 backoff가 다르다" ❌ → p.265 본문과 일치, 의사코드만 다름
 - "shrink 후 OCM 재발은 ×1.1 때문" ❌ → 앱 종료 중이라 원인 단정 못 함

@@ -44,6 +44,7 @@ cgroup v1)에서 실행한다.
 - [x] HiBench 설정 — executor 1개·1코어·1g, Spark 기본값, 데이터 프로파일 `pfq`(Table 1 Small의 1/4) — [steps/08](x86-server/steps/08-hibench-config.md)
 - [x] PR·KM 데이터 1/4 생성, 단독 예비 실험 (PR 10.4GB·753초, KM 12.4GB·476초) — [steps/09](x86-server/steps/09-fig6a-puff.md) §2
 - [x] **Fig 6(a) puff 재현** — stop ballooning, 최저 우선순위 kill, RM 재시작 차단까지 확인. 단 kill 5번(논문 1번) — [steps/09](x86-server/steps/09-fig6a-puff.md) §5
+- [ ] **예정**: task 이미지 안쪽 Hadoop을 원본 2.4.0으로 되돌리고 pi·Spark Flex·Fig 6(a) 재확인 (지금은 2.7.3 교체본) — [steps/03](x86-server/steps/03-task-image-sequenceiq.md) §7
 - [ ] reclaim 확인 → Fig 6(b)(c) (TPC-H + baseline 필요)
 - [ ] WC·NW 데이터 생성, 데이터 비율 조정 검토 (KM 비중이 논문보다 큼)
 - [ ] baseline(공식 YARN jar) vs Pufferfish 비교 → 3대 구성

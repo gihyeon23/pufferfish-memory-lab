@@ -42,7 +42,7 @@
 | 재시작이 막힌 건 어떻게 아나? | RM 로그 `memflexn actual memory give up` 373회. 원 코드 RM이 노드 실제 여유가 요청의 2배 미만이면 Flex 배정을 미룸 (`LeafQueue.java:1551-1569`) |
 | PR이 단독보다 느려진 이유? | KM과 CPU·디스크(swap)를 나눠 쓰고, 노드가 찬 동안 puff가 멈춰서 [추측] |
 | JDK 7/8 비교는? | 원 이미지(JDK 7u51)를 그대로 쓰게 돼서 취소 |
-| 원 이미지면 안쪽 Hadoop도 2.4.0인가? | 아님. OS·JDK는 원본, 안쪽 Hadoop만 2.7.3으로 교체. NM이 호스트의 `HADOOP_*_HOME` 경로를 컨테이너에 넣어서(`ContainerLaunch.java:682-687`) 경로를 맞춰야 했음. 원 저자는 호스트 경로를 이미지와 같게 해서 2.4.0을 썼을 가능성 [추측]. Pufferfish 동작은 컨테이너 바깥(NM·cgroup)이고 Spark executor는 자기 jar를 써서 영향 작음 [추측] |
+| 원 이미지면 안쪽 Hadoop도 2.4.0인가? | 아님. OS·JDK는 원본, 안쪽 Hadoop만 2.7.3으로 교체. NM이 호스트의 `HADOOP_*_HOME` 경로를 컨테이너에 넣어서(`ContainerLaunch.java:682-687`) 경로를 맞춰야 했음. 원 저자는 호스트 경로를 이미지와 같게 해서 2.4.0을 썼을 가능성 [추측]. Pufferfish 동작은 컨테이너 바깥(NM·cgroup)이고 Spark executor는 자기 jar를 써서 영향 작음 [추측]. 맥 때 정한 방식을 x86에서 다시 검토하지 못한 것 → 설정만 바꿔 원본 2.4.0으로 되돌리고 재확인 예정 |
 
 ## 4. 업데이트 규칙
 
