@@ -141,7 +141,7 @@
 
 ### 3-7. ★ Fig 6(a) puff() 재현 — 별도 슬라이드 (논문 그래프와 나란히) [실측, steps/09 §5]
 
-- 그래프: `original-hadoop2.7/x86-server/steps/09-fig6a/fig6a.png` (실선 = 실제 사용량, 점선 = 컨테이너 크기, × = kill)
+- 그래프: `original-hadoop2.7/x86-server/steps/09-fig6a/fig6a.png` (실선 = 실제 사용량, 점선 = 컨테이너 크기, × = kill, ▼ = shrink 1GB 이상 — 실행 중 9번, 논문 그래프의 "shrinked"에 해당)
   - 논문 그래프는 `common/papers/pufferfish-paper.pdf` p.265 Figure 6(a)
 - 구성: PR 1개 → 120초 뒤 KM1 → 120초 뒤 KM2, job마다 Flex executor 1개·1코어·1g, 데이터 1/4
   - 제출 간격 120초는 [우리] (6(a)엔 없음, 같은 절 Fig 7의 값)

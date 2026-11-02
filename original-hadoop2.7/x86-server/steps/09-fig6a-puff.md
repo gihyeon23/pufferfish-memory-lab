@@ -71,7 +71,7 @@ cat events.log apps.txt                       # job별 종료·성공 여부
 
 ![Fig 6(a) 재현](09-fig6a/fig6a.png)
 
-- 실선 = 실제 사용량(cgroup `memory.usage`), 점선 = 컨테이너 크기(limit), × = kill 시점. 1 = PR, 2 = KM1, 3 = KM2
+- 실선 = 실제 사용량(cgroup `memory.usage`), 점선 = 컨테이너 크기(limit), × = kill 시점, ▼ = shrink(`slacking contianer detected` 뒤 1GB 이상 줄어든 것, 컨테이너 종료 앞뒤 15초 제외 — 9번. 1GB 미만까지 세면 31번). 1 = PR, 2 = KM1, 3 = KM2
 - 원본: `watch.log`(2초 간격), `nm.log`(실행 구간 NM 로그), `events.log`, `apps.txt` (`_0011` PR, `_0012` KM1, `_0013` KM2)
 
 ### job 결과 [실측]
