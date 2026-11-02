@@ -73,7 +73,7 @@
 - 논문: puff 설명 안에 있는 동작 (reclaim 아님). "50GB → 70GB로 puff, 실제 수요 60GB → 10GB가 놂 → to avoid memory fragmentation, the puff mechanism shrinks the container size to 62GB (2GB overhead by default)" [p.264]
 - 원 코드 조건 (셋 다) (`ContainerImpl.java:1185-1217`)
   1. 한 번이라도 puff된 컨테이너 (`balloonedBefore`)
-  2. 마지막 OCM 뒤 5라운드 동안 OCM 없음 → ballooning window 닫힘 (`NodeMemoryManager.java:102, 170-177`, 논문은 "2분" [p.264])
+  2. 마지막 OCM 뒤 5라운드 동안 OCM 없음 → ballooning window 닫힘 (`NodeMemoryManager.java:102, 170-177`, 논문은 "**e.g., 2 minutes**" = 예시 [p.264]) → 실측 puff 뒤 약 14~18초면 shrink
   3. 크기 > (사용량 + swap) × 1.1 → 크기를 (사용량 + swap) × 1.1로 줄임
 - 06b 대입: 5899MB(마지막 puff) → 실제 4157 + swap 585 = 4742MB → ×1.1 = **5216MB**, 683MB를 돌려줌 [실측]
 
@@ -137,7 +137,7 @@
   - 2단계: 부족하면 puff됐지만 suspend가 아닌 컨테이너를 **늦게 시작한 순**으로 회수
   - 회수는 요청량(MIN_CONT)까지 내릴 수 있음 (`ContainerImpl.java:1234`)
 - 영향: 앱 2개 이상이 동시에 OCM일 때만 드러남 → Fig 6(b) 재현 때 앱 2개를 동시에 OCM으로 만들어 실측 예정
-- 기타 차이(참고): OCM 집합 유지 "2분"[p.264] ↔ 5라운드, puff 상한 노드 메모리 ↔ ×0.8, suspension tolerance ↔ 고정 10라운드
+- 기타 차이(참고): OCM 집합 유지 "예: 2분"[p.264] ↔ 5라운드(약 15초, shrink가 잦은 원인 중 하나), puff 상한 노드 메모리 ↔ ×0.8, suspension tolerance ↔ 고정 10라운드
 
 ### 3-7. ★ Fig 6(a) puff() 재현 — 별도 슬라이드 (논문 그래프와 나란히) [실측, steps/09 §5]
 
@@ -169,6 +169,15 @@
   - 비교: KM은 ÷4와 비슷(우리 12.4GB), PR은 작게 나옴(우리 10.4GB, ÷4면 약 16GB) [추측]
   - kill 횟수(5 vs 1) 원인은 **미확인** — 처음 적은 "KM 비중(23%)이 커서"는 잘못 읽은 값이라 철회
 - 발표 문장: "원 저자 코드가 적용되는 방식 — 우선순위 puff, puff 정지, 가장 늦은 컨테이너 kill, 재시작 차단 — 은 원 저자와 같게 동작했습니다. 다만 job별 메모리 비율이 달라서 그래프가 똑같이 나오지는 않았습니다. 논문과 원 코드에 그 비율이 명시되어 있지 않은데, 비율까지 맞춰서 다시 돌려야 할지 여쭙고 싶습니다."
+
+### 3-8. 그래프 모양에 영향을 주는 요인 [steps/10 §6]
+
+- 논문에 없는 값과 원 코드-논문 차이가 **각각 그래프의 다른 부분**에 영향을 줌
+  - 선 높이·길이 ← job별 메모리·실행 시간 비율 [논문 없음] — 11/02 PR 입력을 늘려 맞추자 PR이 가장 높고 가장 오래 감 (steps/10)
+  - 초반 누가 위에 있나 ← 메모리 증가 속도 (코어 수 등) [논문 없음]
+  - shrink 빈도(톱니 모양) ← OCM 집합 제외 기준: 논문 "e.g., 2 minutes"(예시) ↔ 원 코드 5라운드(실측 puff 뒤 약 14~18초) [원 코드 ≠ 논문]
+  - kill 뒤 재시작 간격 ← RM 재배정 조건(실제 여유 ≥ 요청 × 2) [원 코드]
+- 실측으로 확인한 건 메모리·실행 시간 비율뿐, 나머지는 추측
 
 ## 4. 결정 사항
 

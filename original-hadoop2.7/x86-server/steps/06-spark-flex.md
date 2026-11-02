@@ -150,7 +150,7 @@ grep -E "set to be|out of memory contianer|balloon|update container memory|Conta
 
     - shrink 조건: 한 번이라도 puff된 컨테이너(`balloonedBefore`)이고 puff 진행 중(`isBallooningWindow`)이 아닐 때 (`ContainerImpl.java:1195-1199`)
     - 우리 워커 규모(수요 수 GB)에서는 10%가 2GB보다 작음 → 논문보다 여유가 적게 남음 (**추측**: 이후 다시 OCM이 날 가능성이 논문보다 큼)
-    - 관찰된 shrink는 마지막 puff(15:09:30) 약 14초 뒤 — 논문의 "2분 동안 OCM이 아니면 집합 C에서 제외" [p.264]와는 별개 동작으로 보임 (**추측**)
+    - 관찰된 shrink는 마지막 puff(15:09:30) 약 14초 뒤 — 처음엔 논문의 "2분 동안 OCM이 아니면 집합 C에서 제외" [p.264]와 별개 동작으로 추측했으나 **틀림** (2026-11-02 정정): 원 코드는 집합에서 빠진 뒤에만 shrink하고, 빠지는 기준이 2분이 아니라 5라운드(약 15초) — §8, [10](10-fig6a-ratio.md) §6
 - puff 간격은 약 4~5초 (논문 heartbeat 2초 [p.263]보다 김) — **추측**: OCM 판정 후 다음 heartbeat에 puff가 실행돼서 두 주기가 걸림
 - backoff(2순위 컨테이너는 ϕ/Nc) [p.263]는 안 보임: 두 컨테이너 모두 ×1.4 → 원 코드는 **앱 단위** backoff라 정상 (§8에서 확인)
 - 남은 swap: puff 뒤에도 `_02` 585M가 그대로 남음 → swap된 페이지는 다시 접근해야 메모리로 돌아옴

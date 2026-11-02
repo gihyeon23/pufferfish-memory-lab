@@ -218,6 +218,7 @@ trade-off를 정리하면:
 | puff 크기 | `min(c.memory×ϕ, (M−A)/2)` (Algorithm 1 18행, p.264) | `min(old×ratio, available/2)`, `available = nodeTotal×balloon.stop − 할당 합` | ⚠️ M 대신 M×0.8 |
 | puff 정지 | 노드 메모리 소진 | 할당 합 ≥ `balloon.stop`(코드 기본 **0.8**, README는 0.9) | ✅ |
 | 노드 포화 시 kill | 최저 우선순위 kill (p.263) | 할당 합 ≥ `balloon.reclaim`(기본 0.9) → **가장 늦게 시작한 app의 FLEX 컨테이너 kill**(`killContainer()`) | ✅ |
+| OCM 집합(C)에서 빼는 기준 · shrink 시점 | "not detected as OCM for more than a time threshold (**e.g., 2 minutes**)" → 집합 C에서 제외. shrink는 따로 설명 ("Container Monitor also shrinks …") (p.264) | **5라운드**(`SWAP_KEEP_TIME = 5`, 주석은 "keep for 2 minute") OCM 없으면 제외 (`NodeMemoryManager.java:102, 170-177`). shrink는 제외된 뒤에만 (`ContainerImpl.java:1198`) → x86 실측 puff 뒤 약 14~18초면 shrink | ⚠️ 논문은 예시값. 원 코드가 훨씬 짧아 shrink가 잦음 (x86 steps/10 §6) |
 | suspension tolerance | 기본 = job 예상 기간의 절반 (p.264) | stop~reclaim 구간에서 최우선 app이 계속 OCM이면 **10라운드**(`SWAP_KEEP_TIME*2`) 후 kill | ❌ 고정 라운드 수 |
 | reclaim 트리거 | 신규 컨테이너 launch 시 lazy (p.263~264) | `startContainers`에서 `MemoryReclaim(requestMemory)` 호출(`containermanager/ContainerManagerImpl.java:880`) | ✅ |
 | reclaim 대상 | 최저 우선순위 OCM부터 (p.264) | ① suspend 중 컨테이너에서 **균등 분할** 회수 → ② 부족하면 puff됐지만 swap 안 하는 컨테이너를 **늦게 시작한 순**으로 회수 | ⚠️ ①은 균등 분할 |
