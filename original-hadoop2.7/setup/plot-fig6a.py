@@ -97,11 +97,20 @@ if big:
     ax.annotate("shrinked", xy=(t, old / 1024), xytext=(t + 60, old / 1024 + 3),
                 arrowprops=dict(arrowstyle="->", color="#000000"), fontsize=10)
 ax.plot([], [], marker="v", ls="", color="#000000", label="shrinked")
+# 축을 논문 Fig 6(a)와 같은 기준으로: 가로 0~1750초 눈금 250초, 세로는 논문 0~100GB(노드 120GB)와 같은 높이
+#   왼쪽 = 우리 GB (노드 28GB), 오른쪽 = 논문 노드로 환산한 GB (× 120/28)
+SCALE = 120 / 28
 ax.set_xlabel("Run time (s)")
-ax.set_ylabel("Memory usage (GB)")
-ax.set_ylim(0, 28)  # 노드 YARN 메모리 28GB
+ax.set_ylabel("Memory usage (GB, node 28GB)")
+ax.set_ylim(0, 100 / SCALE)
+xmax = max(max(s["t"]) for s in series.values())
+ax.set_xlim(-90, max(1900, xmax + 60))
+ax.set_xticks(range(0, int(max(1900, xmax + 60)), 250))
+ax2 = ax.secondary_yaxis("right", functions=(lambda y: y * SCALE, lambda y: y / SCALE))
+ax2.set_ylabel("paper-scale GB (×120/28)")
+ax2.set_yticks(range(0, 101, 20))
 ax.grid(True, ls="--", alpha=0.5)
-ax.legend(ncol=8, loc="upper center", fontsize=9)
+ax.legend(ncol=8, loc="upper center", fontsize=8)
 ax.set_title(f"(a) puff() function — {note}")
 fig.tight_layout()
 fig.savefig(out, dpi=150)
