@@ -22,7 +22,7 @@
   6. `original-hadoop2.7/x86-server/steps/09-fig6a-puff.md` §5 (★ Fig 6(a) 재현 결과 + 그래프 `09-fig6a/fig6a.png`)
   7. `common/pufferfish-architecture.md` "원 공개 구현의 puff/reclaim 흐름" 표
   8. 이 README §9 — 오늘(11/01) 커밋 기록 (슬라이드 순서의 뼈대)
-- **꼭 별도 슬라이드로 넣을 것 (발표자 요청)**: §3-5 "논문에 없어 우리가 정한 값", §3-4 shrink 2GB vs ×1.1, §3-7 Fig 6(a) 재현 (논문 그래프와 나란히)
+- **꼭 별도 슬라이드로 넣을 것 (발표자 요청)**: §3-5 "논문에 없어 우리가 정한 값", §3-2-1 shrink란?(reclaim과 구분), §3-4 shrink 2GB vs ×1.1, §3-7 Fig 6(a) 재현 (논문 그래프와 나란히)
 
 ## 1. 한 줄 메시지
 
@@ -66,6 +66,27 @@
   - puff: 1536 → 2150 → 3010 → 4214 → 5899MB, **정확히 ×1.4** (ϕ=40%) [논문 p.263과 일치]
   - shrink: 5899 → 5216MB
 - 노드 메모리에 여유가 있어서 `stop ballooning`·kill·reclaim은 아직 안 일어남 → Fig 6 재현 실험에서 확인 예정
+
+### 3-2-1. shrink란? — 별도 설명 필요 (발표자가 예상 못 한 동작) [논문 + 원 구현]
+
+- 한 줄: puff는 ×1.4씩 **넉넉하게** 키움 → 수요가 안정되면 **남는 공간을 노드에 돌려주는 정리 단계**
+- 논문: puff 설명 안에 있는 동작 (reclaim 아님). "50GB → 70GB로 puff, 실제 수요 60GB → 10GB가 놂 → to avoid memory fragmentation, the puff mechanism shrinks the container size to 62GB (2GB overhead by default)" [p.264]
+- 원 코드 조건 (셋 다) (`ContainerImpl.java:1185-1217`)
+  1. 한 번이라도 puff된 컨테이너 (`balloonedBefore`)
+  2. 마지막 OCM 뒤 5라운드 동안 OCM 없음 → ballooning window 닫힘 (`NodeMemoryManager.java:102, 170-177`, 논문은 "2분" [p.264])
+  3. 크기 > (사용량 + swap) × 1.1 → 크기를 (사용량 + swap) × 1.1로 줄임
+- 06b 대입: 5899MB(마지막 puff) → 실제 4157 + swap 585 = 4742MB → ×1.1 = **5216MB**, 683MB를 돌려줌 [실측]
+
+| | shrink | reclaim |
+|---|---|---|
+| 언제 | 수요가 안정되고 여유가 남을 때 (스스로) | 새 컨테이너 launch 때 노드 메모리 부족 (lazy) |
+| 얼마나 | 남는 여유분만 (사용량 × 1.1까지) | 자리 만들 만큼, 실제 수요 아래로도 (MIN_CONT까지, swap 강제) |
+| 줄어든 컨테이너 | 계속 정상 실행 | suspend |
+| 로그 | `slacking contianer detected` | `new reclaim`, `creclaim reclaimed:` |
+| 우리 실험 | 06b·06c·PR 단독·Fig 6(a)에서 관찰 | **아직 없음** |
+
+- 그래프 모양: PR 단독 실행에서 puff(×1.4)와 shrink(×1.1)가 번갈아 → **톱니 모양** [실측]
+- 슬라이드 표의 shrink 행엔 "(여유분 회수, reclaim 아님)"을 붙일 것
 
 ### 3-3. backoff — 원 코드는 job 단위, 논문 본문과 일치 [논문 + 원 구현 + 실측]
 

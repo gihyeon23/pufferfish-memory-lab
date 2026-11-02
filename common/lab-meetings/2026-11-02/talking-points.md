@@ -41,6 +41,7 @@
 | Fig 6(a)에서 kill이 왜 5번이나? | 우리 1/4 규모에선 KM 하나가 노드의 44%(논문 23%)를 써서 KM 2개가 서로 밀어냄 [추측]. kill 대상은 원 코드대로 "가장 늦은 앱 중 Flex 컨테이너가 있는 앱" (steps/09 §5) |
 | 재시작이 막힌 건 어떻게 아나? | RM 로그 `memflexn actual memory give up` 373회. 원 코드 RM이 노드 실제 여유가 요청의 2배 미만이면 Flex 배정을 미룸 (`LeafQueue.java:1551-1569`) |
 | PR이 단독보다 느려진 이유? | KM과 CPU·디스크(swap)를 나눠 쓰고, 노드가 찬 동안 puff가 멈춰서 [추측] |
+| shrink는 reclaim인가? | 아님. shrink는 puff 단계의 정리 동작 — 수요가 안정되면 남는 여유분만 돌려줌 [p.264, `ContainerImpl.java:1185-1217`]. reclaim은 새 컨테이너 자리를 위해 쓰는 메모리까지 뺏는 별도 함수이고 아직 관찰 못 함 (README §3-2-1) |
 | JDK 7/8 비교는? | 원 이미지(JDK 7u51)를 그대로 쓰게 돼서 취소 |
 | 원 이미지면 안쪽 Hadoop도 2.4.0인가? | 아님. OS·JDK는 원본, 안쪽 Hadoop만 2.7.3으로 교체. NM이 호스트의 `HADOOP_*_HOME` 경로를 컨테이너에 넣어서(`ContainerLaunch.java:682-687`) 경로를 맞춰야 했음. 원 저자는 호스트 경로를 이미지와 같게 해서 2.4.0을 썼을 가능성 [추측]. Pufferfish 동작은 컨테이너 바깥(NM·cgroup)이고 Spark executor는 자기 jar를 써서 영향 작음 [추측]. 맥 때 정한 방식을 x86에서 다시 검토하지 못한 것 → 설정만 바꿔 원본 2.4.0으로 되돌리고 재확인 예정 |
 
