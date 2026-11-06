@@ -46,6 +46,9 @@ cgroup v1)에서 실행한다.
 - [x] **Fig 6(a) puff 재현** — stop ballooning, 최저 우선순위 kill, RM 재시작 차단까지 확인. 단 kill 5번(논문 1번) — [steps/09](x86-server/steps/09-fig6a-puff.md) §5
 - [ ] **예정**: task 이미지 안쪽 Hadoop을 원본 2.4.0으로 되돌리고 pi·Spark Flex·Fig 6(a) 재확인 (지금은 2.7.3 교체본) — [steps/03](x86-server/steps/03-task-image-sequenceiq.md) §7
 - [x] **Fig 6(a) 비율 맞춤 재실행** — PR 2.5×10⁶ 페이지(단독 55%·1726초): PR 최우선·최장, KM1 kill 없음, KM2만 kill. 단 KM2 kill 6번(즉시 재시작 반복) — [steps/10](x86-server/steps/10-fig6a-ratio.md)
+- [x] Fig 6(a) 차이 점검 — puff 주기 3초(논문 2초, `yarn-default.xml`이 덮어씀), shrink 대기 약 18초(논문 예시 2분) — [steps/11](x86-server/steps/11-fig6a-timing-check.md)
+- [x] Fig 6(a) 본 결과(원 코드 + 2초) — kill 8·shrink 58로 09보다 논문과 멀어짐 — [steps/12](x86-server/steps/12-fig6a-2s.md)
+- [x] Fig 6(a) 제출 간격 0초 + 안쪽 Hadoop 2.4.0 + 최소 할당 1024 — kill 2(256) / 1024로 4회 반복 시 3~7 — 실행마다 편차 큼 — [steps/13](x86-server/steps/13-fig6a-0s.md)
 - [ ] reclaim 확인 → Fig 6(b)(c) (TPC-H + baseline 필요)
 - [ ] WC·NW 데이터 생성 / Fig 6(a) job별 메모리 비율을 맞춰 재실행할지 교수님께 여쭙기 (비율은 논문·원 코드에 없음)
 - [ ] baseline(공식 YARN jar) vs Pufferfish 비교 → 3대 구성

@@ -2,7 +2,7 @@
 # Fig 6(a) 형식 그래프: job별 executor 컨테이너의 실제 사용량(실선, use-N)과 컨테이너 크기(점선, cnt-N)
 #   입력: fig6a.sh 결과 폴더의 watch.log(2초 간격 cgroup), apps.txt(앱 ID ↔ 이름), events.log(시작 시각)
 #   AM 컨테이너(_000001)는 제외. kill 후 relaunch된 executor는 같은 job 색, 컨테이너마다 선을 끊어 그림
-#   nm.log의 "OOM kill: <컨테이너>" 시점에 ×, shrink(slacking 뒤 크기 감소 1GB 이상, 종료 직전 제외)에 ▼ 표시
+#   nm.log의 "OOM kill: <컨테이너>" 시점에 ×, 가장 큰 shrink 한 곳에 "shrinked" 글자
 #   색 3개만 사용 (PPT 서식 규칙), 라벨은 논문 그래프처럼 영어
 # usage: python3 plot-fig6a.py <결과 폴더> [출력 png] [제목 뒤에 붙일 설명]
 import re
@@ -82,21 +82,17 @@ for t, job, c in kills:
     y = next((u for u in reversed(s["use"]) if u > 0), 0) if s else 0  # kill 직전 사용량
     ax.plot([t], [max(y, 0.3)], marker="x", ms=10, mew=2.5, color=color)
 ax.plot([], [], marker="x", ls="", color="#000000", label="killed")
-# shrink: 줄어든 뒤 크기 위치에 ▼ — 1GB 이상 줄어든 것만, 컨테이너 종료 시각 앞뒤 15초 안(종료 정리)은 제외
-#   가장 크게 줄어든 곳에 논문처럼 "shrinked" 글자
+# shrink: 1GB 이상 줄어든 것 중(종료 앞뒤 15초 제외) 가장 크게 줄어든 곳에만 논문처럼 "shrinked" 글자
+#   ▼ 표시는 그래프가 안 보여 뺌 (2026-11-06 교수님)
 ends = {}  # job → 그 job 컨테이너들의 종료 시각 목록
 for (j, c), s in series.items():
     ends.setdefault(j, []).append(s["t"][-1])
 big = [s for s in shrinks if s[2] - s[3] >= 1024
        and not any(abs(e - s[0]) <= 15 for e in ends.get(s[1], []))]
-for t, job, old, new in big:
-    color = [col for j, _, col in jobs if j == job][0]
-    ax.plot([t], [new / 1024], marker="v", ms=8, color=color)
 if big:
     t, job, old, new = max(big, key=lambda s: s[2] - s[3])
     ax.annotate("shrinked", xy=(t, old / 1024), xytext=(t + 60, old / 1024 + 3),
                 arrowprops=dict(arrowstyle="->", color="#000000"), fontsize=10)
-ax.plot([], [], marker="v", ls="", color="#000000", label="shrinked")
 # 축을 논문 Fig 6(a)와 같은 기준으로: 가로 0~1750초 눈금 250초, 세로는 논문 0~100GB(노드 120GB)와 같은 높이
 #   왼쪽 = 우리 GB (노드 28GB), 오른쪽 = 논문 노드로 환산한 GB (× 120/28)
 SCALE = 120 / 28
