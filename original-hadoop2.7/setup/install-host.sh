@@ -3,7 +3,7 @@
 #   1) 빌드·실행 도구 (호스트 NM/RM용 OpenJDK 8 등)
 #   2) Docker 1.12.1 (논문 버전, 2016-10-14 Launchpad 빌드) + hold
 #   3) swap accounting (커널 옵션 swapaccount=1) — 원 코드 OCM 판정에 필요
-#   4) 공식 Hadoop 2.7.3 → /opt/hadoop-2.7.3, YARN jar 13개를 원 저자 빌드본으로 교체
+#   4) 공식 Hadoop 2.7.3 → /opt/hadoop-2.7.3, YARN jar 13개를 원 저자 소스 빌드본(arm-mac 01에서 우리가 빌드)으로 교체
 # 여러 번 실행해도 됨 (이미 된 단계는 건너뜀). arm64·amd64 자동 판별.
 # usage: bash install-host.sh            (같은 폴더의 yarn-jars/ 사용)
 #        YARN_JARS_DIR=/path bash install-host.sh
@@ -65,9 +65,13 @@ if [ ! -d $H ]; then
 fi
 (cd "$YARN_JARS_DIR" && sha256sum -c --quiet "$HERE/yarn-jars.sha256")
 cp "$YARN_JARS_DIR"/hadoop-yarn-*-2.7.3.jar $H/share/hadoop/yarn/
-(cd $H/share/hadoop/yarn && sha256sum -c --quiet "$HERE/yarn-jars.sha256") && echo "YARN jar 13개 = 원 저자 빌드본"
+(cd $H/share/hadoop/yarn && sha256sum -c --quiet "$HERE/yarn-jars.sha256") && echo "YARN jar 13개 = 원 저자 소스 빌드본 (sha256 일치)"
 unzip -l $H/share/hadoop/yarn/hadoop-yarn-server-nodemanager-2.7.3.jar | grep -q NodeMemoryManager && echo "NodeMemoryManager 포함 확인"
 
 echo "== 완료"
 [ $REBOOT = 1 ] && echo "⚠️ swapaccount 적용을 위해 재부팅: sudo reboot"
-echo "다음: bash $HERE/prepare-base-image.sh → bash $HERE/build-image.sh jdk7 → bash $HERE/hadoop.sh start"
+if [ $ARCH = amd64 ]; then   # x86: 원 이미지 (x86-server/steps/03)
+  echo "다음: python3 $HERE/fetch-sequenceiq-image.py $DL/sequenceiq → docker load → bash $HERE/build-image.sh → bash $HERE/hadoop.sh start"
+else                         # 맥(ARM): CentOS 7 + JDK 7 이미지 (arm-mac 05)
+  echo "다음: bash $HERE/prepare-base-image.sh → bash $HERE/build-image.sh jdk7 → bash $HERE/hadoop.sh start"
+fi

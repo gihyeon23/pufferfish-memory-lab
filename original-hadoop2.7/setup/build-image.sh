@@ -2,13 +2,15 @@
 # VM(단일 노드)에서 실행: 호스트 설정 반영 → 교체본 tar 생성 → task 이미지 빌드
 # 전제: install-host.sh(/opt/hadoop-2.7.3 + YARN jar 교체), prepare-base-image.sh(베이스 이미지) 완료
 # usage: build-image.sh [sequenceiq|jdk7|jdk8]   (기본: amd64는 sequenceiq — x86-server/steps/03, arm64는 jdk7 — 05 §7)
-#   sequenceiq: 원 이미지 sequenceiq/hadoop-docker:2.4.0(CentOS 6.5 + Oracle JDK 7u51) → local/hadoop-docker:2.7.3-sequenceiq
+#   sequenceiq: 원 이미지 sequenceiq/hadoop-docker:2.4.0(CentOS 6.5 + Oracle JDK 7u51 + 안쪽 Hadoop 2.4.0) + 설정 → local/hadoop-docker:2.4.0-sequenceiq
 #               (먼저 fetch-sequenceiq-image.py → docker load, x86 전용)
 #   jdk7: local/centos:7 + OpenJDK 7 → local/hadoop-docker:2.7.3-jdk7
 #   jdk8: local/ubuntu:16.04 + OpenJDK 8 → local/hadoop-docker:2.7.3-jdk8 (비교용)
 set -e
 ARCH=$(dpkg --print-architecture)              # amd64 | arm64
 [ $ARCH = amd64 ] && VARIANT=${1:-sequenceiq} || VARIANT=${1:-jdk7}
+# 이미지 태그 = 안쪽 Hadoop 버전-변형 (sequenceiq는 원본 2.4.0, jdk7·jdk8은 교체본 2.7.3)
+[ $VARIANT = sequenceiq ] && TAG=2.4.0-$VARIANT || TAG=2.7.3-$VARIANT
 H=/opt/hadoop-2.7.3
 HERE=$(cd "$(dirname "$0")" && pwd)
 # 호스트 NM/RM은 JDK 8로 실행 (task JDK는 이미지 ENV — yarn-site env-whitelist에서 JAVA_HOME 제외)
@@ -25,14 +27,14 @@ for f in "$HERE"/conf/*.xml; do
       -e "s#@YARN_MB@#$YARN_MB#g" -e "s#@JVM_MB@#$JVM_MB#g" "$f" > "$CTX/conf/$(basename "$f")"
 done
 # NM이 띄울 task 이미지 = 이번에 빌드하는 이미지
-sed -i "s#local/hadoop-docker:2.7.3-[a-z0-9]*#local/hadoop-docker:2.7.3-$VARIANT#" "$CTX/conf/yarn-site.xml"
+sed -i "s#local/hadoop-docker:[0-9.]*-[a-z0-9]*#local/hadoop-docker:$TAG#" "$CTX/conf/yarn-site.xml"
 cp "$CTX"/conf/*.xml $H/etc/hadoop/
 for f in hadoop-env.sh yarn-env.sh mapred-env.sh; do
   grep -q "^export JAVA_HOME=$JAVA_HOME" $H/etc/hadoop/$f || echo "export JAVA_HOME=$JAVA_HOME" >> $H/etc/hadoop/$f
 done
 
 # 2) 교체본 tar (로그 제외, 설정은 Dockerfile에서 따로 COPY)
-tar czf "$CTX/hadoop-2.7.3-pufferfish.tar.gz" --exclude=hadoop-2.7.3/logs -C /opt hadoop-2.7.3
+[ $VARIANT = sequenceiq ] || tar czf "$CTX/hadoop-2.7.3-pufferfish.tar.gz" --exclude=hadoop-2.7.3/logs -C /opt hadoop-2.7.3   # sequenceiq는 안 씀
 cp "$HERE/Dockerfile.$VARIANT" "$CTX/Dockerfile"
 # CentOS 7 지원 종료 → vault (aarch64는 altarch 경로)
 case $ARCH in
@@ -43,6 +45,6 @@ printf '[base]\nname=CentOS-7.9.2009 base (vault)\nbaseurl=%s/os/%s/\ngpgcheck=0
   $VAULT $C7 $VAULT $C7 > "$CTX/vault.repo"
 
 # 3) 이미지 빌드
-docker build --build-arg JAVA8_HOME=/usr/lib/jvm/java-8-openjdk-$ARCH -t local/hadoop-docker:2.7.3-$VARIANT "$CTX"
+docker build --build-arg JAVA8_HOME=/usr/lib/jvm/java-8-openjdk-$ARCH -t local/hadoop-docker:$TAG "$CTX"
 rm -rf "$CTX"
 docker images local/hadoop-docker

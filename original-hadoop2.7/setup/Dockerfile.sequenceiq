@@ -1,26 +1,10 @@
-# task 이미지 (x86 기본) — 원 저자 이미지 sequenceiq/hadoop-docker:2.4.0 위에 교체본 Hadoop만 얹음
-# 원본 그대로: CentOS 6.5 + Oracle JDK 7u51 (/usr/java/default) [원 README "tested 2.4.0", YarnConfiguration.java:1009]
-# 바꾼 것: 안쪽 Hadoop 2.4.0(/usr/local/hadoop) → 호스트와 같은 2.7.3 교체본(/opt) — 05 §2 결정 유지
+# task 이미지 (x86 기본) — 원 저자 이미지 sequenceiq/hadoop-docker:2.4.0 그대로 + 우리 클러스터 설정만 넣음
+# 원본 그대로: CentOS 6.5 + Oracle JDK 7u51 (/usr/java/default) + 안쪽 Hadoop 2.4.0 (/usr/local/hadoop)
+#   [원 README "tested 2.4.0", YarnConfiguration.java:1009]
+# 바꾼 것: 이미지 안 설정 파일만 우리 클러스터 값으로 (HDFS 주소 등) — x86 03 §7 (2026-11-05, 2.7.3 교체본 제거)
 # base: fetch-sequenceiq-image.py로 받아 docker load한 sequenceiq/hadoop-docker:2.4.0 (x86 전용)
 FROM sequenceiq/hadoop-docker:2.4.0
 # build-image.sh가 공통으로 넘기는 값 (Docker 1.12는 안 쓰는 build-arg가 있으면 빌드 실패 → 선언만)
 ARG JAVA8_HOME
 
-# 공식 2.7.3 + 원 저자 YARN jar 13개 교체본 (build-image.sh가 컨텍스트에 복사)
-ADD hadoop-2.7.3-pufferfish.tar.gz /opt/
-COPY conf/*.xml /opt/hadoop-2.7.3/etc/hadoop/
-# 호스트용 JAVA_HOME(JDK 8) 고정 줄 제거 → *-env.sh가 아래 ENV의 JDK 7을 따름
-RUN sed -i '/^export JAVA_HOME=\/usr\/lib\/jvm\/java-8-openjdk-/d' \
-      /opt/hadoop-2.7.3/etc/hadoop/hadoop-env.sh \
-      /opt/hadoop-2.7.3/etc/hadoop/yarn-env.sh \
-      /opt/hadoop-2.7.3/etc/hadoop/mapred-env.sh
-
-# 원 이미지 ENV의 HADOOP_*(/usr/local/hadoop = 2.4.0)를 교체본으로 덮어씀. JAVA_HOME은 원본 그대로
-ENV JAVA_HOME=/usr/java/default \
-    HADOOP_PREFIX=/opt/hadoop-2.7.3 \
-    HADOOP_COMMON_HOME=/opt/hadoop-2.7.3 \
-    HADOOP_HDFS_HOME=/opt/hadoop-2.7.3 \
-    HADOOP_MAPRED_HOME=/opt/hadoop-2.7.3 \
-    HADOOP_YARN_HOME=/opt/hadoop-2.7.3 \
-    HADOOP_CONF_DIR=/opt/hadoop-2.7.3/etc/hadoop \
-    PATH=/opt/hadoop-2.7.3/bin:/usr/java/default/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+COPY conf/*.xml /usr/local/hadoop/etc/hadoop/
