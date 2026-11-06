@@ -17,6 +17,7 @@
 | KM 메모리 | "maximum profiled memory demand of 61GB per container" [p.266] = 노드 51% | 그대로 | 12.4GB (44%) — 비슷 |
 
 - 방법: **KM은 그대로, PR 페이지 수만 늘림**
+- Table 1 Small 입력 비율(PR : KM = 1 : 20) [p.265]은 09가 그대로 지킴, 10은 PR만 2배라 1 : 10 [우리]
 - 바꾸지 않은 것: 실행 조건(executor 1개·1코어·1g, Flex), 제출 간격 120초, 안쪽 Hadoop 2.7.3 (한 번에 한 가지만 바꿔 09와 비교하려고. 2.4.0 되돌리기는 [03](03-task-image-sequenceiq.md) §7 예정 그대로)
 
 ### 설정 ([../../setup/hibench-conf/pf6a/zz-pf6a.conf](../../setup/hibench-conf/pf6a/zz-pf6a.conf))

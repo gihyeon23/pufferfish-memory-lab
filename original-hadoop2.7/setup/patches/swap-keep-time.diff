@@ -1,0 +1,20 @@
+--- a/NodeMemoryManager.java
++++ b/NodeMemoryManager.java
+@@ -99,7 +99,7 @@
+ 				                                       YarnConfiguration.DEFAULT_RATIO__RECLAIM_BALLOON_LIMIT);
+ 		 
+ 		 //keep for 2 minute
+-		 this.SWAP_KEEP_TIME          = 5;
++		 this.SWAP_KEEP_TIME          = 59; // [우리] 5 -> 59: 60라운드 x 2초 = 2분 (논문 p.264 "e.g., 2 minutes")
+ 		 ReadWriteLock readWriteLock  = new ReentrantReadWriteLock();
+ 		 this.readLock    = readWriteLock.readLock();
+ 		 this.writeLock   = readWriteLock.writeLock();
+@@ -295,7 +295,7 @@
+ 			 
+ 			 lastKilled = shouldKill;
+ 			 
+-			 if(killRetries > SWAP_KEEP_TIME * 2){
++			 if(killRetries > 10){ // [우리] 원 코드 SWAP_KEEP_TIME*2(=10) 그대로 고정
+ 			   LOG.info("memory conflicts kill");	 
+ 			   this.killRetries = 0;
+ 			   return this.killContainer();
