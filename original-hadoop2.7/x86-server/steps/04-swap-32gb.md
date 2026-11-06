@@ -40,4 +40,4 @@ sudo sed -i '/swap_1/s/^/#/' /etc/fstab
 ## 5. 논문과 다른 점
 
 - 원 실험 호스트의 swap 크기는 논문에 없음. 32GB는 우리가 정한 값
-- swap 장치: 원 논문 물리 HDD RAID-5 ↔ VM 디스크 위 파일 → swap 속도가 달라 reclaim·thrashing 수치에 영향 가능 (01 §7)
+- swap 장치: 원 논문 **SSD swap 파티션** [p.268] (11/06 정정: 처음엔 HDD RAID-5로 적음) ↔ VM 디스크 위 파일 → swap 속도가 달라 reclaim·thrashing 수치에 영향 가능 (01 §7)

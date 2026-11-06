@@ -100,7 +100,7 @@
 - 26노드 → 워커 2대 (다중 노드 실험은 축소판)
 - 노드 RAM·데이터 1/4, YARN은 28GB (1/4 기준 30GB보다 2GB 적음)
 - 32스레드 → 8 vCPU
-- 물리 HDD RAID-5 → VM 디스크 (종류 미확인) — swap 속도 차이로 reclaim·thrashing 수치가 달라질 수 있음
+- 물리 HDD RAID-5(데이터) + **SSD swap 파티션** [p.268] → VM 디스크 (종류 미확인) — swap 속도 차이로 reclaim·thrashing 수치가 달라질 수 있음 (11/06 정정: 처음엔 swap도 HDD로 적음)
 
 ## 8. 검증 결과
 

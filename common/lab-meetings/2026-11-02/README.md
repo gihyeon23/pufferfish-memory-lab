@@ -22,7 +22,7 @@
   6. `original-hadoop2.7/x86-server/steps/09-fig6a-puff.md` §5 (★ Fig 6(a) 재현 결과 + 그래프 `09-fig6a/fig6a.png`)
   7. `common/pufferfish-architecture.md` "원 공개 구현의 puff/reclaim 흐름" 표
   8. 이 README §9 — 오늘(11/01) 커밋 기록 (슬라이드 순서의 뼈대)
-- **꼭 별도 슬라이드로 넣을 것 (발표자 요청)**: §3-5 "논문에 없어 우리가 정한 값", §3-4 shrink 2GB vs ×1.1, §3-7 Fig 6(a) 재현 (논문 그래프와 나란히)
+- **꼭 별도 슬라이드로 넣을 것 (발표자 요청)**: §3-5 "논문에 없어 우리가 정한 값", §3-2-1 shrink란?(reclaim과 구분), §3-4 shrink 2GB vs ×1.1, §3-7 Fig 6(a) 재현 (논문 그래프와 나란히)
 
 ## 1. 한 줄 메시지
 
@@ -49,7 +49,7 @@
 | OS·커널 | Ubuntu 16.04 [논문 p.265] | 16.04.7, 커널 4.4, x86_64, vCPU 8개 모두 인식 ✅ |
 | Docker | 1.12.1 [논문 p.265] | 1.12.1, aufs, cgroupfs, cgroup v1 + `swapaccount=1` ✅ |
 | YARN | 원 저자 코드 | 공식 2.7.3 + 원 저자 YARN jar 13개 ✅ |
-| task 이미지 | `sequenceiq/hadoop-docker:2.4.0` [원 구현 README] | **원 이미지 그대로 반입** (CentOS 6.5 + Oracle JDK 7u51) ✅ |
+| task 이미지 | `sequenceiq/hadoop-docker:2.4.0` [원 구현 README] (안쪽 Hadoop 2.4.0) | **원 이미지 그대로 반입** (CentOS 6.5 + Oracle JDK 7u51) ✅<br>단 안쪽 Hadoop은 **2.7.3으로 교체** — 맥(ARM) 때 정한 방식을 그대로 가져옴. **원본 2.4.0으로 되돌려 재확인 예정** (steps/03 §7) ⚠️ |
 | Spark | 2.0.1 [논문 p.265] | 2.0.1 ✅ |
 | 메모리 (1/4 축소) | 노드 128GB, YARN 120GB, MAX_HEAP 64GB, MIN_CONT 4GB [논문 p.265] | 32GB, 28GB, 16GB, 1GB [우리: 1/4] |
 
@@ -66,6 +66,27 @@
   - puff: 1536 → 2150 → 3010 → 4214 → 5899MB, **정확히 ×1.4** (ϕ=40%) [논문 p.263과 일치]
   - shrink: 5899 → 5216MB
 - 노드 메모리에 여유가 있어서 `stop ballooning`·kill·reclaim은 아직 안 일어남 → Fig 6 재현 실험에서 확인 예정
+
+### 3-2-1. shrink란? — 별도 설명 필요 (발표자가 예상 못 한 동작) [논문 + 원 구현]
+
+- 한 줄: puff는 ×1.4씩 **넉넉하게** 키움 → 수요가 안정되면 **남는 공간을 노드에 돌려주는 정리 단계**
+- 논문: puff 설명 안에 있는 동작 (reclaim 아님). "50GB → 70GB로 puff, 실제 수요 60GB → 10GB가 놂 → to avoid memory fragmentation, the puff mechanism shrinks the container size to 62GB (2GB overhead by default)" [p.264]
+- 원 코드 조건 (셋 다) (`ContainerImpl.java:1185-1217`)
+  1. 한 번이라도 puff된 컨테이너 (`balloonedBefore`)
+  2. 마지막 OCM 뒤 5라운드 동안 OCM 없음 → ballooning window 닫힘 (`NodeMemoryManager.java:102, 170-177`, 논문은 "**e.g., 2 minutes**" = 예시 [p.264]) → 실측 puff 뒤 약 14~18초면 shrink
+  3. 크기 > (사용량 + swap) × 1.1 → 크기를 (사용량 + swap) × 1.1로 줄임
+- 06b 대입: 5899MB(마지막 puff) → 실제 4157 + swap 585 = 4742MB → ×1.1 = **5216MB**, 683MB를 돌려줌 [실측]
+
+| | shrink | reclaim |
+|---|---|---|
+| 언제 | 수요가 안정되고 여유가 남을 때 (스스로) | 새 컨테이너 launch 때 노드 메모리 부족 (lazy) |
+| 얼마나 | 남는 여유분만 (사용량 × 1.1까지) | 자리 만들 만큼, 실제 수요 아래로도 (MIN_CONT까지, swap 강제) |
+| 줄어든 컨테이너 | 계속 정상 실행 | suspend |
+| 로그 | `slacking contianer detected` | `new reclaim`, `creclaim reclaimed:` |
+| 우리 실험 | 06b·06c·PR 단독·Fig 6(a)에서 관찰 | **아직 없음** |
+
+- 그래프 모양: PR 단독 실행에서 puff(×1.4)와 shrink(×1.1)가 번갈아 → **톱니 모양** [실측]
+- 슬라이드 표의 shrink 행엔 "(여유분 회수, reclaim 아님)"을 붙일 것
 
 ### 3-3. backoff — 원 코드는 job 단위, 논문 본문과 일치 [논문 + 원 구현 + 실측]
 
@@ -116,11 +137,11 @@
   - 2단계: 부족하면 puff됐지만 suspend가 아닌 컨테이너를 **늦게 시작한 순**으로 회수
   - 회수는 요청량(MIN_CONT)까지 내릴 수 있음 (`ContainerImpl.java:1234`)
 - 영향: 앱 2개 이상이 동시에 OCM일 때만 드러남 → Fig 6(b) 재현 때 앱 2개를 동시에 OCM으로 만들어 실측 예정
-- 기타 차이(참고): OCM 집합 유지 "2분"[p.264] ↔ 5라운드, puff 상한 노드 메모리 ↔ ×0.8, suspension tolerance ↔ 고정 10라운드
+- 기타 차이(참고): OCM 집합 유지 "예: 2분"[p.264] ↔ 5라운드(약 15초, shrink가 잦은 원인 중 하나), puff 상한 노드 메모리 ↔ ×0.8, suspension tolerance ↔ 고정 10라운드
 
 ### 3-7. ★ Fig 6(a) puff() 재현 — 별도 슬라이드 (논문 그래프와 나란히) [실측, steps/09 §5]
 
-- 그래프: `original-hadoop2.7/x86-server/steps/09-fig6a/fig6a.png` (실선 = 실제 사용량, 점선 = 컨테이너 크기, × = kill)
+- 그래프: `original-hadoop2.7/x86-server/steps/09-fig6a/fig6a.png` (실선 = 실제 사용량, 점선 = 컨테이너 크기, × = kill, ▼ = shrink 1GB 이상 — 실행 중 9번, 논문 그래프의 "shrinked"에 해당)
   - 논문 그래프는 `common/papers/pufferfish-paper.pdf` p.265 Figure 6(a)
 - 구성: PR 1개 → 120초 뒤 KM1 → 120초 뒤 KM2, job마다 Flex executor 1개·1코어·1g, 데이터 1/4
   - 제출 간격 120초는 [우리] (6(a)엔 없음, 같은 절 Fig 7의 값)
@@ -138,13 +159,25 @@
 | 노드가 차면 가장 늦은 container-3 kill | 첫 kill = KM2 (323초), `stop ballooning` 0.799 → 10라운드 후 `memory conflicts kill` | ✅ |
 | 재시작이 메모리 부족으로 막힘 | KM2 재시작 184초 대기, RM `memflexn actual memory give up` 373회 | ✅ |
 | kill 1번 | **kill 5번** (KM1·KM2가 번갈아) | ❌ |
-| 메모리 비율 PR ≫ KM (약 60GB : 27GB) | PR ≈ KM (약 10GB : 10~11GB) | ❌ |
+| PR이 가장 크게 자람 (그래프상 약 60GB 이상) | PR ≈ KM (약 10GB : 10~11GB) | ❌ |
 
 - 원 코드 근거 [원 구현]
   - kill 대상 = 가장 늦게 시작한 앱 중 Flex 컨테이너가 있는 앱 (`NodeMemoryManager.java:355-385`) → KM2 executor가 재배정 대기 중이면 KM1이 대상
   - RM: Flex 컨테이너는 노드 실제 여유가 요청의 2배 이상일 때만 배정 (`LeafQueue.java:1551-1569`) = 논문 cluster scheduler plugin [p.264]
-- kill이 많은 이유 [추측]: 1/4 규모에서 KM 하나가 노드의 약 44%를 씀 (논문 약 23%) → KM 2개가 서로 밀어냄
-- 발표 문장: "Fig 6(a)의 메커니즘 — 우선순위 puff, puff 정지, 가장 늦은 컨테이너 kill, 재시작 차단 — 은 전부 재현됐습니다. 다만 우리 축소 규모에선 KMeans 비중이 커서 kill이 1번이 아니라 5번 났고, 데이터 비율을 논문에 맞추는 조정을 다음에 해 보겠습니다."
+- **job별 메모리 비율 — 논문·원 코드에 Fig 6(a) 값 없음** (steps/09 §5)
+  - 명시된 건 KM 수요 61GB(노드의 51%) [p.266]뿐. PR은 그래프와 원 저자 테스트 로그(`memory_test`, 약 64GiB)로만 추정 [추측]
+  - 비교: KM은 ÷4와 비슷(우리 12.4GB), PR은 작게 나옴(우리 10.4GB, ÷4면 약 16GB) [추측]
+  - kill 횟수(5 vs 1) 원인은 **미확인** — 처음 적은 "KM 비중(23%)이 커서"는 잘못 읽은 값이라 철회
+- 발표 문장: "원 저자 코드가 적용되는 방식 — 우선순위 puff, puff 정지, 가장 늦은 컨테이너 kill, 재시작 차단 — 은 원 저자와 같게 동작했습니다. 다만 job별 메모리 비율이 달라서 그래프가 똑같이 나오지는 않았습니다. 논문과 원 코드에 그 비율이 명시되어 있지 않은데, 비율까지 맞춰서 다시 돌려야 할지 여쭙고 싶습니다."
+
+### 3-8. 그래프 모양에 영향을 주는 요인 [steps/10 §6]
+
+- 논문에 없는 값과 원 코드-논문 차이가 **각각 그래프의 다른 부분**에 영향을 줌
+  - 선 높이·길이 ← job별 메모리·실행 시간 비율 [논문 없음] — 11/02 PR 입력을 늘려 맞추자 PR이 가장 높고 가장 오래 감 (steps/10)
+  - 초반 누가 위에 있나 ← 메모리 증가 속도 (코어 수 등) [논문 없음]
+  - shrink 빈도(톱니 모양) ← OCM 집합 제외 기준: 논문 "e.g., 2 minutes"(예시) ↔ 원 코드 5라운드(실측 puff 뒤 약 14~18초) [원 코드 ≠ 논문]
+  - kill 뒤 재시작 간격 ← RM 재배정 조건(실제 여유 ≥ 요청 × 2) [원 코드]
+- 실측으로 확인한 건 메모리·실행 시간 비율뿐, 나머지는 추측
 
 ## 4. 결정 사항
 
@@ -155,6 +188,7 @@
 | 11/01 | shrink ×1.1 등 원 코드 동작은 수정하지 않고 결과 해석 때 명시 |
 | 11/01 | HiBench 6.0, executor 1개·1코어·1g, 나머지 Spark 기본값, 데이터 Table 1 Small의 1/4 |
 | 11/01 | VM 1대로 단일 노드 실험 먼저, 원 코드 문제(reclaim 균등 분할 등)는 환경 세팅 후 |
+| 11/02 | 안쪽 Hadoop을 원본 2.4.0으로 되돌리기로 함 (설정만, 랩미팅 뒤 실행) |
 | 11/01 | Fig 6(a): 제출 간격 120초, HiBench가 만든 spark-submit을 직접 실행(동시 실행 시 출력 폴더 충돌 회피) |
 
 ## 5. 교수님께 확인할 것
@@ -163,12 +197,14 @@
 - [ ] **VM 디스크 HDD/SSD** (논문은 HDD → swap 속도 차이 해석용)
 - [ ] executor 1코어(논문 "기본 설정" 문장 해석)로 진행해도 되는지
 - [ ] 원 저자 문의 메일 (shrink 여유분, MR Flex, 코드 버전, HiBench 버전) — 보내도 되는지
-- [ ] Fig 6(a) 데이터 비율: 1/4 그대로 둘지, 논문의 PR:KM 메모리 비율에 맞춰 조정할지
+- [ ] **Fig 6(a) 그래프 차이**: "원 저자와 적용 방식은 같은데, job별 메모리 비율 차이로 그래프가 똑같이는 안 나온다" — 이 정도로 충분한지, 비율까지 맞춰 재실행해야 하는지
+  - 비율은 논문·원 코드에 없음 (KM 61GB만 명시 [p.266]) → 맞춘다면 그래프·원 저자 로그에서 추정한 값 기준
+  - 대안: 단일 노드용 128GB VM이면 논문 입력·힙 그대로 가능
 
 ## 6. 다음 계획 (단일 노드)
 
 1. ~~PR·KM 데이터, 예비 실험, Fig 6(a)~~ → 완료 (11/01)
-2. Fig 6(a) 데이터 비율 조정 후 재실행 검토, WC·NW 데이터 생성
+2. Fig 6(a): 교수님 답에 따라 비율 맞춤 재실행 여부 결정 (안쪽 Hadoop 2.4.0 되돌리기와 함께), WC·NW 데이터 생성
 3. 입력 규모 예비 실험 (PR을 1GB/16GB 힙으로) + YARN 28GB 여유 점검
 4. TPC-H(Spark-SQL) 준비 + baseline(공식 YARN jar) 전환 → **Fig 6(b)(c) reclaim 재현**
 5. Fig 7 container parallelism (힙 1·2·4·8·16GB vs PF)
@@ -177,7 +213,10 @@
 ## 7. 발표에서 피할 주장
 
 - "reclaim을 확인했다" ❌ → 호출 로그만 봄, 실제 회수는 아직 없음 (Fig 6(a)의 kill은 puff 쪽 kill, reclaim 아님)
-- "Fig 6(a)를 똑같이 재현했다" ❌ → 메커니즘은 재현, kill 횟수(5 vs 1)·메모리 비율은 다름
+- "Fig 6(a)를 똑같이 재현했다" ❌ → 적용 방식은 같음, kill 횟수(5 vs 1)·그래프 모양은 다름
+- "논문의 KM은 노드의 23%" ❌ → 그건 억눌린 크기. 명시된 KM 수요는 61GB(51%) [p.266]
+- "kill이 많은 건 KM 비중 때문" ❌ → 원인 미확인
+- "task 이미지가 원 저자와 완전히 같다" ❌ → OS·JDK는 원본, 안쪽 Hadoop만 2.7.3 (되돌릴 예정)
 - "실행 시간이 논문보다 빠르다/느리다" ❌ → 하드웨어·1/4 규모·1코어라 절대 시간 비교 불가
 - "논문과 원 코드의 backoff가 다르다" ❌ → p.265 본문과 일치, 의사코드만 다름
 - "shrink 후 OCM 재발은 ×1.1 때문" ❌ → 앱 종료 중이라 원인 단정 못 함

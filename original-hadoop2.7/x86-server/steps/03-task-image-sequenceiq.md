@@ -75,6 +75,21 @@ grep -A1 image-name /opt/hadoop-2.7.3/etc/hadoop/yarn-site.xml                  
 - 안쪽 Hadoop 2.4.0 → 2.7.3 교체본 (arm-mac 05 §2 결정 유지)
   - 원 저자는 이미지 안의 2.4.0을 그대로 썼을 가능성 있음 (**추측**)
 
+### 안쪽 Hadoop을 원본 2.4.0으로 되돌리기 (2026-11-02 결정, 2026-11-05 실행)
+
+- 원인: 맥(ARM)에선 원 이미지를 못 써서 "안쪽 Hadoop = 호스트 2.7.3"으로 정했고(arm-mac 05), x86에서 원 이미지를 쓰게 된 뒤에도 이 결정을 다시 검토하지 않고 공통 `setup/`에 그대로 둠
+  - JDK는 이미 원본(7u51)을 쓰게 맞춤 (`env-whitelist`에서 `JAVA_HOME` 제외) — Hadoop만 같은 처리를 안 함
+    - 11/05 정정: DCE가 `JAVA_HOME`·`HADOOP_*`를 원래 빼므로 whitelist 변경은 필요 없었음 (아래 실행 참고)
+- 방법 (원 코드 수정 없이 설정만)
+  1. [../../setup/Dockerfile.sequenceiq](../../setup/Dockerfile.sequenceiq): 교체본 `ADD`·`HADOOP_*` ENV 덮어쓰기 제거 → 원 이미지의 `/usr/local/hadoop`(2.4.0) 사용
+  2. [../../setup/conf/yarn-site.xml](../../setup/conf/yarn-site.xml) `yarn.nodemanager.env-whitelist`에서 `HADOOP_*` 제거 → NM이 호스트 경로를 컨테이너에 넣지 않게 (`ContainerLaunch.java:682-687`)
+  3. 확인: pi(DCE) → Spark Flex([06](06-spark-flex.md)) → Fig 6(a) 재실행([09](09-fig6a-puff.md))
+- 확인할 위험: 컨테이너 안 Hadoop 2.4.0 + 호스트 YARN 2.7.3 혼합 (2.x끼리는 대체로 호환, **추측**)
+- **실행 (11/05)**: Dockerfile은 원 이미지 + 설정 파일 COPY만, `env-whitelist`는 지정 안 함(원 기본값) — DCE가 실행 스크립트에서 `JAVA_HOME`·`HADOOP_*`를 빼서 이미지 ENV가 쓰임 (`DockerContainerExecutor.java:315-320`)
+  - 확인 [실측]: 이미지 안 Hadoop 2.4.0·JDK 1.7.0_51, pi(DCE) 성공, Spark Flex executor "set to be flexible", task java = `/usr/java/default`
+  - 이전 이미지는 `local/hadoop-docker:inner273-backup` 태그로 보관
+- 그때까지의 결과(06~09)는 "안쪽 Hadoop만 2.7.3"인 조건으로 해석 — Pufferfish 동작은 컨테이너 바깥(NM·cgroup), Spark executor는 자기 jar를 써서 영향 작음 (**추측**)
+
 ## 8. 검증 결과
 
 - 맥: 받아서 묶기까지 확인 (레이어 48개, CentOS 6.5, `jdk1.7.0_51`)

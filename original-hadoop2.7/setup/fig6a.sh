@@ -5,7 +5,7 @@
 #   HiBench run.sh를 동시에 돌리면 출력·리포트 폴더가 겹쳐서, HiBench가 만든 spark-submit 명령을 그대로 직접 실행
 #   (HiBench가 넘기는 환경변수 SPARKBENCH_PROPERTIES_FILES·HADOOP_CONF_DIR도 같게)
 # 사전: pagerank·kmeans prepare 완료, 각 workload를 run.sh로 한 번 돌려 report/<w>/spark/conf가 있어야 함
-# usage: bash fig6a.sh [간격초]   (기본 120) → ~/hibench-logs/fig6a-<시각>/
+# usage: bash fig6a.sh [간격초]   (기본 120) → ~/hibench-logs/fig6a-<시각>/ — 0이면 앞 job이 앱 ID를 받자마자 다음 제출
 set -e
 IV=${1:-120}
 HERE=$(cd "$(dirname "$0")" && pwd)
@@ -36,10 +36,16 @@ bash $HERE/watch-containers.sh > $OUT/watch.log 2>&1 &
 W=$!
 echo "interval=${IV}s start=$(date +%F' '%T)" > $OUT/events.log
 
+# 간격 0: 동시에 띄우면 RM 도착 순서(= EJF 우선순위)가 섞이므로, 앞 job이 앱 ID를 받자마자 다음 제출
+gap() {  # gap <앞 job 이름>
+  if [ "$IV" = 0 ]; then
+    until grep -a -q 'application_[0-9]*_[0-9]*' $OUT/$1.log 2>/dev/null; do sleep 0.2; done
+  else sleep $IV; fi
+}
 submit fig6a-pr  pagerank org.apache.spark.examples.SparkPageRank $HDFS/Pagerank/Input/edges $HDFS/Pagerank/Output-fig6a 3
-sleep $IV
+gap fig6a-pr
 submit fig6a-km1 kmeans com.intel.hibench.sparkbench.ml.DenseKMeans -k 10 --numIterations 5 $HDFS/Kmeans/Input/samples
-sleep $IV
+gap fig6a-km1
 submit fig6a-km2 kmeans com.intel.hibench.sparkbench.ml.DenseKMeans -k 10 --numIterations 5 $HDFS/Kmeans/Input/samples
 while [ $(grep -c "^.* end " $OUT/events.log) -lt 3 ]; do sleep 5; done
 sleep 4; kill $W
