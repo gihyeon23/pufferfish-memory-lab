@@ -10,3 +10,4 @@
 | 2026-10-05 | 2단계 로드맵 (Hadoop 3.5.0 클러스터) | [2026-10-05.md](2026-10-05/2026-10-05.md), [talking-points](2026-10-05/talking-points.md) |
 | 2026-10-26 | 원 구현 첫 실행, 맥(ARM) 한계, x86 VM 전환 | [README.md](2026-10-26/README.md) (다른 AI 인계용), [talking-points](2026-10-26/talking-points.md) |
 | 2026-11-02 | x86 VM 원 저자 환경, 첫 OCM·puff 관찰, shrink ×1.1, 우리가 정한 값(1코어 등) | [README.md](2026-11-02/README.md) (다른 AI 인계용), [talking-points](2026-11-02/talking-points.md) |
+| 2026-11-09 | Fig 6(a) 조건별 비교(11~14·반복), 논문과 같은 것·다른 것·우리가 정한 값 | [README.md](2026-11-09/README.md), [PPT](2026-11-09/fig6a-conditions.pptx) |

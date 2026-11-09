@@ -6,8 +6,10 @@
 #   (HiBench가 넘기는 환경변수 SPARKBENCH_PROPERTIES_FILES·HADOOP_CONF_DIR도 같게)
 # 사전: pagerank·kmeans prepare 완료, 각 workload를 run.sh로 한 번 돌려 report/<w>/spark/conf가 있어야 함
 # usage: bash fig6a.sh [간격초]   (기본 120) → ~/hibench-logs/fig6a-<시각>/ — 0이면 앞 job이 앱 ID를 받자마자 다음 제출
+#        CORES=4 bash fig6a.sh 0   — executor 코어 수 (기본 1, x86 steps/08)
 set -e
 IV=${1:-120}
+CORES=${CORES:-1}
 HERE=$(cd "$(dirname "$0")" && pwd)
 H=/opt/HiBench-6.0
 S=/opt/spark-2.0.1-bin-hadoop2.7
@@ -26,7 +28,7 @@ submit() {  # submit <이름> <workload> <클래스> <인자...>
     s=$(date +%s); rc=0; echo "$(date +%T) submit $name" >> $OUT/events.log
     $S/bin/spark-submit --properties-file $H/report/$w/spark/conf/sparkbench/spark.conf \
       --name $name --class $cls --master yarn-client \
-      --num-executors 1 --executor-cores 1 --executor-memory 1g $JAR "$@" > $OUT/$name.log 2>&1 || rc=$?
+      --num-executors 1 --executor-cores $CORES --executor-memory 1g $JAR "$@" > $OUT/$name.log 2>&1 || rc=$?
     echo "$(date +%T) end $name exit=$rc sec=$(( $(date +%s) - s ))" >> $OUT/events.log ) &
 }
 
@@ -34,7 +36,7 @@ submit() {  # submit <이름> <workload> <클래스> <인자...>
 nm0=$(wc -l < $NMLOG)
 bash $HERE/watch-containers.sh > $OUT/watch.log 2>&1 &
 W=$!
-echo "interval=${IV}s start=$(date +%F' '%T)" > $OUT/events.log
+echo "interval=${IV}s cores=$CORES start=$(date +%F' '%T)" > $OUT/events.log
 
 # 간격 0: 동시에 띄우면 RM 도착 순서(= EJF 우선순위)가 섞이므로, 앞 job이 앱 ID를 받자마자 다음 제출
 gap() {  # gap <앞 job 이름>
