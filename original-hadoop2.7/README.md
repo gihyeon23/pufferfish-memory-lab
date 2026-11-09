@@ -50,6 +50,7 @@ cgroup v1)에서 실행한다.
 - [x] Fig 6(a) 본 결과(원 코드 + 2초) — kill 8·shrink 58로 09보다 논문과 멀어짐 — [steps/12](x86-server/steps/12-fig6a-2s.md)
 - [x] Fig 6(a) 제출 간격 0초 + 안쪽 Hadoop 2.4.0 + 최소 할당 1024 — kill 2(256) / 1024로 4회 반복 시 3~7 — 실행마다 편차 큼 — [steps/13](x86-server/steps/13-fig6a-0s.md)
 - [x] Fig 6(a) executor 4코어 3회 — PR이 커지고 실행 시간 짧아짐, kill 6~8·PR 먼저 종료는 그대로 — [steps/15](x86-server/steps/15-fig6a-4core.md)
+- [x] Fig 6(a) 최고 조합(보조, shrink 2분 코드 수정 포함) — PR 모양은 가장 비슷, kill 10으로 가장 많음 — [steps/16](x86-server/steps/16-fig6a-best.md)
 - [ ] reclaim 확인 → Fig 6(b)(c) (TPC-H + baseline 필요)
 - [ ] WC·NW 데이터 생성 / Fig 6(a) job별 메모리 비율을 맞춰 재실행할지 교수님께 여쭙기 (비율은 논문·원 코드에 없음)
 - [ ] baseline(공식 YARN jar) vs Pufferfish 비교 → 3대 구성
