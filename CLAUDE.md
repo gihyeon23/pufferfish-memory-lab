@@ -40,6 +40,10 @@ Management for Data-intensive Applications")의 OCM 감지/puff/reclaim 동작�
    - 비교 결과는 "논문에 명시된 사실 / 현재 구현 / 차이 / 수정 필요 여부"
      표로 정리한다.
 
+## 작업 분담
+
+[common/work-split.md](common/work-split.md)를 따른다 — 설계·실행·해석은 사용자가, 긴 로그 확인·집계·검토는 Claude가.
+
 ## 이 저장소의 관례
 
 - 새 작업은 해당 패키지 폴더 안에서 한다. 여러 패키지가 같이 쓰는 것만
