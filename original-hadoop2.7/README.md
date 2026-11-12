@@ -1,13 +1,13 @@
 # original-hadoop2.7 — 원 저자 코드 + 논문 환경 재현 (진행 중)
 
-원 저자 공개 코드(YARN 2.7.3 기반)를 수정 없이, 논문 소프트웨어 환경(Ubuntu 16.04 · Docker 1.12.1 ·
-cgroup v1)에서 실행한다.
+원 저자 공개 코드(YARN 2.7.3 기반)를 논문 소프트웨어 환경(Ubuntu 16.04 · Docker 1.12.1 ·
+cgroup v1)에서 실행한다. 2026-11-12부터 논문 그래프가 기준 — 원 코드가 논문과 다른 곳은 논문대로 고침 ([steps/17](x86-server/steps/17-paper-aligned-plan.md)).
 
 | 폴더 | 내용 | 상태 |
 |---|---|---|
 | [setup/](setup/) | 두 환경 공통: 설치·이미지 빌드 스크립트, conf, Dockerfile, jar 비교 `cmpsig.py` | 사용 중 |
 | [arm-mac/](arm-mac/) | 맥(M4) VirtualBox VM `u1604-test` — 절차 확인·연습용 | 정식 실험 안 함 |
-| [x86-server/](x86-server/) | 연구실 x86 VM — **정식 실험** | worker 1대 수령, 단일 노드 구성 중 |
+| [x86-server/](x86-server/) | 연구실 x86 VM — **정식 실험** | VM 3대 수령, worker1 단일 노드로 Fig 6(a) 진행 중 |
 
 ## 환경을 나눈 이유
 
@@ -51,6 +51,7 @@ cgroup v1)에서 실행한다.
 - [x] Fig 6(a) 제출 간격 0초 + 안쪽 Hadoop 2.4.0 + 최소 할당 1024 — kill 2(256) / 1024로 4회 반복 시 3~7 — 실행마다 편차 큼 — [steps/13](x86-server/steps/13-fig6a-0s.md)
 - [x] Fig 6(a) executor 4코어 3회 — PR이 커지고 실행 시간 짧아짐, kill 6~8·PR 먼저 종료는 그대로 — [steps/15](x86-server/steps/15-fig6a-4core.md)
 - [x] Fig 6(a) 효과 있던 요소 조합(보조, shrink 2분 코드 수정 포함) — PR 모양은 가까워졌지만 kill 10으로 가장 많음 — [steps/16](x86-server/steps/16-fig6a-combo.md)
+- [ ] **논문 기준으로 코드 맞추기** A shrink 대기 → B kill 기준 → C shrink 여유분 → D reclaim 대상 → E puff 상한 (A 실행 중, 11-12) — [steps/17](x86-server/steps/17-paper-aligned-plan.md)
 - [ ] reclaim 확인 → Fig 6(b)(c) (TPC-H + baseline 필요)
 - [ ] WC·NW 데이터 생성 / Fig 6(a) job별 메모리 비율을 맞춰 재실행할지 교수님께 여쭙기 (비율은 논문·원 코드에 없음)
 - [ ] baseline(공식 YARN jar) vs Pufferfish 비교 → 3대 구성
