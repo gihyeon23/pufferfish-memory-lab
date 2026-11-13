@@ -1,0 +1,238 @@
+Warning: Master yarn-client is deprecated since 2.0. Please use master "yarn" with specified deploy mode instead.
+26/11/13 14:07:37 INFO spark.SparkContext: Running Spark version 2.0.1
+26/11/13 14:07:38 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+26/11/13 14:07:38 WARN util.Utils: Your hostname, ubuntu resolves to a loopback address: 127.0.1.1; using 192.168.133.4 instead (on interface ens3)
+26/11/13 14:07:38 WARN util.Utils: Set SPARK_LOCAL_IP if you need to bind to another address
+26/11/13 14:07:38 INFO spark.SecurityManager: Changing view acls to: inuos
+26/11/13 14:07:38 INFO spark.SecurityManager: Changing modify acls to: inuos
+26/11/13 14:07:38 INFO spark.SecurityManager: Changing view acls groups to: 
+26/11/13 14:07:38 INFO spark.SecurityManager: Changing modify acls groups to: 
+26/11/13 14:07:38 INFO spark.SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(inuos); groups with view permissions: Set(); users  with modify permissions: Set(inuos); groups with modify permissions: Set()
+26/11/13 14:07:38 INFO util.Utils: Successfully started service 'sparkDriver' on port 46753.
+26/11/13 14:07:38 INFO spark.SparkEnv: Registering MapOutputTracker
+26/11/13 14:07:38 INFO spark.SparkEnv: Registering BlockManagerMaster
+26/11/13 14:07:38 INFO storage.DiskBlockManager: Created local directory at /tmp/blockmgr-52ff42fd-3704-4e79-997f-9fc57807f4cf
+26/11/13 14:07:38 INFO memory.MemoryStore: MemoryStore started with capacity 366.3 MB
+26/11/13 14:07:38 INFO spark.SparkEnv: Registering OutputCommitCoordinator
+26/11/13 14:07:38 INFO util.log: Logging initialized @1693ms
+26/11/13 14:07:38 INFO server.Server: jetty-9.2.z-SNAPSHOT
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@72e34f77{/jobs,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@7bf9b098{/jobs/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@389adf1d{/jobs/job,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@77307458{/jobs/job/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@1fc0053e{/stages,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@290b1b2e{/stages/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@47874b25{/stages/stage,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@33617539{/stages/stage/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@2c177f9e{/stages/pool,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@5db4c359{/stages/pool/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@209775a9{/storage,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@18e7143f{/storage/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@f9b7332{/storage/rdd,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@74cec793{/storage/rdd/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@6fefce9e{/environment,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@4f8969b0{/environment/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@1bdf8190{/executors,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@192f2f27{/executors/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@8a589a2{/executors/threadDump,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@c65a5ef{/executors/threadDump/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@6b5176f2{/static,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@b672aa8{/,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@2fab4aff{/api,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@ec0c838{/stages/stage/kill,null,AVAILABLE}
+26/11/13 14:07:38 WARN component.AbstractLifeCycle: FAILED ServerConnector@7caa550{HTTP/1.1}{0.0.0.0:4040}: java.net.BindException: Address already in use
+java.net.BindException: Address already in use
+	at sun.nio.ch.Net.bind0(Native Method)
+	at sun.nio.ch.Net.bind(Net.java:461)
+	at sun.nio.ch.Net.bind(Net.java:453)
+	at sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:222)
+	at sun.nio.ch.ServerSocketAdaptor.bind(ServerSocketAdaptor.java:85)
+	at org.spark_project.jetty.server.ServerConnector.open(ServerConnector.java:321)
+	at org.spark_project.jetty.server.AbstractNetworkConnector.doStart(AbstractNetworkConnector.java:80)
+	at org.spark_project.jetty.server.ServerConnector.doStart(ServerConnector.java:236)
+	at org.spark_project.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+	at org.spark_project.jetty.server.Server.doStart(Server.java:366)
+	at org.spark_project.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+	at org.apache.spark.ui.JettyUtils$.org$apache$spark$ui$JettyUtils$$connect$1(JettyUtils.scala:298)
+	at org.apache.spark.ui.JettyUtils$$anonfun$5.apply(JettyUtils.scala:308)
+	at org.apache.spark.ui.JettyUtils$$anonfun$5.apply(JettyUtils.scala:308)
+	at org.apache.spark.util.Utils$$anonfun$startServiceOnPort$1.apply$mcVI$sp(Utils.scala:2091)
+	at scala.collection.immutable.Range.foreach$mVc$sp(Range.scala:160)
+	at org.apache.spark.util.Utils$.startServiceOnPort(Utils.scala:2082)
+	at org.apache.spark.ui.JettyUtils$.startJettyServer(JettyUtils.scala:308)
+	at org.apache.spark.ui.WebUI.bind(WebUI.scala:139)
+	at org.apache.spark.SparkContext$$anonfun$10.apply(SparkContext.scala:448)
+	at org.apache.spark.SparkContext$$anonfun$10.apply(SparkContext.scala:448)
+	at scala.Option.foreach(Option.scala:257)
+	at org.apache.spark.SparkContext.<init>(SparkContext.scala:448)
+	at com.intel.hibench.sparkbench.ml.DenseKMeans$.run(DenseKMeans.scala:82)
+	at com.intel.hibench.sparkbench.ml.DenseKMeans$$anonfun$main$1.apply(DenseKMeans.scala:74)
+	at com.intel.hibench.sparkbench.ml.DenseKMeans$$anonfun$main$1.apply(DenseKMeans.scala:73)
+	at scala.Option.map(Option.scala:146)
+	at com.intel.hibench.sparkbench.ml.DenseKMeans$.main(DenseKMeans.scala:73)
+	at com.intel.hibench.sparkbench.ml.DenseKMeans.main(DenseKMeans.scala)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.spark.deploy.SparkSubmit$.org$apache$spark$deploy$SparkSubmit$$runMain(SparkSubmit.scala:736)
+	at org.apache.spark.deploy.SparkSubmit$.doRunMain$1(SparkSubmit.scala:185)
+	at org.apache.spark.deploy.SparkSubmit$.submit(SparkSubmit.scala:210)
+	at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:124)
+	at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
+26/11/13 14:07:38 WARN component.AbstractLifeCycle: FAILED org.spark_project.jetty.server.Server@26be6ca7: java.net.BindException: Address already in use
+java.net.BindException: Address already in use
+	at sun.nio.ch.Net.bind0(Native Method)
+	at sun.nio.ch.Net.bind(Net.java:461)
+	at sun.nio.ch.Net.bind(Net.java:453)
+	at sun.nio.ch.ServerSocketChannelImpl.bind(ServerSocketChannelImpl.java:222)
+	at sun.nio.ch.ServerSocketAdaptor.bind(ServerSocketAdaptor.java:85)
+	at org.spark_project.jetty.server.ServerConnector.open(ServerConnector.java:321)
+	at org.spark_project.jetty.server.AbstractNetworkConnector.doStart(AbstractNetworkConnector.java:80)
+	at org.spark_project.jetty.server.ServerConnector.doStart(ServerConnector.java:236)
+	at org.spark_project.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+	at org.spark_project.jetty.server.Server.doStart(Server.java:366)
+	at org.spark_project.jetty.util.component.AbstractLifeCycle.start(AbstractLifeCycle.java:68)
+	at org.apache.spark.ui.JettyUtils$.org$apache$spark$ui$JettyUtils$$connect$1(JettyUtils.scala:298)
+	at org.apache.spark.ui.JettyUtils$$anonfun$5.apply(JettyUtils.scala:308)
+	at org.apache.spark.ui.JettyUtils$$anonfun$5.apply(JettyUtils.scala:308)
+	at org.apache.spark.util.Utils$$anonfun$startServiceOnPort$1.apply$mcVI$sp(Utils.scala:2091)
+	at scala.collection.immutable.Range.foreach$mVc$sp(Range.scala:160)
+	at org.apache.spark.util.Utils$.startServiceOnPort(Utils.scala:2082)
+	at org.apache.spark.ui.JettyUtils$.startJettyServer(JettyUtils.scala:308)
+	at org.apache.spark.ui.WebUI.bind(WebUI.scala:139)
+	at org.apache.spark.SparkContext$$anonfun$10.apply(SparkContext.scala:448)
+	at org.apache.spark.SparkContext$$anonfun$10.apply(SparkContext.scala:448)
+	at scala.Option.foreach(Option.scala:257)
+	at org.apache.spark.SparkContext.<init>(SparkContext.scala:448)
+	at com.intel.hibench.sparkbench.ml.DenseKMeans$.run(DenseKMeans.scala:82)
+	at com.intel.hibench.sparkbench.ml.DenseKMeans$$anonfun$main$1.apply(DenseKMeans.scala:74)
+	at com.intel.hibench.sparkbench.ml.DenseKMeans$$anonfun$main$1.apply(DenseKMeans.scala:73)
+	at scala.Option.map(Option.scala:146)
+	at com.intel.hibench.sparkbench.ml.DenseKMeans$.main(DenseKMeans.scala:73)
+	at com.intel.hibench.sparkbench.ml.DenseKMeans.main(DenseKMeans.scala)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:498)
+	at org.apache.spark.deploy.SparkSubmit$.org$apache$spark$deploy$SparkSubmit$$runMain(SparkSubmit.scala:736)
+	at org.apache.spark.deploy.SparkSubmit$.doRunMain$1(SparkSubmit.scala:185)
+	at org.apache.spark.deploy.SparkSubmit$.submit(SparkSubmit.scala:210)
+	at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:124)
+	at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
+26/11/13 14:07:38 INFO server.ServerConnector: Stopped ServerConnector@7caa550{HTTP/1.1}{0.0.0.0:4040}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@ec0c838{/stages/stage/kill,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@2fab4aff{/api,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@b672aa8{/,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@6b5176f2{/static,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@c65a5ef{/executors/threadDump/json,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@8a589a2{/executors/threadDump,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@192f2f27{/executors/json,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@1bdf8190{/executors,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@4f8969b0{/environment/json,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@6fefce9e{/environment,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@74cec793{/storage/rdd/json,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@f9b7332{/storage/rdd,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@18e7143f{/storage/json,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@209775a9{/storage,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@5db4c359{/stages/pool/json,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@2c177f9e{/stages/pool,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@33617539{/stages/stage/json,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@47874b25{/stages/stage,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@290b1b2e{/stages/json,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@1fc0053e{/stages,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@77307458{/jobs/job/json,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@389adf1d{/jobs/job,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@7bf9b098{/jobs/json,null,UNAVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@72e34f77{/jobs,null,UNAVAILABLE}
+26/11/13 14:07:38 WARN util.Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
+26/11/13 14:07:38 INFO server.Server: jetty-9.2.z-SNAPSHOT
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@72e34f77{/jobs,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@7bf9b098{/jobs/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@389adf1d{/jobs/job,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@77307458{/jobs/job/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@1fc0053e{/stages,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@290b1b2e{/stages/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@47874b25{/stages/stage,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@33617539{/stages/stage/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@2c177f9e{/stages/pool,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@5db4c359{/stages/pool/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@209775a9{/storage,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@18e7143f{/storage/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@f9b7332{/storage/rdd,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@74cec793{/storage/rdd/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@6fefce9e{/environment,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@4f8969b0{/environment/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@1bdf8190{/executors,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@192f2f27{/executors/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@8a589a2{/executors/threadDump,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@c65a5ef{/executors/threadDump/json,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@6b5176f2{/static,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@b672aa8{/,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@2fab4aff{/api,null,AVAILABLE}
+26/11/13 14:07:38 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@ec0c838{/stages/stage/kill,null,AVAILABLE}
+26/11/13 14:07:38 INFO server.ServerConnector: Started ServerConnector@19b30c92{HTTP/1.1}{0.0.0.0:4041}
+26/11/13 14:07:38 INFO server.Server: Started @1848ms
+26/11/13 14:07:38 INFO util.Utils: Successfully started service 'SparkUI' on port 4041.
+26/11/13 14:07:38 INFO ui.SparkUI: Bound SparkUI to 0.0.0.0, and started at http://192.168.133.4:4041
+26/11/13 14:07:38 INFO spark.SparkContext: Added JAR file:/opt/HiBench-6.0/sparkbench/assembly/target/sparkbench-assembly-6.0-dist.jar at spark://192.168.133.4:46753/jars/sparkbench-assembly-6.0-dist.jar with timestamp 1794546458964
+26/11/13 14:07:39 INFO client.RMProxy: Connecting to ResourceManager at ubuntu/127.0.1.1:8032
+26/11/13 14:07:39 INFO yarn.Client: Requesting a new application from cluster with 1 NodeManagers
+26/11/13 14:07:39 INFO yarn.Client: Verifying our application has not requested more than the maximum memory capability of the cluster (28672 MB per container)
+26/11/13 14:07:39 INFO yarn.Client: Will allocate AM container, with 896 MB memory including 384 MB overhead
+26/11/13 14:07:39 INFO yarn.Client: Setting up container launch context for our AM
+26/11/13 14:07:39 INFO yarn.Client: Setting up the launch environment for our AM container
+26/11/13 14:07:39 INFO yarn.Client: Preparing resources for our AM container
+26/11/13 14:07:39 WARN yarn.Client: Neither spark.yarn.jars nor spark.yarn.archive is set, falling back to uploading libraries under SPARK_HOME.
+26/11/13 14:07:41 INFO yarn.Client: Uploading resource file:/tmp/spark-73b97a97-3c9f-4224-95c6-493f0068e6e6/__spark_libs__2490617664743532180.zip -> hdfs://ubuntu:9000/user/inuos/.sparkStaging/application_1794543422643_0005/__spark_libs__2490617664743532180.zip
+26/11/13 14:07:42 INFO yarn.Client: Uploading resource file:/tmp/spark-73b97a97-3c9f-4224-95c6-493f0068e6e6/__spark_conf__1324160435980666461.zip -> hdfs://ubuntu:9000/user/inuos/.sparkStaging/application_1794543422643_0005/__spark_conf__.zip
+26/11/13 14:07:42 INFO spark.SecurityManager: Changing view acls to: inuos
+26/11/13 14:07:42 INFO spark.SecurityManager: Changing modify acls to: inuos
+26/11/13 14:07:42 INFO spark.SecurityManager: Changing view acls groups to: 
+26/11/13 14:07:42 INFO spark.SecurityManager: Changing modify acls groups to: 
+26/11/13 14:07:42 INFO spark.SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(inuos); groups with view permissions: Set(); users  with modify permissions: Set(inuos); groups with modify permissions: Set()
+26/11/13 14:07:42 INFO yarn.Client: Submitting application application_1794543422643_0005 to ResourceManager
+26/11/13 14:07:42 INFO impl.YarnClientImpl: Submitted application application_1794543422643_0005
+26/11/13 14:07:42 INFO cluster.SchedulerExtensionServices: Starting Yarn extension services with app application_1794543422643_0005 and attemptId None
+26/11/13 14:07:43 INFO yarn.Client: Application report for application_1794543422643_0005 (state: ACCEPTED)
+26/11/13 14:07:43 INFO yarn.Client: 
+	 client token: N/A
+	 diagnostics: N/A
+	 ApplicationMaster host: N/A
+	 ApplicationMaster RPC port: -1
+	 queue: default
+	 start time: 1794546462740
+	 final status: UNDEFINED
+	 tracking URL: http://ubuntu:8088/proxy/application_1794543422643_0005/
+	 user: inuos
+26/11/13 14:07:44 INFO yarn.Client: Application report for application_1794543422643_0005 (state: ACCEPTED)
+26/11/13 14:07:45 INFO yarn.Client: Application report for application_1794543422643_0005 (state: ACCEPTED)
+26/11/13 14:07:46 INFO yarn.Client: Application report for application_1794543422643_0005 (state: ACCEPTED)
+26/11/13 14:07:47 INFO yarn.Client: Application report for application_1794543422643_0005 (state: ACCEPTED)
+26/11/13 14:07:48 INFO cluster.YarnSchedulerBackend$YarnSchedulerEndpoint: ApplicationMaster registered as NettyRpcEndpointRef(null)
+26/11/13 14:07:48 INFO cluster.YarnClientSchedulerBackend: Add WebUI Filter. org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter, Map(PROXY_HOSTS -> ubuntu, PROXY_URI_BASES -> http://ubuntu:8088/proxy/application_1794543422643_0005), /proxy/application_1794543422643_0005
+26/11/13 14:07:48 INFO ui.JettyUtils: Adding filter: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/11/13 14:07:48 INFO yarn.Client: Application report for application_1794543422643_0005 (state: RUNNING)
+26/11/13 14:07:48 INFO yarn.Client: 
+	 client token: N/A
+	 diagnostics: N/A
+	 ApplicationMaster host: 192.168.133.4
+	 ApplicationMaster RPC port: 0
+	 queue: default
+	 start time: 1794546462740
+	 final status: UNDEFINED
+	 tracking URL: http://ubuntu:8088/proxy/application_1794543422643_0005/
+	 user: inuos
+26/11/13 14:07:48 INFO cluster.YarnClientSchedulerBackend: Application application_1794543422643_0005 has started running.
+26/11/13 14:07:48 INFO util.Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 43969.
+26/11/13 14:07:48 INFO netty.NettyBlockTransferService: Server created on 192.168.133.4:43969
+26/11/13 14:07:48 INFO storage.BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 192.168.133.4, 43969)
+26/11/13 14:07:48 INFO storage.BlockManagerMasterEndpoint: Registering block manager 192.168.133.4:43969 with 366.3 MB RAM, BlockManagerId(driver, 192.168.133.4, 43969)
+26/11/13 14:07:48 INFO storage.BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 192.168.133.4, 43969)
+26/11/13 14:07:48 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@3c83468e{/metrics/json,null,AVAILABLE}
+26/11/13 14:07:53 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Registered executor NettyRpcEndpointRef(null) (192.168.133.4:49296) with ID 1
+26/11/13 14:07:53 INFO cluster.YarnClientSchedulerBackend: SchedulerBackend is ready for scheduling beginning after reached minRegisteredResourcesRatio: 0.8
+numExamples = 25000000.
+26/11/13 14:14:59 WARN netlib.BLAS: Failed to load implementation from: com.github.fommil.netlib.NativeSystemBLAS
+26/11/13 14:14:59 WARN netlib.BLAS: Failed to load implementation from: com.github.fommil.netlib.NativeRefBLAS
+Total cost = 1.5376155628265215E12.
