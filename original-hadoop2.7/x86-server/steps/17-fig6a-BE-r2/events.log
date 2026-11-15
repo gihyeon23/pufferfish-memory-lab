@@ -1,0 +1,7 @@
+interval=0s cores=1 start=2026-11-13 19:12:03
+19:12:03 submit fig6a-pr
+19:12:11 submit fig6a-km1
+19:12:16 submit fig6a-km2
+19:22:31 end fig6a-km1 exit=0 sec=620
+19:28:08 end fig6a-pr exit=0 sec=965
+19:30:38 end fig6a-km2 exit=0 sec=1102

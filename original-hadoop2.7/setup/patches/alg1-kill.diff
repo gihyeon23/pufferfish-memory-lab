@@ -1,0 +1,46 @@
+--- a/NodeMemoryManager.java
++++ b/NodeMemoryManager.java
+@@ -28,6 +28,7 @@
+ import org.apache.hadoop.yarn.server.nodemanager.containermanager.container.Container;
+ import org.apache.hadoop.yarn.server.nodemanager.containermanager.container.ContainerImpl.ContainerMemoryEvent;
+ import org.apache.hadoop.yarn.server.nodemanager.containermanager.container.ContainerMemoryState;
++import org.apache.hadoop.yarn.server.nodemanager.containermanager.container.ContainerState;
+ 
+ 
+ public class NodeMemoryManager {
+@@ -295,7 +296,8 @@
+ 			 
+ 			 lastKilled = shouldKill;
+ 			 
+-			 if(killRetries > 10){ // [우리] 원 코드 SWAP_KEEP_TIME*2(=10) 그대로 고정
++			 // [우리] B: 논문 Alg.1 4~6행 [p.264] — 최우선 OCM이면 그 라운드에 바로 kill (원 코드 11라운드 대기 제거)
++			 if(shouldKill){
+ 			   LOG.info("memory conflicts kill");	 
+ 			   this.killRetries = 0;
+ 			   return this.killContainer();
+@@ -373,14 +375,24 @@
+ 	
+ 	for(int index = swappingApps.size()-1; index >=0 ;index--){
+ 		Map<ContainerId, Container> containers = swappingApps.get(index).getContainers();
++		// [우리] B: 바로 kill로 바꿔서, 이미 kill 중인 컨테이너를 다음 라운드에 또 고르지 않게 함
++		//       최저 우선순위 app에 kill 진행 중(RUNNING 아닌) FLEX가 있으면 이번 라운드는 건너뜀
++		boolean killing = false;
+ 		for(Container container : containers.values()){
+-			if(container.isFlexble()){
++			if(container.isFlexble() && container.getContainerState() == ContainerState.RUNNING){
+ 				LOG.info("OOM kill: "+container.getContainerId());
+ 				container.getContainerMonitor().resumeCpuQuota();
+ 				container.getContainerMonitor().resumeCpus();
+ 				return container.getContainerId();
+ 			}
++			if(container.isFlexble() && container.getContainerState() == ContainerState.KILLING){
++				killing = true;
++			}
+ 		}
++		if(killing){
++			LOG.info("kill in progress, wait");
++			return null;
++		}
+ 	}
+ 	
+ 	return null;
