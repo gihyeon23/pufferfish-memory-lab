@@ -12,4 +12,5 @@
 4. **순서** A~E (steps/17 표): shrink 대기 → kill 기준 → shrink 여유분 → reclaim 대상 → puff 상한
 5. **판단 지표**: PR 크기·시간, stop 전 shrink 수, kill 수 (논문 1), 전체 시간 (논문 약 1790초)
 6. **이번 주 결과**: (단계 A 실행 후 채움)
-7. **여쭐 것**: 논문에 값이 없는 것 — kill 기준 "job 예상 기간", 여유분 2GB를 규모 1/4로 줄일지
+7. **정정 보고**: B를 suspension tolerance로 계획했으나, 논문상 Fig 6(a)는 기본 EJF(p.266)이고 tolerance는 EJF+S·SJF용(p.267) → B = Alg.1 kill의 11라운드 대기 제거로 변경
+8. **여쭐 것**: 여유분 2GB를 규모 1/4로 줄일지 (C)

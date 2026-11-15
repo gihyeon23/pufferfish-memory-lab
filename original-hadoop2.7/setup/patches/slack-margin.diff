@@ -1,0 +1,39 @@
+--- a/ContainerImpl.java
++++ b/ContainerImpl.java
+@@ -639,6 +639,8 @@
+ 		private boolean isRunning;
+ 
+ 		private double SLACK_FACTOR;
++		// [우리] C: 논문 p.264 shrink 여유분 고정값 "2GB overhead by default" — NM 옵션 -Dpufferfish.slack.mb (기본 2048)
++		private int SLACK_MB;
+ 		
+ 		private boolean balloonedBefore;
+ 		
+@@ -661,6 +663,7 @@
+ 			//synchronized queue for insert to balloonned or reclaimed value
+ 			this.cmeQueue  =new LinkedList<ContainerMemoryEvent>();
+ 			this.SLACK_FACTOR=1.1;
++			this.SLACK_MB=Integer.getInteger("pufferfish.slack.mb", 2048);
+ 			//record if it is in ballooning window
+ 			this.isBallooningWindow=false;
+ 			//record if it has ever ballooned before
+@@ -1201,7 +1204,8 @@
+ 			
+ 			updateCgroupValues();
+ 			
+-			if(limitedMemory > (currentUsedMemory+currentUsedSwap)*SLACK_FACTOR){
++			// [우리] C: 원 코드 (사용량)*1.1 -> 사용량 + SLACK_MB
++			if(limitedMemory > (currentUsedMemory+currentUsedSwap)+SLACK_MB){
+ 				
+ 				LOG.info("slacking contianer detected: "+this.name);
+ 				
+@@ -1214,7 +1218,8 @@
+ 		
+ 		public void shrinkSlack(){
+ 			
+-			int targetSize = (int)((currentUsedMemory+currentUsedSwap)*SLACK_FACTOR);
++			// [우리] C: 원 코드 (사용량)*1.1 -> 사용량 + SLACK_MB (논문 예: 수요 60GB -> 62GB)
++			int targetSize = (int)((currentUsedMemory+currentUsedSwap)+SLACK_MB);
+ 			
+ 			if(targetSize > 0)
+ 			    updateConfiguredMemory(targetSize);

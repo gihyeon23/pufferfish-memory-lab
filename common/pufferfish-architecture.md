@@ -78,7 +78,17 @@ CLAUDE.md 워크플로에 따라 논문(`common/papers/pufferfish-paper.pdf`,
 - **SJF(Shortest Job First)**: 예상 완료 시간 기준, 짧은 job 우선 (job 소요
   시간 추정 필요, 과거 로그 기반)
 - suspension tolerance(최대 suspend 허용 시간, 기본값 = job 예상 기간의 절반)
-  넘으면 kill → 다른 노드에서 재기동 기대
+  넘으면 kill → 다른 노드에서 재기동 기대. **EJF+S·SJF의 선택 기능** — 기본 EJF엔 없음
+  (p.267 "EJF with suspension tolerance … EJF+S"), Fig 6(a)는 기본 EJF (p.266)
+
+## 2.4 Fig 6(a) 비교 기준 — 본문 서술 (11-13 추가)
+
+- 설정 (p.265): ϕ = 40%, MIN_CONT 4GB, MAX_HEAP 64GB, 노드 128GB 중 YARN 120GB, small 데이터, 기본 EJF
+- Fig 6(a) 흐름 (p.265~266): PR(c1) 최우선, KM(c2·c3)은 처음에 억눌림 → **c3 약 600초에 kill** (c1의 큰 수요 때문) → c3 재시작이 **600~1050초 막힘** (노드 메모리 없음) → **c1 약 880초 shrink** → 풀린 메모리가 c3로
+- Fig 6(a) 그래프 읽기 (본문 아님, 11-15 확대 확인): cnt-1(PR) 크기 shrink **3번** — 약 905초 70→56GB, 약 1000초 56→43GB, 약 1480초 79→55GB. 사용량이 떨어진 뒤 약 85~120초 뒤에 shrink (2분 대기와 맞아 보임, **추측**). shrink 뒤 크기−사용량 약 3~5GB
+- Fig 5(b) (p.263): kill은 "최우선이 OCM인데 노드가 못 채워줄 때"만
+- swap: "SSD-backed swap partition", 1GB reclaim 약 0.5초 (p.268)
+- Fig 11·12 (p.268): 시작 단계 puff 오버헤드 10% 미만, ϕ·MIN_CONT가 클수록 puff 횟수↓
 
 ## 2.5 원 저자 공개 구현 (논문 본문과 별개로 직접 확인한 사실)
 
@@ -219,7 +229,8 @@ trade-off를 정리하면:
 | puff 정지 | 노드 메모리 소진 | 할당 합 ≥ `balloon.stop`(코드 기본 **0.8**, README는 0.9) | ✅ |
 | 노드 포화 시 kill | 최저 우선순위 kill (p.263) | 할당 합 ≥ `balloon.reclaim`(기본 0.9) → **가장 늦게 시작한 app의 FLEX 컨테이너 kill**(`killContainer()`) | ✅ |
 | OCM 집합(C)에서 빼는 기준 · shrink 시점 | "not detected as OCM for more than a time threshold (**e.g., 2 minutes**)" → 집합 C에서 제외. shrink는 따로 설명 ("Container Monitor also shrinks …") (p.264) | **5라운드**(`SWAP_KEEP_TIME = 5`, 주석은 "keep for 2 minute") OCM 없으면 제외 (`NodeMemoryManager.java:102, 170-177`). shrink는 제외된 뒤에만 (`ContainerImpl.java:1198`) → x86 실측 puff 뒤 약 14~18초면 shrink | ⚠️ 논문은 예시값. 원 코드가 훨씬 짧아 shrink가 잦음 (x86 steps/10 §6) |
-| suspension tolerance | 기본 = job 예상 기간의 절반 (p.264) | stop~reclaim 구간에서 최우선 app이 계속 OCM이면 **10라운드**(`SWAP_KEEP_TIME*2`) 후 kill | ❌ 고정 라운드 수 |
+| 최우선 OCM 시 kill (Alg.1 4~6행) | A ≥ M이고 최우선이 OCM → 그 라운드에 최저 우선순위 kill (p.264) | stop~reclaim 구간에서 최우선 app이 **11라운드 연속** OCM이면 kill (`NodeMemoryManager.java:289-301`) | ⚠️ 대기 있음. x86 steps/17 B에서 제거 (11-13 정정: 전엔 tolerance로 잘못 봄) |
+| suspension tolerance | 기본 = job 예상 기간의 절반 (p.264), EJF+S·SJF만 (p.267) | 없음 | Fig 6(a)(기본 EJF)엔 해당 없음 |
 | reclaim 트리거 | 신규 컨테이너 launch 시 lazy (p.263~264) | `startContainers`에서 `MemoryReclaim(requestMemory)` 호출(`containermanager/ContainerManagerImpl.java:880`) | ✅ |
 | reclaim 대상 | 최저 우선순위 OCM부터 (p.264) | ① suspend 중 컨테이너에서 **균등 분할** 회수 → ② 부족하면 puff됐지만 swap 안 하는 컨테이너를 **늦게 시작한 순**으로 회수 | ⚠️ ①은 균등 분할 |
 | suspend | CPU 1% + 단일 코어 (p.260) | `docker update --cpu-quota 1000` + `--cpuset-cpus 0` | ✅ |
