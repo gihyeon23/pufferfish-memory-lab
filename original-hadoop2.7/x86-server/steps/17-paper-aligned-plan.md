@@ -100,6 +100,13 @@
   - 한계: 논문 규모에선 puff 1회가 2GB보다 훨씬 큼 → 2GB가 맞는 게 값 자체 때문인지 우리 puff 크기와 비슷해서인지는 구분 못 함 (**추측**)
 - 집계: shrink = nm.log `update container memory`에서 줄어든 것만 셈
 
+### 단계 D 확인 — Fig 6(a)에서 reclaim이 도는가 [실측, 11-15]
+
+- 원 코드 `MemoryReclaim` (`NodeMemoryManager.java:404-480`): 할당 + 요청 < 노드 전체(28672MB)면 바로 return (`:410-412`). 넘을 때만 "new reclaim" 로그 후 ① suspend 컨테이너 균등 분할 ② 늦게 시작한 순
+- B+E 4회·C 2GB 4회·F 1회 nm.log: "memory reclaim called" 7~9번, **"new reclaim" 0번** → 회수 한 번도 안 함
+- 호출 때 할당 최대 24546MB + 요청 2048 < 28672 (KM2 재시작 포함). KM2 재시작이 막힌 건 RM 스케줄러 (노드 여유 없음), NM reclaim 아님 (**추측**)
+- 결론: D를 바꿔도 Fig 6(a) 결과는 같음. 논문의 reclaim 실험은 Fig 6(b) (Kmeans FLEX + TPC-H REGULAR) [p.266]
+
 ### 전체 시간 대비 비율로 비교 [실측, 11-15]
 
 - 이유: 데이터 1/4이라 전체 시간이 약 1100초 (논문 약 1790초) → 절대 초 대신 "마지막 job 종료 = 100%"로 비교
