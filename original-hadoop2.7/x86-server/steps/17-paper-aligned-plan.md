@@ -88,6 +88,12 @@
 - 2GB: PR 첫 shrink가 논문 시각(약 905초) 근처로 감. 단 r2·r4 첫 shrink는 PR 종료 시각과 같음 (끝날 때 줄인 것) → 실행 중 shrink는 r1 805·r3 901초
 - 512MB: 여유분이 작아 사용량이 조금만 줄어도 다시 shrink (**추측**), 1MB 단위 연속 shrink도 보임
 - 첫 kill·kill 수·PR 높이는 여유분과 무관하게 비슷
+- 2GB가 논문에 가까운 이유 [실측 r1 PR 크기 변화]
+  - 우리 puff 1회 크기 약 1.1~2.9GB. 512MB면 puff로 받은 여유가 2분 뒤 바로 shrink → 다시 OCM → puff 반복 (512 r1: 9135→8365→11130→9768→12690→11017MB, puff 2분 뒤마다 shrink)
+  - 2GB면 puff 여유가 남고 사용량이 실제로 떨어질 때만 shrink (2GB r1: 7718MB 6분 유지 → 11158→10823MB 1번)
+  - 논문 그래프도 puff 뒤 점선이 사용량보다 수 GB 위에 몇 분 유지되다가 사용량이 떨어진 뒤 shrink (그래프 읽기) → 2GB 쪽 동작과 같음
+  - 논문은 2GB를 규모와 묶어 말하지 않음 ("2GB overhead by default" [p.264]) → 1/4로 줄일 근거 없음
+  - 한계: 논문 규모에선 puff 1회가 2GB보다 훨씬 큼 → 2GB가 맞는 게 값 자체 때문인지 우리 puff 크기와 비슷해서인지는 구분 못 함 (**추측**)
 - 집계: shrink = nm.log `update container memory`에서 줄어든 것만 셈
 
 ## 단계 C 실행 — shrink 여유분 (worker1, 11-15)
