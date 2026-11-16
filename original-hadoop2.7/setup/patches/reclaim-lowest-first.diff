@@ -1,0 +1,23 @@
+--- a/NodeMemoryManager.java	2026-11-16 17:44:04
++++ b/NodeMemoryManager.java	2026-11-16 17:44:04
+@@ -432,12 +432,17 @@
+ 	 
+ 	 //First, reclaim memory from swapped container
+ 	 if(scontainers.size() > 0){
+-
+-	    int thisRound = requestSize/scontainers.size();
++	    // [우리] D: 논문 p.264 — 최저 우선순위(EJF: 늦게 시작한 것)부터 회수 (원 코드: 균등 분할 requestSize/size)
++	    Collections.sort(scontainers, new Comparator<Container>() {
++	        @Override
++	        public int compare(final Container o1, final Container o2) {
++	        return Long.compare(o2.getLaunchStartTime(), o1.getLaunchStartTime());
++	        }
++	    } );
+ 	    Iterator<Container> it=scontainers.iterator();
+ 	    while(it.hasNext()){
+ 		    long claimedSize =it.next().getContainerMonitor().
+-				         reclaimMemory(thisRound);
++				         reclaimMemory(requestSize);
+ 
+ 		    requestSize-=claimedSize;
+ 

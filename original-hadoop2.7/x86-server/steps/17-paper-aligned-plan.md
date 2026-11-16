@@ -60,6 +60,7 @@
 | C (512MB) | 4회 (11-15, Claude 실행) | 13:47~15:15 완료, 멈춤 없음 | [r1](17-fig6a-C512-r1/)·[r2](17-fig6a-C512-r2/)·[r3](17-fig6a-C512-r3/)·[r4](17-fig6a-C512-r4/) (vmstat는 r1 폴더) |
 | C (2GB 비교) | 4회 (11-15, Claude 실행), 옵션만 2048로 바꾸고 NM 재시작 | 15:24~16:45 완료, 멈춤 없음 | [r1](17-fig6a-C2G-r1/)·[r2](17-fig6a-C2G-r2/)·[r3](17-fig6a-C2G-r3/)·[r4](17-fig6a-C2G-r4/) (vmstat는 r1 폴더) |
 | F | 제출 간격 15초 1회 (11-15, C 2GB 위) | 17:15~17:35 완료, 멈춤 없음 | [17-fig6a-F-r1/](17-fig6a-F-r1/) — kill 1 (KM2 298초), PR shrink 3 (첫 952초), 종료 PR 1018·KM1 643·KM2 1122초. **첫 kill 시각 변화 없음** (C 2GB 251~303초) [실측] |
+| D | reclaim 대상 패치만 (11-16) | 17:44 NM 재시작, 실행 없음 | Fig 6(a)에선 reclaim 미작동 (위 "단계 D 확인") → 현재 VM jar = A+B+C+D, slack 2048, stop 1.0·reclaim 2.0 |
 
 ### 단계 B+E 4회 요약 [실측]
 
@@ -106,6 +107,9 @@
 - B+E 4회·C 2GB 4회·F 1회 nm.log: "memory reclaim called" 7~9번, **"new reclaim" 0번** → 회수 한 번도 안 함
 - 호출 때 할당 최대 24546MB + 요청 2048 < 28672 (KM2 재시작 포함). KM2 재시작이 막힌 건 RM 스케줄러 (노드 여유 없음), NM reclaim 아님 (**추측**)
 - 결론: D를 바꿔도 Fig 6(a) 결과는 같음. 논문의 reclaim 실험은 Fig 6(b) (Kmeans FLEX + TPC-H REGULAR) [p.266]
+- **처리 (사용자, 11-16): 패치만 + 문서, Fig 6(a) 재실행 없음**
+  - 패치 `setup/patches/reclaim-lowest-first.diff` (A·B 위 누적): ① 균등 분할 → 늦게 시작한 순(EJF 최저 우선순위)부터 요청량 전체 회수
+  - VM 적용 [실측]: jar에 비교자 클래스 추가(`NodeMemoryManager$4`), NM 11-16 17:44 재시작, slack 2048 유지. 동작 검증은 reclaim이 도는 실험(Fig 6(b)류)에서만 가능 → 미검증
 
 ### 전체 시간 대비 비율로 비교 [실측, 11-15]
 
