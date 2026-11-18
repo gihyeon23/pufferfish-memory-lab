@@ -7,9 +7,11 @@
 # 사전: pagerank·kmeans prepare 완료, 각 workload를 run.sh로 한 번 돌려 report/<w>/spark/conf가 있어야 함
 # usage: bash fig6a.sh [간격초]   (기본 120) → ~/hibench-logs/fig6a-<시각>/ — 0이면 앞 job이 앱 ID를 받자마자 다음 제출
 #        CORES=4 bash fig6a.sh 0   — executor 코어 수 (기본 1, x86 steps/08)
+#        ONLY=pr bash fig6a.sh 0   — 단독 실행 (pr 또는 km, x86 steps/17 G)
 set -e
 IV=${1:-120}
 CORES=${CORES:-1}
+ONLY=${ONLY:-}
 HERE=$(cd "$(dirname "$0")" && pwd)
 H=/opt/HiBench-6.0
 S=/opt/spark-2.0.1-bin-hadoop2.7
@@ -44,12 +46,19 @@ gap() {  # gap <앞 job 이름>
     until grep -a -q 'application_[0-9]*_[0-9]*' $OUT/$1.log 2>/dev/null; do sleep 0.2; done
   else sleep $IV; fi
 }
+N=3
+if [ "$ONLY" = pr ]; then N=1
+  submit fig6a-pr  pagerank org.apache.spark.examples.SparkPageRank $HDFS/Pagerank/Input/edges $HDFS/Pagerank/Output-fig6a 3
+elif [ "$ONLY" = km ]; then N=1
+  submit fig6a-km1 kmeans com.intel.hibench.sparkbench.ml.DenseKMeans -k 10 --numIterations 5 $HDFS/Kmeans/Input/samples
+else
 submit fig6a-pr  pagerank org.apache.spark.examples.SparkPageRank $HDFS/Pagerank/Input/edges $HDFS/Pagerank/Output-fig6a 3
 gap fig6a-pr
 submit fig6a-km1 kmeans com.intel.hibench.sparkbench.ml.DenseKMeans -k 10 --numIterations 5 $HDFS/Kmeans/Input/samples
 gap fig6a-km1
 submit fig6a-km2 kmeans com.intel.hibench.sparkbench.ml.DenseKMeans -k 10 --numIterations 5 $HDFS/Kmeans/Input/samples
-while [ $(grep -c "^.* end " $OUT/events.log) -lt 3 ]; do sleep 5; done
+fi
+while [ $(grep -c "^.* end " $OUT/events.log) -lt $N ]; do sleep 5; done
 sleep 4; kill $W
 
 tail -n +$((nm0 + 1)) $NMLOG | sed -E 's/org\.apache\.hadoop\.yarn\.server\.nodemanager\.containermanager\.//' > $OUT/nm.log

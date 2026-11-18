@@ -1,0 +1,1502 @@
+2026-11-18 17:21:01,906 INFO SecurityLogger.org.apache.hadoop.ipc.Server: Auth successful for appattempt_1794543422643_0074_000001 (auth:SIMPLE)
+2026-11-18 17:21:01,913 INFO ContainerManagerImpl: Start request for container_1794543422643_0074_01_000001 by user inuos
+2026-11-18 17:21:01,914 INFO container.ContainerImpl: container id:container_1794543422643_0074_01_000001
+2026-11-18 17:21:01,914 INFO ContainerManagerImpl: container_1794543422643_0074_01_000001 set to be normal
+2026-11-18 17:21:01,914 INFO ContainerManagerImpl: Creating a new application reference for app application_1794543422643_0074
+2026-11-18 17:21:01,914 INFO NodeMemoryManager: memory reclaim called, current assigned: 0  current used: 0 request: 1024
+2026-11-18 17:21:01,914 INFO NodeMemoryManager: limit: 57344.0
+2026-11-18 17:21:01,914 INFO ContainerManagerImpl: try to reclaim memory for new container: container_1794543422643_0074_01_000001
+2026-11-18 17:21:01,914 INFO org.apache.hadoop.yarn.server.nodemanager.NMAuditLogger: USER=inuos	IP=127.0.0.1	OPERATION=Start Container Request	TARGET=ContainerManageImpl	RESULT=SUCCESS	APPID=application_1794543422643_0074	CONTAINERID=container_1794543422643_0074_01_000001
+2026-11-18 17:21:01,916 INFO application.ApplicationImpl: Application application_1794543422643_0074 transitioned from NEW to INITING
+2026-11-18 17:21:01,916 INFO application.ApplicationImpl: Adding container_1794543422643_0074_01_000001 to application application_1794543422643_0074
+2026-11-18 17:21:01,916 INFO application.ApplicationImpl: Application application_1794543422643_0074 transitioned from INITING to RUNNING
+2026-11-18 17:21:01,916 INFO container.ContainerImpl: Container container_1794543422643_0074_01_000001 transitioned from NEW to LOCALIZING
+2026-11-18 17:21:01,916 INFO AuxServices: Got event CONTAINER_INIT for appId application_1794543422643_0074
+2026-11-18 17:21:01,917 INFO localizer.LocalizedResource: Resource hdfs://ubuntu:9000/user/inuos/.sparkStaging/application_1794543422643_0074/__spark_libs__3438399406592458777.zip transitioned from INIT to DOWNLOADING
+2026-11-18 17:21:01,917 INFO localizer.LocalizedResource: Resource hdfs://ubuntu:9000/user/inuos/.sparkStaging/application_1794543422643_0074/__spark_conf__.zip transitioned from INIT to DOWNLOADING
+2026-11-18 17:21:01,917 INFO localizer.ResourceLocalizationService: Created localizer for container_1794543422643_0074_01_000001
+2026-11-18 17:21:01,920 INFO localizer.ResourceLocalizationService: Writing credentials to the nmPrivate file /home/inuos/hadoop-data/nm-local-dir/nmPrivate/container_1794543422643_0074_01_000001.tokens. Credentials list: 
+2026-11-18 17:21:01,934 INFO org.apache.hadoop.yarn.server.nodemanager.DockerContainerExecutor: Initializing user inuos
+2026-11-18 17:21:02,863 INFO localizer.LocalizedResource: Resource hdfs://ubuntu:9000/user/inuos/.sparkStaging/application_1794543422643_0074/__spark_libs__3438399406592458777.zip(->/home/inuos/hadoop-data/nm-local-dir/usercache/inuos/filecache/34/__spark_libs__3438399406592458777.zip) transitioned from DOWNLOADING to LOCALIZED
+2026-11-18 17:21:02,889 INFO localizer.LocalizedResource: Resource hdfs://ubuntu:9000/user/inuos/.sparkStaging/application_1794543422643_0074/__spark_conf__.zip(->/home/inuos/hadoop-data/nm-local-dir/usercache/inuos/filecache/35/__spark_conf__.zip) transitioned from DOWNLOADING to LOCALIZED
+2026-11-18 17:21:02,890 INFO container.ContainerImpl: Container container_1794543422643_0074_01_000001 transitioned from LOCALIZING to LOCALIZED
+2026-11-18 17:21:02,920 INFO launcher.ContainerLaunch: write out launch env
+2026-11-18 17:21:02,920 INFO org.apache.hadoop.yarn.server.nodemanager.DockerContainerExecutor: starting write our launch env
+2026-11-18 17:21:02,920 INFO launcher.ContainerLaunch: command: $JAVA_HOME/bin/java -server -Xmx512m -Djava.io.tmpdir=$PWD/tmp -Dspark.yarn.app.container.log.dir=/opt/hadoop-2.7.3/logs/userlogs/application_1794543422643_0074/container_1794543422643_0074_01_000001 org.apache.spark.deploy.yarn.ExecutorLauncher --arg '192.168.133.4:45080' --properties-file $PWD/__spark_conf__/__spark_conf__.properties 1> /opt/hadoop-2.7.3/logs/userlogs/application_1794543422643_0074/container_1794543422643_0074_01_000001/stdout 2> /opt/hadoop-2.7.3/logs/userlogs/application_1794543422643_0074/container_1794543422643_0074_01_000001/stderr
+2026-11-18 17:21:02,921 INFO container.ContainerImpl: Container container_1794543422643_0074_01_000001 transitioned from LOCALIZED to RUNNING
+2026-11-18 17:21:03,748 INFO monitor.ContainersMonitorImpl: Starting resource-monitoring for container_1794543422643_0074_01_000001
+2026-11-18 17:21:07,590 INFO SecurityLogger.org.apache.hadoop.ipc.Server: Auth successful for appattempt_1794543422643_0074_000001 (auth:SIMPLE)
+2026-11-18 17:21:07,597 INFO ContainerManagerImpl: Start request for container_1794543422643_0074_01_000002 by user inuos
+2026-11-18 17:21:07,597 INFO container.ContainerImpl: container id:container_1794543422643_0074_01_000002
+2026-11-18 17:21:07,597 INFO ContainerManagerImpl: container_1794543422643_0074_01_000002 set to be flexible
+2026-11-18 17:21:07,597 INFO NodeMemoryManager: memory reclaim called, current assigned: 0  current used: 0 request: 2048
+2026-11-18 17:21:07,597 INFO NodeMemoryManager: limit: 57344.0
+2026-11-18 17:21:07,597 INFO ContainerManagerImpl: try to reclaim memory for new container: container_1794543422643_0074_01_000002
+2026-11-18 17:21:07,597 INFO org.apache.hadoop.yarn.server.nodemanager.NMAuditLogger: USER=inuos	IP=127.0.0.1	OPERATION=Start Container Request	TARGET=ContainerManageImpl	RESULT=SUCCESS	APPID=application_1794543422643_0074	CONTAINERID=container_1794543422643_0074_01_000002
+2026-11-18 17:21:07,598 INFO application.ApplicationImpl: Adding container_1794543422643_0074_01_000002 to application application_1794543422643_0074
+2026-11-18 17:21:07,598 INFO container.ContainerImpl: Container container_1794543422643_0074_01_000002 transitioned from NEW to LOCALIZING
+2026-11-18 17:21:07,598 INFO AuxServices: Got event CONTAINER_INIT for appId application_1794543422643_0074
+2026-11-18 17:21:07,598 INFO container.ContainerImpl: Container container_1794543422643_0074_01_000002 transitioned from LOCALIZING to LOCALIZED
+2026-11-18 17:21:07,610 INFO launcher.ContainerLaunch: write out launch env
+2026-11-18 17:21:07,610 INFO org.apache.hadoop.yarn.server.nodemanager.DockerContainerExecutor: starting write our launch env
+2026-11-18 17:21:07,610 INFO launcher.ContainerLaunch: command: $JAVA_HOME/bin/java -server -Xmx16384m -Djava.io.tmpdir=$PWD/tmp '-Dspark.driver.port=45080' -Dspark.yarn.app.container.log.dir=/opt/hadoop-2.7.3/logs/userlogs/application_1794543422643_0074/container_1794543422643_0074_01_000002 -XX:MaxPermSize=256m -XX:OnOutOfMemoryError='kill %p' org.apache.spark.executor.CoarseGrainedExecutorBackend --driver-url spark://CoarseGrainedScheduler@192.168.133.4:45080 --executor-id 1 --hostname ubuntu --cores 1 --app-id application_1794543422643_0074 --user-class-path file:$PWD/__app__.jar 1> /opt/hadoop-2.7.3/logs/userlogs/application_1794543422643_0074/container_1794543422643_0074_01_000002/stdout 2> /opt/hadoop-2.7.3/logs/userlogs/application_1794543422643_0074/container_1794543422643_0074_01_000002/stderr
+2026-11-18 17:21:07,610 INFO container.ContainerImpl: Container container_1794543422643_0074_01_000002 transitioned from LOCALIZED to RUNNING
+2026-11-18 17:21:07,750 INFO monitor.ContainersMonitorImpl: Starting resource-monitoring for container_1794543422643_0074_01_000002
+2026-11-18 17:21:17,921 INFO container.ContainerImpl: run docker commands: docker inspect --format={{.Id}} container_1794543422643_0074_01_000001 
+2026-11-18 17:21:17,958 INFO container.ContainerImpl: finish docker commands: docker inspect --format={{.Id}} container_1794543422643_0074_01_000001 
+2026-11-18 17:21:18,458 INFO container.ContainerImpl: container_1794543422643_0074_01_000001 get dockerId 35a807ef9b1c9e62e27bdf0776297d11f14922e513681e198a8bdb675dda3a17
+2026-11-18 17:21:18,459 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:19,460 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:20,460 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:21,461 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:22,461 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:22,611 INFO container.ContainerImpl: run docker commands: docker inspect --format={{.Id}} container_1794543422643_0074_01_000002 
+2026-11-18 17:21:22,635 INFO container.ContainerImpl: finish docker commands: docker inspect --format={{.Id}} container_1794543422643_0074_01_000002 
+2026-11-18 17:21:23,135 INFO container.ContainerImpl: container_1794543422643_0074_01_000002 get dockerId ad91bf7010443945d03f7e9d4732087efcf99aba1ecd8e7c457562dfeedf1513
+2026-11-18 17:21:23,136 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:23,462 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:24,137 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:24,463 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:25,138 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:25,138 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 2047 31 2048
+2026-11-18 17:21:25,139 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota 1000 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:25,931 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota 1000 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:26,431 INFO container.ContainerImpl: run docker commands: docker update --cpuset-cpus 0 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:26,485 INFO container.ContainerImpl: finish docker commands: docker update --cpuset-cpus 0 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:26,986 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:21:26,986 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:26,987 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 2047 276 2048
+2026-11-18 17:21:26,987 INFO NodeMemoryManager: add swapping containercontainer_1794543422643_0074_01_000002
+2026-11-18 17:21:26,987 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:21:26,987 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 2047 276 2048
+2026-11-18 17:21:27,987 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:27,987 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:21:27,987 INFO container.ContainerImpl: container_1794543422643_0074_01_000002 balloon
+2026-11-18 17:21:27,987 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 2048new: 2867
+2026-11-18 17:21:27,987 INFO container.ContainerImpl: run docker commands: docker update --memory 2867m --memory-swap 133939m container_1794543422643_0074_01_000002 
+2026-11-18 17:21:28,028 INFO container.ContainerImpl: finish docker commands: docker update --memory 2867m --memory-swap 133939m container_1794543422643_0074_01_000002 
+2026-11-18 17:21:28,528 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 2048to: 2867
+2026-11-18 17:21:28,528 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:21:28,529 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:28,563 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:29,064 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:29,064 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:29,064 INFO NodeMemoryManager: add swapping containercontainer_1794543422643_0074_01_000002
+2026-11-18 17:21:29,064 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:21:29,100 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:29,600 INFO container.ContainerImpl: run docker commands: docker update --cpuset-cpus 0,1,2,3,4,5,6,7 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:29,636 INFO container.ContainerImpl: finish docker commands: docker update --cpuset-cpus 0,1,2,3,4,5,6,7 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:30,137 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:30,138 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:31,139 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:31,139 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:32,138 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:21:32,140 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:32,140 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:33,142 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:33,142 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:33,143 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 2866 37 2867
+2026-11-18 17:21:33,143 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota 1000 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:33,429 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota 1000 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:33,929 INFO container.ContainerImpl: run docker commands: docker update --cpuset-cpus 0 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:33,970 INFO container.ContainerImpl: finish docker commands: docker update --cpuset-cpus 0 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:34,471 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:21:34,471 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 2866 118 2867
+2026-11-18 17:21:34,472 INFO NodeMemoryManager: add swapping containercontainer_1794543422643_0074_01_000002
+2026-11-18 17:21:34,472 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:21:34,472 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 2866 118 2867
+2026-11-18 17:21:35,472 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:21:35,472 INFO container.ContainerImpl: container_1794543422643_0074_01_000002 balloon
+2026-11-18 17:21:35,472 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 2867new: 4013
+2026-11-18 17:21:35,472 INFO container.ContainerImpl: run docker commands: docker update --memory 4013m --memory-swap 135085m container_1794543422643_0074_01_000002 
+2026-11-18 17:21:35,506 INFO container.ContainerImpl: finish docker commands: docker update --memory 4013m --memory-swap 135085m container_1794543422643_0074_01_000002 
+2026-11-18 17:21:36,007 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 2867to: 4013
+2026-11-18 17:21:36,007 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:21:36,007 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:36,040 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:36,540 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:36,585 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:37,086 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:37,086 INFO container.ContainerImpl: run docker commands: docker update --cpuset-cpus 0,1,2,3,4,5,6,7 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:37,124 INFO container.ContainerImpl: finish docker commands: docker update --cpuset-cpus 0,1,2,3,4,5,6,7 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:37,625 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:37,626 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:21:38,626 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:38,626 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:39,626 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:21:39,627 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:39,628 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:40,628 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:40,629 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:41,628 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:21:41,628 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 4012 113 4013
+2026-11-18 17:21:41,629 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:41,629 INFO container.ContainerImpl: wrongstate: running receive balloon: container_1794543422643_0074_01_000002
+2026-11-18 17:21:41,629 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 4013 114 4013
+2026-11-18 17:21:41,629 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota 1000 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:41,788 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota 1000 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:42,304 INFO container.ContainerImpl: run docker commands: docker update --cpuset-cpus 0 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:42,358 INFO container.ContainerImpl: finish docker commands: docker update --cpuset-cpus 0 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:42,859 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:21:42,859 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:42,860 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 4012 159 4013
+2026-11-18 17:21:43,629 INFO NodeMemoryManager: add swapping containercontainer_1794543422643_0074_01_000002
+2026-11-18 17:21:43,629 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:21:43,629 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 4012 159 4013
+2026-11-18 17:21:43,860 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:43,861 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:21:43,861 INFO container.ContainerImpl: container_1794543422643_0074_01_000002 balloon
+2026-11-18 17:21:43,861 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 4013new: 5618
+2026-11-18 17:21:43,861 INFO container.ContainerImpl: run docker commands: docker update --memory 5618m --memory-swap 136690m container_1794543422643_0074_01_000002 
+2026-11-18 17:21:43,901 INFO container.ContainerImpl: finish docker commands: docker update --memory 5618m --memory-swap 136690m container_1794543422643_0074_01_000002 
+2026-11-18 17:21:44,401 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 4013to: 5618
+2026-11-18 17:21:44,402 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:21:44,402 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:44,447 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:44,947 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:44,947 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:44,980 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:45,480 INFO container.ContainerImpl: run docker commands: docker update --cpuset-cpus 0,1,2,3,4,5,6,7 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:45,528 INFO container.ContainerImpl: finish docker commands: docker update --cpuset-cpus 0,1,2,3,4,5,6,7 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:46,028 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:46,029 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:21:46,029 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:47,030 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:47,030 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:48,029 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:21:48,030 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:48,031 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:49,031 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:49,032 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:50,030 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:21:50,032 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:50,032 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:51,032 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:51,032 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:52,031 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:21:52,033 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:52,033 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:53,033 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:53,034 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:54,032 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:21:54,034 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:54,034 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:55,035 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:55,035 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:56,033 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:21:56,035 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:56,036 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:57,036 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:57,037 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:58,034 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:21:58,034 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 5617 230 5618
+2026-11-18 17:21:58,036 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:58,037 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:21:58,037 INFO container.ContainerImpl: wrongstate: running receive balloon: container_1794543422643_0074_01_000002
+2026-11-18 17:21:58,037 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 5617 231 5618
+2026-11-18 17:21:58,037 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota 1000 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:58,193 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota 1000 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:58,693 INFO container.ContainerImpl: run docker commands: docker update --cpuset-cpus 0 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:58,737 INFO container.ContainerImpl: finish docker commands: docker update --cpuset-cpus 0 container_1794543422643_0074_01_000002 
+2026-11-18 17:21:59,238 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:21:59,264 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:21:59,265 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 5617 285 5618
+2026-11-18 17:22:00,034 INFO NodeMemoryManager: add swapping containercontainer_1794543422643_0074_01_000002
+2026-11-18 17:22:00,034 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:00,035 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 5617 286 5618
+2026-11-18 17:22:00,266 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:22:00,266 INFO container.ContainerImpl: container_1794543422643_0074_01_000002 balloon
+2026-11-18 17:22:00,266 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 5618new: 7865
+2026-11-18 17:22:00,266 INFO container.ContainerImpl: run docker commands: docker update --memory 7865m --memory-swap 138937m container_1794543422643_0074_01_000002 
+2026-11-18 17:22:00,304 INFO container.ContainerImpl: finish docker commands: docker update --memory 7865m --memory-swap 138937m container_1794543422643_0074_01_000002 
+2026-11-18 17:22:00,804 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 5618to: 7865
+2026-11-18 17:22:00,805 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:22:00,805 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:00,806 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:22:00,849 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:22:01,349 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:22:01,395 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:22:01,895 INFO container.ContainerImpl: run docker commands: docker update --cpuset-cpus 0,1,2,3,4,5,6,7 container_1794543422643_0074_01_000002 
+2026-11-18 17:22:01,940 INFO container.ContainerImpl: finish docker commands: docker update --cpuset-cpus 0,1,2,3,4,5,6,7 container_1794543422643_0074_01_000002 
+2026-11-18 17:22:02,441 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:02,441 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:02,441 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:03,442 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:03,442 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:04,443 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:04,443 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:04,444 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:05,445 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:05,445 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:06,444 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:06,446 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:06,446 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:07,447 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:07,448 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:08,445 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:08,448 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:08,448 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:09,448 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:09,449 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:10,446 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:10,449 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:10,450 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:11,450 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:11,450 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:12,447 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:12,451 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:12,451 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:13,452 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:13,452 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:14,449 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:14,453 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:14,453 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:15,453 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:15,454 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:16,449 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:16,454 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:16,454 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:17,455 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:17,455 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:18,450 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:18,456 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:18,456 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:19,457 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:19,457 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:20,451 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:20,457 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:20,458 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:21,458 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:21,458 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:22,452 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:22,459 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:22,459 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:23,460 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:23,461 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:24,452 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:24,453 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 7864 147 7865
+2026-11-18 17:22:24,461 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:24,461 INFO container.ContainerImpl: wrongstate: running receive balloon: container_1794543422643_0074_01_000002
+2026-11-18 17:22:24,461 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 7864 147 7865
+2026-11-18 17:22:24,461 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota 1000 container_1794543422643_0074_01_000002 
+2026-11-18 17:22:24,721 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota 1000 container_1794543422643_0074_01_000002 
+2026-11-18 17:22:25,221 INFO container.ContainerImpl: run docker commands: docker update --cpuset-cpus 0 container_1794543422643_0074_01_000002 
+2026-11-18 17:22:25,221 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:25,261 INFO container.ContainerImpl: finish docker commands: docker update --cpuset-cpus 0 container_1794543422643_0074_01_000002 
+2026-11-18 17:22:25,761 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:22:25,762 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 7864 147 7865
+2026-11-18 17:22:26,453 INFO NodeMemoryManager: add swapping containercontainer_1794543422643_0074_01_000002
+2026-11-18 17:22:26,454 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:26,454 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 7864 147 7865
+2026-11-18 17:22:26,762 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:26,763 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:22:26,763 INFO container.ContainerImpl: container_1794543422643_0074_01_000002 balloon
+2026-11-18 17:22:26,763 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 7865new: 11011
+2026-11-18 17:22:26,763 INFO container.ContainerImpl: run docker commands: docker update --memory 11011m --memory-swap 142083m container_1794543422643_0074_01_000002 
+2026-11-18 17:22:26,797 INFO container.ContainerImpl: finish docker commands: docker update --memory 11011m --memory-swap 142083m container_1794543422643_0074_01_000002 
+2026-11-18 17:22:27,297 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 7865to: 11011
+2026-11-18 17:22:27,297 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:22:27,298 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:22:27,330 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:22:27,831 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:22:27,831 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:27,876 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:22:28,377 INFO container.ContainerImpl: run docker commands: docker update --cpuset-cpus 0,1,2,3,4,5,6,7 container_1794543422643_0074_01_000002 
+2026-11-18 17:22:28,419 INFO container.ContainerImpl: finish docker commands: docker update --cpuset-cpus 0,1,2,3,4,5,6,7 container_1794543422643_0074_01_000002 
+2026-11-18 17:22:28,919 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:28,920 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:29,920 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:29,921 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:30,920 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:30,921 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:30,922 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:31,922 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:31,923 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:32,922 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:32,923 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:32,923 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:33,924 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:33,924 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:34,922 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:34,924 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:34,924 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:35,925 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:35,925 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:36,923 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:36,926 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:36,926 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:37,927 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:37,928 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:38,924 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:38,928 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:38,929 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:39,930 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:39,930 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:40,925 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:40,931 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:40,931 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:41,932 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:41,933 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:42,926 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:42,933 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:42,933 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:43,933 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:43,934 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:44,927 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:44,933 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:44,935 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:45,934 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:45,936 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:46,928 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:46,934 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:46,937 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:47,935 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:47,938 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:48,929 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:48,936 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:48,938 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:49,937 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:49,939 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:50,929 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:50,938 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:50,940 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:51,939 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:51,941 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:52,930 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:52,940 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:52,941 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:53,940 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:53,942 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:54,931 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:54,941 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:54,943 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:55,941 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:55,943 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:56,932 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:56,942 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:56,943 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:57,943 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:57,944 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:58,933 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:22:58,944 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:58,944 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:22:59,945 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:22:59,946 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:00,934 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:00,947 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:00,947 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:01,948 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:01,948 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:02,935 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:02,948 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:02,949 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:03,949 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:03,949 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:04,936 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:04,950 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:04,951 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:05,951 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:05,952 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:06,936 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:06,952 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:06,952 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:07,953 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:07,953 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:08,937 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:08,954 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:08,954 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:09,955 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:09,955 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:10,938 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:10,955 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:10,956 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:11,956 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:11,956 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:12,938 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:12,956 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:12,957 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:13,957 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:13,958 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:14,939 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:14,958 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:14,958 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:15,959 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:15,959 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:16,940 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:16,959 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:16,960 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:17,960 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:17,961 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:18,941 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:18,961 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:18,961 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:19,962 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:19,962 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:20,942 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:20,962 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:20,963 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:21,963 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:21,964 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:22,942 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:22,964 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:22,964 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:23,964 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:23,965 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:24,943 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:24,965 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:24,966 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:25,966 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:25,966 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:26,944 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:26,967 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:26,967 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:27,967 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:27,968 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:28,951 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:28,968 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:28,968 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:29,969 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:29,969 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:30,952 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:30,970 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:30,970 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:31,970 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:31,971 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:32,953 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:32,971 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:32,972 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:33,972 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:33,973 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:34,954 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:34,954 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 11010 113 11011
+2026-11-18 17:23:34,973 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:34,974 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:34,974 INFO container.ContainerImpl: wrongstate: running receive balloon: container_1794543422643_0074_01_000002
+2026-11-18 17:23:34,974 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 11010 113 11011
+2026-11-18 17:23:34,974 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota 1000 container_1794543422643_0074_01_000002 
+2026-11-18 17:23:35,033 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota 1000 container_1794543422643_0074_01_000002 
+2026-11-18 17:23:35,533 INFO container.ContainerImpl: run docker commands: docker update --cpuset-cpus 0 container_1794543422643_0074_01_000002 
+2026-11-18 17:23:35,574 INFO container.ContainerImpl: finish docker commands: docker update --cpuset-cpus 0 container_1794543422643_0074_01_000002 
+2026-11-18 17:23:36,075 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:23:36,075 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 11010 113 11011
+2026-11-18 17:23:36,075 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:36,955 INFO NodeMemoryManager: add swapping containercontainer_1794543422643_0074_01_000002
+2026-11-18 17:23:36,955 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:36,955 INFO container.ContainerImpl: out of memory contianer detected: container_1794543422643_0074_01_000002 11010 113 11011
+2026-11-18 17:23:37,076 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:23:37,076 INFO container.ContainerImpl: container_1794543422643_0074_01_000002 balloon
+2026-11-18 17:23:37,076 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 11011new: 15415
+2026-11-18 17:23:37,076 INFO container.ContainerImpl: run docker commands: docker update --memory 15415m --memory-swap 146487m container_1794543422643_0074_01_000002 
+2026-11-18 17:23:37,118 INFO container.ContainerImpl: finish docker commands: docker update --memory 15415m --memory-swap 146487m container_1794543422643_0074_01_000002 
+2026-11-18 17:23:37,618 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 11011to: 15415
+2026-11-18 17:23:37,618 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 SUSPENDING
+2026-11-18 17:23:37,619 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:37,620 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:23:37,669 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:23:38,169 INFO container.ContainerImpl: run docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:23:38,209 INFO container.ContainerImpl: finish docker commands: docker update --cpu-quota -1 container_1794543422643_0074_01_000002 
+2026-11-18 17:23:38,710 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:38,710 INFO container.ContainerImpl: run docker commands: docker update --cpuset-cpus 0,1,2,3,4,5,6,7 container_1794543422643_0074_01_000002 
+2026-11-18 17:23:38,752 INFO container.ContainerImpl: finish docker commands: docker update --cpuset-cpus 0,1,2,3,4,5,6,7 container_1794543422643_0074_01_000002 
+2026-11-18 17:23:39,253 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:39,254 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:40,254 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:40,254 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:41,255 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:41,255 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:41,255 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:42,256 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:42,257 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:43,256 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:43,257 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:43,258 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:44,258 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:44,259 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:45,257 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:45,259 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:45,260 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:46,259 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:46,260 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:47,258 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:47,260 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:47,261 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:48,260 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:48,262 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:49,258 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:49,261 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:49,262 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:50,261 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:50,262 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:51,259 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:51,262 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:51,263 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:52,263 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:52,264 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:53,259 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:53,265 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:53,265 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:54,265 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:54,266 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:55,260 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:55,266 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:55,266 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:56,267 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:56,267 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:57,261 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:57,268 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:57,268 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:58,268 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:58,269 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:23:59,262 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:23:59,269 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:23:59,269 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:00,269 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:00,269 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:01,263 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:01,270 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:01,270 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:02,271 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:02,271 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:03,264 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:03,272 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:03,272 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:04,273 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:04,273 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:05,265 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:05,274 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:05,274 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:06,275 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:06,275 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:07,266 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:07,275 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:07,276 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:08,276 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:08,277 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:09,267 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:09,277 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:09,277 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:10,278 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:10,278 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:11,269 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:11,278 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:11,279 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:12,279 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:12,280 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:13,270 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:13,280 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:13,281 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:14,281 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:14,281 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:15,271 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:15,282 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:15,282 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:16,283 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:16,284 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:17,271 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:17,284 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:17,285 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:18,285 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:18,285 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:19,272 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:19,285 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:19,286 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:20,286 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:20,286 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:21,273 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:21,287 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:21,287 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:22,288 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:22,288 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:23,281 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:23,289 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:23,290 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:24,291 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:24,291 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:25,282 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:25,293 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:25,294 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:26,294 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:26,294 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:27,284 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:27,294 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:27,295 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:28,295 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:28,296 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:29,285 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:29,296 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:29,297 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:30,298 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:30,299 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:31,286 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:31,299 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:31,300 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:32,300 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:32,301 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:33,287 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:33,301 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:33,302 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:34,303 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:34,303 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:35,288 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:35,305 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:35,306 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:36,306 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:36,306 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:37,289 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:37,307 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:37,308 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:38,328 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:38,329 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:39,290 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:39,329 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:39,329 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:40,330 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:40,330 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:41,291 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:41,331 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:41,331 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:42,332 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:42,332 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:43,292 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:43,332 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:43,333 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:44,333 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:44,334 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:45,293 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:45,334 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:45,335 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:46,335 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:46,335 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:47,293 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:47,336 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:47,336 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:48,336 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:48,337 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:49,294 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:49,337 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:49,338 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:50,338 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:50,339 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:51,295 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:51,339 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:51,340 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:52,340 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:52,341 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:53,296 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:53,341 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:53,341 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:54,342 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:54,342 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:55,297 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:55,343 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:55,343 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:56,343 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:56,344 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:57,298 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:57,344 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:57,345 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:58,345 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:58,346 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:24:59,299 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:24:59,346 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:24:59,346 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:00,347 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:00,347 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:01,300 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:01,348 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:01,348 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:02,348 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:02,349 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:03,301 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:03,349 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:03,350 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:04,350 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:04,351 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:05,302 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:05,351 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:05,352 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:06,352 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:06,353 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:07,304 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:07,353 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:07,354 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:08,354 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:08,355 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:09,305 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:09,355 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:09,355 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:10,355 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:10,356 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:11,306 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:11,356 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:11,356 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:12,357 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:12,357 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:13,307 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:13,358 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:13,358 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:14,359 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:14,359 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:15,308 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:15,360 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:15,360 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:16,360 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:16,361 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:17,309 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:17,361 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:17,361 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:18,361 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:18,362 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:19,311 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:19,362 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:19,363 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:20,363 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:20,363 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:21,312 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:21,364 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:21,364 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:22,365 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:22,365 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:23,313 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:23,366 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:23,366 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:24,366 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:24,367 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:25,314 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:25,367 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:25,368 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:26,369 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:26,370 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:27,315 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:27,370 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:27,370 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:28,370 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:28,371 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:29,316 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:29,371 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:29,372 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:30,372 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:30,373 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:31,317 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:31,373 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:31,374 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:32,374 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:32,375 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:33,318 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:33,375 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:33,375 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:34,375 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:34,376 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:35,319 INFO NodeMemoryManager: cached swapping container: container_1794543422643_0074_01_000002  ratio:0.4
+2026-11-18 17:25:35,376 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:35,377 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:36,377 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:36,378 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:37,320 INFO NodeMemoryManager: container_1794543422643_0074_01_000002 is removed
+2026-11-18 17:25:37,378 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:37,379 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:37,379 INFO container.ContainerImpl: slacking contianer detected: container_1794543422643_0074_01_000002
+2026-11-18 17:25:37,379 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 15415new: 14973
+2026-11-18 17:25:37,379 INFO container.ContainerImpl: run docker commands: docker update --memory 14973m --memory-swap 146045m container_1794543422643_0074_01_000002 
+2026-11-18 17:25:37,427 INFO container.ContainerImpl: finish docker commands: docker update --memory 14973m --memory-swap 146045m container_1794543422643_0074_01_000002 
+2026-11-18 17:25:37,927 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 15415to: 14973
+2026-11-18 17:25:37,928 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:38,379 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:38,929 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:39,380 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:39,930 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:40,381 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:40,931 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:41,382 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:41,931 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:42,382 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:42,932 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:43,383 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:43,933 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:44,383 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:44,933 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:45,384 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:45,934 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:46,384 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:46,935 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:47,385 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:47,936 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:48,386 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:48,938 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:49,387 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:49,939 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:50,388 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:50,940 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:51,388 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:51,941 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:52,389 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:52,942 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:53,390 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:53,942 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:54,390 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:54,943 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:55,391 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:55,944 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:56,392 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:56,945 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:57,392 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:57,945 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:58,393 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:58,946 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:25:59,393 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:25:59,947 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:00,394 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:00,948 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:01,395 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:01,949 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:02,395 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:02,949 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:03,396 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:03,950 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:04,399 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:04,951 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:05,400 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:05,952 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:06,400 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:06,953 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:07,401 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:07,954 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:08,402 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:08,956 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:09,403 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:09,957 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:10,404 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:10,958 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:11,405 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:11,959 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:12,406 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:12,961 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:13,407 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:13,962 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:14,408 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:14,963 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:15,408 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:15,964 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:16,409 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:16,965 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:17,410 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:17,966 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:18,411 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:18,967 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:19,411 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:19,967 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:20,412 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:20,968 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:21,412 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:21,969 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:22,413 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:22,970 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:23,414 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:23,971 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:24,415 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:24,971 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:25,415 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:25,972 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:26,416 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:26,973 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:27,419 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:27,973 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:28,419 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:28,974 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:29,420 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:29,975 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:30,421 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:30,976 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:31,421 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:31,977 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:32,422 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:32,977 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:33,423 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:33,979 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:34,423 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:34,979 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:35,424 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:35,980 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:36,424 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:36,981 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:37,425 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:37,981 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:38,426 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:38,982 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:39,426 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:39,983 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:40,427 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:40,983 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:41,428 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:41,984 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:42,428 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:42,985 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:43,429 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:43,986 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:44,430 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:44,987 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:45,430 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:45,988 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:46,431 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:46,989 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:47,432 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:47,989 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:48,433 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:48,990 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:49,434 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:49,992 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:50,434 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:50,992 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:51,435 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:51,993 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:52,435 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:52,994 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:53,436 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:53,994 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:54,437 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:54,995 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:55,437 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:55,995 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:56,438 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:56,996 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:57,438 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:57,997 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:58,439 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:58,997 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:26:59,439 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:26:59,998 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:00,440 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:00,998 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:01,440 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:01,999 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:02,441 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:02,999 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:03,441 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:04,000 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:04,442 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:05,001 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:05,443 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:06,002 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:06,443 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:07,002 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:07,444 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:08,003 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:08,444 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:09,013 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:09,445 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:10,013 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:10,445 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:11,014 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:11,446 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:12,015 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:12,446 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:13,015 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:13,447 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:14,016 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:14,447 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:15,017 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:15,448 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:16,017 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:16,448 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:17,018 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:17,449 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:18,018 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:18,450 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:19,019 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:19,450 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:20,019 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:20,451 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:21,020 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:21,451 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:22,021 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:22,452 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:23,021 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:23,452 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:24,022 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:24,453 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:25,023 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:25,454 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:26,023 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:26,455 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:27,023 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:27,455 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:28,024 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:28,456 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:29,024 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:29,456 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:30,025 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:30,458 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:31,025 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:31,458 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:32,026 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:32,459 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:33,027 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:33,459 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:34,027 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:34,460 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:35,028 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:35,460 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:36,029 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:36,461 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:37,030 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:37,462 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:38,030 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:38,462 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:39,031 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:39,463 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:40,032 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:40,464 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:41,033 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:41,464 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:42,033 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:42,465 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:43,034 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:43,465 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:44,034 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:44,465 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:45,035 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:45,466 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:46,035 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:46,466 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:47,036 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:47,467 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:48,036 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:48,468 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:49,037 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:49,469 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:50,037 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:50,469 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:51,038 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:51,470 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:52,038 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:52,470 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:53,039 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:53,471 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:54,039 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:54,471 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:55,039 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:55,472 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:56,040 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:56,473 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:57,040 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:57,473 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:58,040 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:58,474 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:27:59,041 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:27:59,474 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:00,041 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:00,475 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:01,042 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:01,475 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:02,043 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:02,476 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:03,044 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:03,476 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:04,044 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:04,477 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:05,045 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:05,477 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:06,046 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:06,477 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:07,046 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:07,478 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:08,048 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:08,479 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:09,049 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:09,479 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:10,049 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:10,480 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:11,050 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:11,480 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:12,051 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:12,480 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:13,052 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:13,481 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:14,053 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:14,481 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:15,054 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:15,482 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:16,054 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:16,482 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:17,055 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:17,483 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:18,056 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:18,483 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:19,057 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:19,484 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:20,058 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:20,485 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:21,058 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:21,485 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:22,060 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:22,485 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:23,061 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:23,486 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:24,061 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:24,486 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:25,062 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:25,486 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:26,063 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:26,487 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:27,066 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:27,488 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:28,067 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:28,488 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:29,068 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:29,489 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:30,069 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:30,489 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:31,069 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:31,490 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:32,070 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:32,490 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:33,071 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:33,491 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:34,072 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:34,491 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:35,072 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:35,492 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:36,073 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:36,492 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:37,073 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:37,493 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:38,074 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:38,493 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:39,074 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:39,494 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:40,075 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:40,494 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:41,075 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:41,499 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:42,076 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:42,499 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:43,077 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:43,500 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:44,078 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:44,500 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:45,078 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:45,500 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:46,079 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:46,501 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:47,080 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:47,501 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:48,081 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:48,502 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:49,082 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:49,502 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:50,083 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:50,503 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:51,085 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:51,504 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:52,085 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:52,505 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:53,086 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:53,505 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:54,087 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:54,506 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:55,088 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:55,506 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:56,089 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:56,506 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:57,090 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:57,507 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:58,091 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:58,507 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:28:59,092 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:28:59,508 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:00,093 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:00,508 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:01,094 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:01,509 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:02,095 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:02,510 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:03,096 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:03,510 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:04,097 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:04,511 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:05,097 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:05,512 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:06,098 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:06,099 INFO container.ContainerImpl: slacking contianer detected: container_1794543422643_0074_01_000002
+2026-11-18 17:29:06,099 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 14973new: 14856
+2026-11-18 17:29:06,099 INFO container.ContainerImpl: run docker commands: docker update --memory 14856m --memory-swap 145928m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:06,144 INFO container.ContainerImpl: finish docker commands: docker update --memory 14856m --memory-swap 145928m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:06,644 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 14973to: 14856
+2026-11-18 17:29:06,645 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:06,645 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:07,646 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:07,646 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:08,646 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:08,647 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:09,647 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:09,648 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:10,648 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:10,649 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:10,650 INFO container.ContainerImpl: slacking contianer detected: container_1794543422643_0074_01_000002
+2026-11-18 17:29:10,650 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 14856new: 14751
+2026-11-18 17:29:10,650 INFO container.ContainerImpl: run docker commands: docker update --memory 14751m --memory-swap 145823m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:10,684 INFO container.ContainerImpl: finish docker commands: docker update --memory 14751m --memory-swap 145823m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:11,184 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 14856to: 14751
+2026-11-18 17:29:11,185 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:11,648 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:12,185 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:12,649 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:13,186 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:13,650 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:14,187 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:14,650 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:15,187 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:15,187 INFO container.ContainerImpl: slacking contianer detected: container_1794543422643_0074_01_000002
+2026-11-18 17:29:15,187 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 14751new: 14618
+2026-11-18 17:29:15,187 INFO container.ContainerImpl: run docker commands: docker update --memory 14618m --memory-swap 145690m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:15,230 INFO container.ContainerImpl: finish docker commands: docker update --memory 14618m --memory-swap 145690m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:15,730 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 14751to: 14618
+2026-11-18 17:29:15,730 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:15,731 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:16,732 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:16,732 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:16,732 INFO container.ContainerImpl: slacking contianer detected: container_1794543422643_0074_01_000002
+2026-11-18 17:29:16,732 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 14618new: 14617
+2026-11-18 17:29:16,732 INFO container.ContainerImpl: run docker commands: docker update --memory 14617m --memory-swap 145689m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:16,774 INFO container.ContainerImpl: finish docker commands: docker update --memory 14617m --memory-swap 145689m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:17,274 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 14618to: 14617
+2026-11-18 17:29:17,274 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:17,732 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:18,275 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:18,733 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:19,276 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:19,733 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:20,277 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:20,734 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:21,278 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:21,278 INFO container.ContainerImpl: slacking contianer detected: container_1794543422643_0074_01_000002
+2026-11-18 17:29:21,278 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 14617new: 14521
+2026-11-18 17:29:21,278 INFO container.ContainerImpl: run docker commands: docker update --memory 14521m --memory-swap 145593m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:21,318 INFO container.ContainerImpl: finish docker commands: docker update --memory 14521m --memory-swap 145593m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:21,818 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 14617to: 14521
+2026-11-18 17:29:21,819 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:21,819 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:22,820 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:22,820 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:23,821 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:23,821 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:24,821 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:24,822 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:25,822 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:25,822 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:25,823 INFO container.ContainerImpl: slacking contianer detected: container_1794543422643_0074_01_000002
+2026-11-18 17:29:25,823 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 14521new: 14400
+2026-11-18 17:29:25,823 INFO container.ContainerImpl: run docker commands: docker update --memory 14400m --memory-swap 145472m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:25,863 INFO container.ContainerImpl: finish docker commands: docker update --memory 14400m --memory-swap 145472m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:26,363 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 14521to: 14400
+2026-11-18 17:29:26,364 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:26,364 INFO container.ContainerImpl: slacking contianer detected: container_1794543422643_0074_01_000002
+2026-11-18 17:29:26,364 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 14400new: 14399
+2026-11-18 17:29:26,364 INFO container.ContainerImpl: run docker commands: docker update --memory 14399m --memory-swap 145471m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:26,405 INFO container.ContainerImpl: finish docker commands: docker update --memory 14399m --memory-swap 145471m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:26,905 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 14400to: 14399
+2026-11-18 17:29:26,906 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:26,906 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:27,907 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:27,907 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:28,907 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:28,908 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:29,908 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:29,908 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:30,908 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:30,909 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:30,909 INFO container.ContainerImpl: slacking contianer detected: container_1794543422643_0074_01_000002
+2026-11-18 17:29:30,909 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 14399new: 14314
+2026-11-18 17:29:30,909 INFO container.ContainerImpl: run docker commands: docker update --memory 14314m --memory-swap 145386m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:30,951 INFO container.ContainerImpl: finish docker commands: docker update --memory 14314m --memory-swap 145386m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:31,451 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 14399to: 14314
+2026-11-18 17:29:31,452 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:31,909 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:32,452 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:32,909 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:33,453 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:33,909 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:34,454 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:34,910 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:35,463 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:35,910 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:36,464 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:36,464 INFO container.ContainerImpl: slacking contianer detected: container_1794543422643_0074_01_000002
+2026-11-18 17:29:36,464 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 14314new: 14202
+2026-11-18 17:29:36,464 INFO container.ContainerImpl: run docker commands: docker update --memory 14202m --memory-swap 145274m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:36,500 INFO container.ContainerImpl: finish docker commands: docker update --memory 14202m --memory-swap 145274m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:37,000 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 14314to: 14202
+2026-11-18 17:29:37,001 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:37,001 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:38,001 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:38,002 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:39,002 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:39,002 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:40,002 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:40,003 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:41,003 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:41,003 INFO container.ContainerImpl: slacking contianer detected: container_1794543422643_0074_01_000002
+2026-11-18 17:29:41,003 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 14202new: 14125
+2026-11-18 17:29:41,003 INFO container.ContainerImpl: run docker commands: docker update --memory 14125m --memory-swap 145197m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:41,046 INFO container.ContainerImpl: finish docker commands: docker update --memory 14125m --memory-swap 145197m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:41,546 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 14202to: 14125
+2026-11-18 17:29:41,546 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:41,547 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:42,547 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:42,548 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:43,548 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:43,549 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:44,549 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:44,549 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:45,549 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:45,550 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:46,550 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:46,550 INFO container.ContainerImpl: slacking contianer detected: container_1794543422643_0074_01_000002
+2026-11-18 17:29:46,550 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 14125new: 14029
+2026-11-18 17:29:46,550 INFO container.ContainerImpl: run docker commands: docker update --memory 14029m --memory-swap 145101m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:46,594 INFO container.ContainerImpl: finish docker commands: docker update --memory 14029m --memory-swap 145101m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:47,094 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 14125to: 14029
+2026-11-18 17:29:47,094 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:47,095 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:48,095 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:48,095 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:49,096 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:49,096 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:50,096 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:50,097 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:51,097 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:51,097 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:52,097 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:52,097 INFO container.ContainerImpl: slacking contianer detected: container_1794543422643_0074_01_000002
+2026-11-18 17:29:52,097 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 14029new: 13970
+2026-11-18 17:29:52,098 INFO container.ContainerImpl: run docker commands: docker update --memory 13970m --memory-swap 145042m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:52,130 INFO container.ContainerImpl: finish docker commands: docker update --memory 13970m --memory-swap 145042m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:52,630 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 14029to: 13970
+2026-11-18 17:29:52,630 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:52,630 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:53,631 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:53,631 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:54,632 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:54,632 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:55,633 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:55,633 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:56,634 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:56,634 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:57,634 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:57,635 INFO container.ContainerImpl: slacking contianer detected: container_1794543422643_0074_01_000002
+2026-11-18 17:29:57,635 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 13970new: 13881
+2026-11-18 17:29:57,635 INFO container.ContainerImpl: run docker commands: docker update --memory 13881m --memory-swap 144953m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:57,677 INFO container.ContainerImpl: finish docker commands: docker update --memory 13881m --memory-swap 144953m container_1794543422643_0074_01_000002 
+2026-11-18 17:29:58,177 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 13970to: 13881
+2026-11-18 17:29:58,178 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:58,178 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:29:59,178 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:29:59,179 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:30:00,179 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:30:00,179 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:30:01,179 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:30:01,180 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:30:02,180 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:30:02,180 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:30:03,181 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:30:03,181 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:30:04,182 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:30:04,182 INFO container.ContainerImpl: slacking contianer detected: container_1794543422643_0074_01_000002
+2026-11-18 17:30:04,182 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 13881new: 5031
+2026-11-18 17:30:04,182 INFO container.ContainerImpl: run docker commands: docker update --memory 5031m --memory-swap 136103m container_1794543422643_0074_01_000002 
+2026-11-18 17:30:04,242 INFO container.ContainerImpl: finish docker commands: docker update --memory 5031m --memory-swap 136103m container_1794543422643_0074_01_000002 
+2026-11-18 17:30:04,399 INFO launcher.ContainerLaunch: Container container_1794543422643_0074_01_000001 succeeded 
+2026-11-18 17:30:04,399 INFO container.ContainerImpl: Container container_1794543422643_0074_01_000001 transitioned from RUNNING to EXITED_WITH_SUCCESS
+2026-11-18 17:30:04,399 INFO launcher.ContainerLaunch: Cleaning up container container_1794543422643_0074_01_000001
+2026-11-18 17:30:04,399 INFO launcher.ContainerLaunch: Marking container container_1794543422643_0074_01_000001 as inactive
+2026-11-18 17:30:04,442 INFO launcher.ContainerLaunch: Container container_1794543422643_0074_01_000002 succeeded 
+2026-11-18 17:30:04,742 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 13881to: 5031
+2026-11-18 17:30:04,743 INFO container.ContainerImpl: file error: java.io.FileNotFoundException: /sys/fs/cgroup/memory/docker/ad91bf7010443945d03f7e9d4732087efcf99aba1ecd8e7c457562dfeedf1513/memory.limit_in_bytes (No such file or directory)
+2026-11-18 17:30:04,743 INFO container.ContainerImpl: file error: java.io.FileNotFoundException: /sys/fs/cgroup/memory/docker/ad91bf7010443945d03f7e9d4732087efcf99aba1ecd8e7c457562dfeedf1513/memory.usage_in_bytes (No such file or directory)
+2026-11-18 17:30:04,743 INFO container.ContainerImpl: file error: java.io.FileNotFoundException: /sys/fs/cgroup/memory/docker/ad91bf7010443945d03f7e9d4732087efcf99aba1ecd8e7c457562dfeedf1513/memory.stat (No such file or directory)
+2026-11-18 17:30:04,743 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000002 RUNNING
+2026-11-18 17:30:04,743 INFO container.ContainerImpl: file error: java.io.FileNotFoundException: /sys/fs/cgroup/memory/docker/35a807ef9b1c9e62e27bdf0776297d11f14922e513681e198a8bdb675dda3a17/memory.limit_in_bytes (No such file or directory)
+2026-11-18 17:30:04,743 INFO container.ContainerImpl: file error: java.io.FileNotFoundException: /sys/fs/cgroup/memory/docker/35a807ef9b1c9e62e27bdf0776297d11f14922e513681e198a8bdb675dda3a17/memory.usage_in_bytes (No such file or directory)
+2026-11-18 17:30:04,743 INFO container.ContainerImpl: file error: java.io.FileNotFoundException: /sys/fs/cgroup/memory/docker/35a807ef9b1c9e62e27bdf0776297d11f14922e513681e198a8bdb675dda3a17/memory.stat (No such file or directory)
+2026-11-18 17:30:04,743 INFO container.ContainerImpl: $$$  container_1794543422643_0074_01_000001 RUNNING
+2026-11-18 17:30:04,743 INFO container.ContainerImpl: file error: java.io.FileNotFoundException: /sys/fs/cgroup/memory/docker/ad91bf7010443945d03f7e9d4732087efcf99aba1ecd8e7c457562dfeedf1513/memory.limit_in_bytes (No such file or directory)
+2026-11-18 17:30:04,744 INFO container.ContainerImpl: file error: java.io.FileNotFoundException: /sys/fs/cgroup/memory/docker/ad91bf7010443945d03f7e9d4732087efcf99aba1ecd8e7c457562dfeedf1513/memory.usage_in_bytes (No such file or directory)
+2026-11-18 17:30:04,744 INFO container.ContainerImpl: file error: java.io.FileNotFoundException: /sys/fs/cgroup/memory/docker/ad91bf7010443945d03f7e9d4732087efcf99aba1ecd8e7c457562dfeedf1513/memory.stat (No such file or directory)
+2026-11-18 17:30:04,744 INFO container.ContainerImpl: slacking contianer detected: container_1794543422643_0074_01_000002
+2026-11-18 17:30:04,744 INFO container.ContainerImpl: update container memory: container_1794543422643_0074_01_000002 old: 13881new: 5031
+2026-11-18 17:30:04,744 INFO container.ContainerImpl: file error: java.io.FileNotFoundException: /sys/fs/cgroup/memory/docker/35a807ef9b1c9e62e27bdf0776297d11f14922e513681e198a8bdb675dda3a17/memory.limit_in_bytes (No such file or directory)
+2026-11-18 17:30:04,744 INFO container.ContainerImpl: file error: java.io.FileNotFoundException: /sys/fs/cgroup/memory/docker/35a807ef9b1c9e62e27bdf0776297d11f14922e513681e198a8bdb675dda3a17/memory.usage_in_bytes (No such file or directory)
+2026-11-18 17:30:04,744 INFO container.ContainerImpl: file error: java.io.FileNotFoundException: /sys/fs/cgroup/memory/docker/35a807ef9b1c9e62e27bdf0776297d11f14922e513681e198a8bdb675dda3a17/memory.stat (No such file or directory)
+2026-11-18 17:30:04,744 INFO container.ContainerImpl: run docker commands: docker update --memory 5031m --memory-swap 136103m container_1794543422643_0074_01_000002 
+2026-11-18 17:30:04,770 WARN container.ContainerImpl: Exception from Docker update with container ID: container_1794543422643_0074_01_000002 and exit code: 1
+ExitCodeException exitCode=1: Error response from daemon: No such container: container_1794543422643_0074_01_000002
+
+	at org.apache.hadoop.util.Shell.runCommand(Shell.java:582)
+	at org.apache.hadoop.util.Shell.run(Shell.java:479)
+	at org.apache.hadoop.util.Shell$ShellCommandExecutor.execute(Shell.java:773)
+	at container.ContainerImpl$ContainerMonitor.runDockerUpdateCommand(ContainerImpl.java:1332)
+	at container.ContainerImpl$ContainerMonitor.DockerCommandMemory(ContainerImpl.java:1041)
+	at container.ContainerImpl$ContainerMonitor.updateConfiguredMemory(ContainerImpl.java:951)
+	at container.ContainerImpl$ContainerMonitor.shrinkSlack(ContainerImpl.java:1225)
+	at container.ContainerImpl$ContainerMonitor.run(ContainerImpl.java:813)
+2026-11-18 17:30:04,771 INFO container.ContainerImpl: tries for 2
+2026-11-18 17:30:04,771 INFO container.ContainerImpl: finish docker commands: docker update --memory 5031m --memory-swap 136103m container_1794543422643_0074_01_000002 
+2026-11-18 17:30:05,472 INFO container.ContainerImpl: run docker commands: docker update --memory 5031m --memory-swap 136103m container_1794543422643_0074_01_000002 
+2026-11-18 17:30:05,496 WARN container.ContainerImpl: Exception from Docker update with container ID: container_1794543422643_0074_01_000002 and exit code: 1
+ExitCodeException exitCode=1: Error response from daemon: No such container: container_1794543422643_0074_01_000002
+
+	at org.apache.hadoop.util.Shell.runCommand(Shell.java:582)
+	at org.apache.hadoop.util.Shell.run(Shell.java:479)
+	at org.apache.hadoop.util.Shell$ShellCommandExecutor.execute(Shell.java:773)
+	at container.ContainerImpl$ContainerMonitor.runDockerUpdateCommand(ContainerImpl.java:1332)
+	at container.ContainerImpl$ContainerMonitor.DockerCommandMemory(ContainerImpl.java:1041)
+	at container.ContainerImpl$ContainerMonitor.updateConfiguredMemory(ContainerImpl.java:951)
+	at container.ContainerImpl$ContainerMonitor.shrinkSlack(ContainerImpl.java:1225)
+	at container.ContainerImpl$ContainerMonitor.run(ContainerImpl.java:813)
+2026-11-18 17:30:05,496 INFO container.ContainerImpl: tries for 3
+2026-11-18 17:30:05,496 INFO container.ContainerImpl: finish docker commands: docker update --memory 5031m --memory-swap 136103m container_1794543422643_0074_01_000002 
+2026-11-18 17:30:05,744 INFO container.ContainerImpl: container_1794543422643_0074_01_000001final current state: EXITED_WITH_SUCCESS
+2026-11-18 17:30:06,181 INFO container.ContainerImpl: file error: java.io.FileNotFoundException: /sys/fs/cgroup/memory/docker/ad91bf7010443945d03f7e9d4732087efcf99aba1ecd8e7c457562dfeedf1513/memory.usage_in_bytes (No such file or directory)
+2026-11-18 17:30:06,181 INFO container.ContainerImpl: file error: java.io.FileNotFoundException: /sys/fs/cgroup/memory/docker/ad91bf7010443945d03f7e9d4732087efcf99aba1ecd8e7c457562dfeedf1513/memory.limit_in_bytes (No such file or directory)
+2026-11-18 17:30:06,296 INFO container.ContainerImpl: run docker commands: docker update --memory 5031m --memory-swap 136103m container_1794543422643_0074_01_000002 
+2026-11-18 17:30:06,321 WARN container.ContainerImpl: Exception from Docker update with container ID: container_1794543422643_0074_01_000002 and exit code: 1
+ExitCodeException exitCode=1: Error response from daemon: No such container: container_1794543422643_0074_01_000002
+
+	at org.apache.hadoop.util.Shell.runCommand(Shell.java:582)
+	at org.apache.hadoop.util.Shell.run(Shell.java:479)
+	at org.apache.hadoop.util.Shell$ShellCommandExecutor.execute(Shell.java:773)
+	at container.ContainerImpl$ContainerMonitor.runDockerUpdateCommand(ContainerImpl.java:1332)
+	at container.ContainerImpl$ContainerMonitor.DockerCommandMemory(ContainerImpl.java:1041)
+	at container.ContainerImpl$ContainerMonitor.updateConfiguredMemory(ContainerImpl.java:951)
+	at container.ContainerImpl$ContainerMonitor.shrinkSlack(ContainerImpl.java:1225)
+	at container.ContainerImpl$ContainerMonitor.run(ContainerImpl.java:813)
+2026-11-18 17:30:06,322 INFO container.ContainerImpl: tries for 4
+2026-11-18 17:30:06,322 INFO container.ContainerImpl: finish docker commands: docker update --memory 5031m --memory-swap 136103m container_1794543422643_0074_01_000002 
+2026-11-18 17:30:06,505 INFO launcher.ContainerLaunch: Could not get pid for container_1794543422643_0074_01_000001. Waited for 2000 ms.
+2026-11-18 17:30:06,543 INFO container.ContainerImpl: Container container_1794543422643_0074_01_000002 transitioned from RUNNING to EXITED_WITH_SUCCESS
+2026-11-18 17:30:06,543 INFO org.apache.hadoop.yarn.server.nodemanager.DockerContainerExecutor: Deleting absolute path : /home/inuos/hadoop-data/nm-local-dir/usercache/inuos/appcache/application_1794543422643_0074/container_1794543422643_0074_01_000001
+2026-11-18 17:30:06,543 INFO org.apache.hadoop.yarn.server.nodemanager.NMAuditLogger: USER=inuos	OPERATION=Container Finished - Succeeded	TARGET=ContainerImpl	RESULT=SUCCESS	APPID=application_1794543422643_0074	CONTAINERID=container_1794543422643_0074_01_000001
+2026-11-18 17:30:06,544 INFO container.ContainerImpl: Container container_1794543422643_0074_01_000001 transitioned from EXITED_WITH_SUCCESS to DONE
+2026-11-18 17:30:06,544 INFO launcher.ContainerLaunch: Cleaning up container container_1794543422643_0074_01_000002
+2026-11-18 17:30:06,544 INFO launcher.ContainerLaunch: Marking container container_1794543422643_0074_01_000002 as inactive
+2026-11-18 17:30:06,573 INFO SecurityLogger.org.apache.hadoop.ipc.Server: Auth successful for appattempt_1794543422643_0074_000001 (auth:SIMPLE)
+2026-11-18 17:30:06,581 INFO ContainerManagerImpl: Stopping container with container Id: container_1794543422643_0074_01_000001
+2026-11-18 17:30:06,581 INFO org.apache.hadoop.yarn.server.nodemanager.NMAuditLogger: USER=inuos	IP=127.0.0.1	OPERATION=Stop Container Request	TARGET=ContainerManageImpl	RESULT=SUCCESS	APPID=application_1794543422643_0074	CONTAINERID=container_1794543422643_0074_01_000001
+2026-11-18 17:30:07,222 INFO container.ContainerImpl: balloon-nswap: container_1794543422643_0074_01_000002 from 13881to: 5031
+2026-11-18 17:30:07,222 INFO container.ContainerImpl: container_1794543422643_0074_01_000002final current state: EXITED_WITH_SUCCESS
+2026-11-18 17:30:07,550 INFO org.apache.hadoop.yarn.server.nodemanager.NodeStatusUpdaterImpl: Removed completed containers from NM context: [container_1794543422643_0074_01_000001]
+2026-11-18 17:30:08,650 INFO launcher.ContainerLaunch: Could not get pid for container_1794543422643_0074_01_000002. Waited for 2000 ms.
+2026-11-18 17:30:08,677 INFO application.ApplicationImpl: Removing container_1794543422643_0074_01_000001 from application application_1794543422643_0074
+2026-11-18 17:30:08,677 INFO org.apache.hadoop.yarn.server.nodemanager.DockerContainerExecutor: Deleting absolute path : /home/inuos/hadoop-data/nm-local-dir/usercache/inuos/appcache/application_1794543422643_0074/container_1794543422643_0074_01_000002
+2026-11-18 17:30:08,678 INFO AuxServices: Got event CONTAINER_STOP for appId application_1794543422643_0074
+2026-11-18 17:30:08,678 WARN ContainerManagerImpl: Event EventType: KILL_CONTAINER sent to absent container container_1794543422643_0074_01_000001
+2026-11-18 17:30:08,678 INFO application.ApplicationImpl: Application application_1794543422643_0074 transitioned from RUNNING to FINISHING_CONTAINERS_WAIT
+2026-11-18 17:30:08,678 INFO org.apache.hadoop.yarn.server.nodemanager.NMAuditLogger: USER=inuos	OPERATION=Container Finished - Succeeded	TARGET=ContainerImpl	RESULT=SUCCESS	APPID=application_1794543422643_0074	CONTAINERID=container_1794543422643_0074_01_000002
+2026-11-18 17:30:08,678 INFO container.ContainerImpl: Container container_1794543422643_0074_01_000002 transitioned from EXITED_WITH_SUCCESS to DONE
+2026-11-18 17:30:08,678 INFO application.ApplicationImpl: Removing container_1794543422643_0074_01_000002 from application application_1794543422643_0074
+2026-11-18 17:30:08,678 INFO application.ApplicationImpl: Application application_1794543422643_0074 transitioned from FINISHING_CONTAINERS_WAIT to APPLICATION_RESOURCES_CLEANINGUP
+2026-11-18 17:30:08,678 INFO AuxServices: Got event CONTAINER_STOP for appId application_1794543422643_0074
+2026-11-18 17:30:08,678 INFO AuxServices: Got event APPLICATION_STOP for appId application_1794543422643_0074
+2026-11-18 17:30:08,678 INFO org.apache.hadoop.yarn.server.nodemanager.DockerContainerExecutor: Deleting absolute path : /home/inuos/hadoop-data/nm-local-dir/usercache/inuos/appcache/application_1794543422643_0074
+2026-11-18 17:30:08,679 INFO application.ApplicationImpl: Application application_1794543422643_0074 transitioned from APPLICATION_RESOURCES_CLEANINGUP to FINISHED
+2026-11-18 17:30:08,679 INFO loghandler.NonAggregatingLogHandler: Scheduling Log Deletion for application: application_1794543422643_0074, with delay of 10800 seconds

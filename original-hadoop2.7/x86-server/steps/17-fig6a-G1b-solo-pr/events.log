@@ -1,0 +1,3 @@
+interval=0s cores=1 start=2026-11-18 16:46:27
+16:46:27 submit fig6a-pr
+17:12:32 end fig6a-pr exit=0 sec=1565
