@@ -5,7 +5,7 @@
 
 ## 슬라이드 순서 (11-19 사용자 확정: 흐름 → 단계마다 바꾼 것+그래프 → 요약)
 
-- PPT: [fig6a-paper-aligned.pptx](fig6a-paper-aligned.pptx) (22장, 발표자 노트 포함)
+- PPT: [fig6a-paper-aligned.pptx](fig6a-paper-aligned.pptx) (24장, 발표자 노트 포함)
 
 경로: `S` = `original-hadoop2.7/x86-server/steps/`, `F` = 이 폴더 `fig/`. 대표 그래프 = r1, 4회 2×2는 부록
 
@@ -15,6 +15,7 @@
 | 2 | 전체 흐름 | A→B+E→C→D (코드) → F→G (실험 조건), 누적 | 순서도 |
 | 3 | 판단 지표 | 첫 kill, PR 첫 shrink, PR 종료, 전체 시간. 전체 대비 %로 보는 이유 (전체 길이가 다름) | — |
 | 4 | 논문 Fig 6(a) | 비교 기준 | `F/paper-fig6a.png` |
+| 4-1 | 출발점 14 (11-19 사용자 요청) | 지난 발표 마지막 그래프, 원 코드 4회: 첫 kill 10~13%, PR 첫 shrink 4~5%, kill 3~7 | `S/14-fig6a-0s/fig6a.png` |
 | 5 | A shrink 대기 2분 | 논문 2분 [p.264] vs 원 코드 약 18초 | `S/17-fig6a-A-r1/fig6a.png` |
 | 6 | B+E kill 기준·puff 상한 | 논문 A≥M일 때 그 라운드 kill [p.264 Alg.1] vs 원 코드 11라운드 연속·0.8/0.9 기준 | `S/17-fig6a-BE-r1/fig6a.png` |
 | 7 | C 여유분 2GB | 논문 +2GB [p.264] vs 원 코드 ×1.1. 512MB는 shrink 반복 → 2GB | `S/17-fig6a-C2G-r1/fig6a.png` (+ `C512-r1` 비교) |
@@ -26,7 +27,7 @@
 | 13 | 왜 아직 다른가 | 역추적: 논문 KM 27GB에 묶임, 우리 KM 2배. G-3: 측정 차이 아님 (rss) | 진행률별 표 (`common/papers/fig6a-digitized.txt`) |
 | 14 | 정정 보고 | §7 + "PR이 마지막 종료" → 실제는 KM2가 약 66초 뒤 (역추적) | — |
 | 15 | 여쭐 것 | §8 | — |
-| 부록 | 단계별 4회 | | `F/grid-{A,BE,C512,C2G,F,G2}.png` |
+| 부록 | 단계별 4회 | | `F/grid-{14,A,BE,C512,C2G,F,G2}.png` |
 
 ## 흐름 (발표 메모)
 
