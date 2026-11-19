@@ -55,8 +55,8 @@
 # 사전: pagerank·kmeans prepare.sh, 각각 run.sh 1회 (report/<w>/spark/conf 생성)
 bash ~/legacy/setup/fig6a.sh 120            # → ~/hibench-logs/fig6a-<MMDD-HHMM>/
 # 맥에서 결과 가져와 그래프
-scp -r labvm:hibench-logs/fig6a-<MMDD-HHMM> original-hadoop2.7/x86-server/steps/09-fig6a/
-python3 original-hadoop2.7/setup/plot-fig6a.py original-hadoop2.7/x86-server/steps/09-fig6a
+scp -r labvm:hibench-logs/fig6a-<MMDD-HHMM> original-hadoop2.7/x86-server/runs/09-fig6a/
+python3 original-hadoop2.7/setup/plot-fig6a.py original-hadoop2.7/x86-server/runs/09-fig6a
 ```
 
 ## 4. 확인 포인트
@@ -67,9 +67,9 @@ grep -E "update container memory" nm.log      # puff·shrink 크기 변화
 cat events.log apps.txt                       # job별 종료·성공 여부
 ```
 
-## 5. 결과 (2026-11-01 17:46:00 시작, 결과 폴더 [09-fig6a/](09-fig6a/))
+## 5. 결과 (2026-11-01 17:46:00 시작, 결과 폴더 [../runs/09-fig6a/](../runs/09-fig6a/))
 
-![Fig 6(a) 재현](09-fig6a/fig6a.png)
+![Fig 6(a) 재현](../runs/09-fig6a/fig6a.png)
 
 - 실선 = 실제 사용량(cgroup `memory.usage`), 점선 = 컨테이너 크기(limit), × = kill 시점, ▼ = shrink(`slacking contianer detected` 뒤 1GB 이상 줄어든 것, 컨테이너 종료 앞뒤 15초 제외 — 9번. 1GB 미만까지 세면 31번). 1 = PR, 2 = KM1, 3 = KM2
 - 원본: `watch.log`(2초 간격), `nm.log`(실행 구간 NM 로그), `events.log`, `apps.txt` (`_0011` PR, `_0012` KM1, `_0013` KM2)

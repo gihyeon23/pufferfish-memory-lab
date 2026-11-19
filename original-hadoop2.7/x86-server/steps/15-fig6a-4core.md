@@ -10,14 +10,14 @@
 ## 조건
 
 - 14와 같음 (원 코드, 2초 주기, 제출 간격 0초, 최소 할당 1024, 입력 `pfq`). `--executor-cores`만 1 → 4
-- 실행: `CORES=4 bash ~/legacy/setup/fig6a.sh 0` → `15-fig6a-4core/`, `-r2/`, `-r3/`
+- 실행: `CORES=4 bash ~/legacy/setup/fig6a.sh 0` → `../runs/15-fig6a-4core/`, `-r2/`, `-r3/`
 - 11-06 3회차는 실행 1.5분 만에 VM이 다운돼 버림. 11-09에 다시 실행해 r3으로 기록
 
 ## 결과 [실측]
 
 | 4코어 | r2 | r3 |
 |---|---|---|
-| ![15](15-fig6a-4core/fig6a.png) | ![r2](15-fig6a-4core-r2/fig6a.png) | ![r3](15-fig6a-4core-r3/fig6a.png) |
+| ![15](../runs/15-fig6a-4core/fig6a.png) | ![r2](../runs/15-fig6a-4core-r2/fig6a.png) | ![r3](../runs/15-fig6a-4core-r3/fig6a.png) |
 
 | | 1코어 (14, 4회) | 4코어 (15, 3회) | 논문 |
 |---|---|---|---|

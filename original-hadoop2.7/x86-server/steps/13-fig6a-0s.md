@@ -14,7 +14,7 @@
 
 | 13 (256) | 14 (1024, 현재 설정) |
 |---|---|
-| ![13](13-fig6a-0s-min256/fig6a.png) | ![14](14-fig6a-0s/fig6a.png) |
+| ![13](../runs/13-fig6a-0s-min256/fig6a.png) | ![14](../runs/14-fig6a-0s/fig6a.png) |
 
 | | 12 (120초, 256) | 13 (0초, 256) | 14 (0초, 1024) | 논문 |
 |---|---|---|---|---|
@@ -45,7 +45,7 @@
 
 ## 반복 실행 — 14와 같은 조건 3회 더 (2026-11-06) [실측]
 
-- `for i in 1 2 3; do bash ~/legacy/setup/fig6a.sh 0; sleep 60; done` → `14-fig6a-0s-r2~r4/`, 지표는 `python3 setup/fig6a-metrics.py <폴더들>`
+- `for i in 1 2 3; do bash ~/legacy/setup/fig6a.sh 0; sleep 60; done` → `../runs/14-fig6a-0s-r2~r4/`, 지표는 `python3 setup/fig6a-metrics.py <폴더들>`
 
 | | 14 | r2 | r3 | r4 | 범위 |
 |---|---|---|---|---|---|
