@@ -125,7 +125,7 @@ grep -E "set to be|out of memory contianer|balloon|update container memory|Conta
 ### 결과 (2026-11-01, `application_1793511642822_0004`) — OCM → suspend → puff → shrink 관찰
 
 - 1차 시도(`_0003`) 실패: `spark-shell -i`가 줄 단위로 해석해서 `.map(...)`로 시작하는 줄이 `illegal start of definition` → 체인을 한 줄로 수정
-- 원본 기록: [06b-watch.log](06b-watch.log) (cgroup 2초 간격), [06b-nm.log](06b-nm.log) (NM 로그 발췌)
+- 원본 기록: [../runs/06-logs/06b-watch.log](../runs/06-logs/06b-watch.log) (cgroup 2초 간격), [../runs/06-logs/06b-nm.log](../runs/06-logs/06b-nm.log) (NM 로그 발췌)
 - Spark 출력: `[06b] cached 6000 MB in 30s`, `[06b] second pass 6000.0 MB in 0s`
 
 | 단계 | 관찰 [사실: 로그] | 원 코드 / 논문 |
@@ -191,7 +191,7 @@ ssh labvm 'cd ~; nohup bash legacy/setup/watch-containers.sh > 06c-watch.log 2>&
 
 ### 결과 (`application_1793511642822_0005`)
 
-- 원본: [06c-watch.log](06c-watch.log), [06c-nm.log](06c-nm.log)
+- 원본: [../runs/06-logs/06c-watch.log](../runs/06-logs/06c-watch.log), [../runs/06-logs/06c-nm.log](../runs/06-logs/06c-nm.log)
 - Spark 출력: `[06b] cached 6000 MB in 30s`, `[06b] second pass 6000 MB (byte sum 0) in 1s`
 
 | 시각 | 관찰 [사실: 로그] |

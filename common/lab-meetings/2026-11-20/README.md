@@ -7,7 +7,7 @@
 
 - PPT: [fig6a-paper-aligned.pptx](fig6a-paper-aligned.pptx) (26장, 발표자 노트 포함)
 
-경로: `S` = `original-hadoop2.7/x86-server/steps/`, `F` = 이 폴더 `fig/`. 대표 그래프 = r1, 4회 2×2는 부록
+경로: `R` = `original-hadoop2.7/x86-server/runs/`, `F` = 이 폴더 `fig/`. 대표 그래프 = r1, 4회 2×2는 부록
 
 | # | 슬라이드 | 내용 | 그림 |
 |---|---|---|---|
@@ -17,13 +17,13 @@
 | 3-2 | 차이 ② 환경·실험 조건 | 규모 축소·입력 크기·우리가 정한 값 10항목 | — |
 | 3 | 판단 지표 | 첫 kill, PR 첫 shrink, PR 종료, 전체 시간. 전체 대비 %로 보는 이유 (전체 길이가 다름) | — |
 | 4 | 논문 Fig 6(a) | 비교 기준 | `F/paper-fig6a.png` |
-| 4-1 | 출발점 14 (11-19 사용자 요청) | 지난 발표 마지막 그래프, 원 코드 4회: 첫 kill 10~13%, PR 첫 shrink 4~5%, kill 3~7 | `S/14-fig6a-0s/fig6a.png` |
-| 5 | A shrink 대기 2분 | 논문 2분 [p.264] vs 원 코드 약 18초 | `S/17-fig6a-A-r1/fig6a.png` |
-| 6 | B+E kill 기준·puff 상한 | 논문 A≥M일 때 그 라운드 kill [p.264 Alg.1] vs 원 코드 11라운드 연속·0.8/0.9 기준 | `S/17-fig6a-BE-r1/fig6a.png` |
-| 7 | C 여유분 2GB | 논문 +2GB [p.264] vs 원 코드 ×1.1. 512MB는 shrink 반복 → 2GB | `S/17-fig6a-C2G-r1/fig6a.png` (+ `C512-r1` 비교) |
+| 4-1 | 출발점 14 (11-19 사용자 요청) | 지난 발표 마지막 그래프, 원 코드 4회: 첫 kill 10~13%, PR 첫 shrink 4~5%, kill 3~7 | `R/14-fig6a-0s/fig6a.png` |
+| 5 | A shrink 대기 2분 | 논문 2분 [p.264] vs 원 코드 약 18초 | `R/17/A-r1/fig6a.png` |
+| 6 | B+E kill 기준·puff 상한 | 논문 A≥M일 때 그 라운드 kill [p.264 Alg.1] vs 원 코드 11라운드 연속·0.8/0.9 기준 | `R/17/BE-r1/fig6a.png` |
+| 7 | C 여유분 2GB | 논문 +2GB [p.264] vs 원 코드 ×1.1. 512MB는 shrink 반복 → 2GB | `R/17/C2G-r1/fig6a.png` (+ `C512-r1` 비교) |
 | 8 | D reclaim 대상 | 논문 최저 우선순위부터 [p.264] vs 균등 분할. Fig 6(a)에선 reclaim 안 돎 → 패치만 | — |
-| 9 | F 제출 간격 15초 | "one by one" [p.265]. 효과 없음 | `S/17-fig6a-F-r1/fig6a.png` |
-| 10 | G 메모리 수요 150% | 단독 실행으로 입력 맞춤 (PR 50%·KM 48%) → Fig 6(a) | `S/17-fig6a-G2-r1/fig6a.png` |
+| 9 | F 제출 간격 15초 | "one by one" [p.265]. 효과 없음 | `R/17/F-r1/fig6a.png` |
+| 10 | G 메모리 수요 150% | 단독 실행으로 입력 맞춤 (PR 50%·KM 48%) → Fig 6(a) | `R/17/G2-r1/fig6a.png` |
 | 11 | 결과 요약표 | 아래 §6 표 | — |
 | 12 | 논문 vs G-2 | 나란히 | `F/paper-vs-G2.png` |
 | 13 | 남은 차이 (11-19 쉽게 다시 씀) | KM1 최대 논문 28 vs 우리 58GB, KM2 18 vs 31GB. 원인: 논문 규칙상 낮은 우선순위는 suspend 유지 [p.263, 265], 우리는 PR이 OCM 적어 KM이 puff 받음 (puff PR 4·KM1 14·KM2 33), PR 증가 모양 차이 (추측) | 진행률별 표 (`common/papers/fig6a-digitized.txt`) |

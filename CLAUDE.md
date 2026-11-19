@@ -56,7 +56,7 @@ Management for Data-intensive Applications")의 OCM 감지/puff/reclaim 동작�
   - `reimpl-single-node/`: `reimpl-single-node/experiments/`에 단계 번호(`NN-짧은-이름.md`),
     `reimpl-single-node/experiments/README.md` 인덱스와 루트 `README.md` 표도 갱신
   - `reimpl-hadoop3/`: `steps/`에 단계 번호(`0N-*.md`)
-  - `original-hadoop2.7/`: 환경별 폴더(`arm-mac/` 연습, `x86-server/` 정식)의 `steps/`에 단계 번호. 두 환경 공통 스크립트·설정은 `setup/`
+  - `original-hadoop2.7/`: 환경별 폴더(`arm-mac/` 연습, `x86-server/` 정식)의 `steps/`에 단계 번호 문서(.md)만. 실행 결과 폴더는 `x86-server/runs/` (17단계는 `runs/17/<단계>-rN/`). 두 환경 공통 스크립트·설정은 `setup/`
 - **실험 기록(메인 길)과 랩미팅 발표 자료는 분리한다.**
   - 실험 기록: 위 패키지 폴더에 단계 번호로 계속 쌓는다.
   - 발표 자료: `common/lab-meetings/<랩미팅 날짜>/`에 그 주 요약·발표 메모·예상 질문을 둔다.

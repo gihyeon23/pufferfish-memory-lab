@@ -28,7 +28,7 @@
 - 적용: `bash ~/legacy/setup/patch-nm-timing.sh <패치된 java>` → NM 재시작 → `fig6a.sh 120`
 - 확인: 라운드 간격 중앙값 2.0초, OCM 제외까지 121~140초
 
-![Fig 6(a) 2초·2분](11-fig6a/fig6a.png)
+![Fig 6(a) 2초·2분](../runs/11-fig6a/fig6a.png)
 
 | | 09 (원 코드, 3초·18초) | 11 (2초·2분, 코드 수정) | 논문 |
 |---|---|---|---|

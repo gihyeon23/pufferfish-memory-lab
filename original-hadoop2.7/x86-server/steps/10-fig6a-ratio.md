@@ -48,12 +48,12 @@ HIBENCH_CONF_FOLDER=$H/conf-pf6a bash $H/bin/workloads/websearch/pagerank/prepar
 bash ~/legacy/setup/fig6a.sh 120          # KM 입력은 pfq 그대로
 ```
 
-## 5. 결과 (2026-11-02 11:34:37 시작, [10-fig6a-ratio/](10-fig6a-ratio/))
+## 5. 결과 (2026-11-02 11:34:37 시작, [../runs/10-fig6a-ratio/](../runs/10-fig6a-ratio/))
 
-![Fig 6(a) 비율 맞춤](10-fig6a-ratio/fig6a.png)
+![Fig 6(a) 비율 맞춤](../runs/10-fig6a-ratio/fig6a.png)
 
 - 실선 = 실제 사용량, 점선 = 컨테이너 크기, × = kill, ▼ = shrink(1GB 이상). 1 = PR(`_0020`), 2 = KM1(`_0021`), 3 = KM2(`_0022`)
-- 비교용 09 그래프: [09-fig6a/fig6a.png](09-fig6a/fig6a.png)
+- 비교용 09 그래프: [../runs/09-fig6a/fig6a.png](../runs/09-fig6a/fig6a.png)
 
 ### job 결과 [실측]
 
