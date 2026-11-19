@@ -1,0 +1,562 @@
+Warning: Master yarn-client is deprecated since 2.0. Please use master "yarn" with specified deploy mode instead.
+26/11/19 09:22:42 INFO spark.SparkContext: Running Spark version 2.0.1
+26/11/19 09:22:42 WARN util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+26/11/19 09:22:42 WARN util.Utils: Your hostname, ubuntu resolves to a loopback address: 127.0.1.1; using 192.168.133.4 instead (on interface ens3)
+26/11/19 09:22:42 WARN util.Utils: Set SPARK_LOCAL_IP if you need to bind to another address
+26/11/19 09:22:42 INFO spark.SecurityManager: Changing view acls to: inuos
+26/11/19 09:22:42 INFO spark.SecurityManager: Changing modify acls to: inuos
+26/11/19 09:22:42 INFO spark.SecurityManager: Changing view acls groups to: 
+26/11/19 09:22:42 INFO spark.SecurityManager: Changing modify acls groups to: 
+26/11/19 09:22:42 INFO spark.SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(inuos); groups with view permissions: Set(); users  with modify permissions: Set(inuos); groups with modify permissions: Set()
+26/11/19 09:22:43 INFO util.Utils: Successfully started service 'sparkDriver' on port 46787.
+26/11/19 09:22:43 INFO spark.SparkEnv: Registering MapOutputTracker
+26/11/19 09:22:43 INFO spark.SparkEnv: Registering BlockManagerMaster
+26/11/19 09:22:43 INFO storage.DiskBlockManager: Created local directory at /tmp/blockmgr-899ca9ed-6501-4589-b804-295682bd707e
+26/11/19 09:22:43 INFO memory.MemoryStore: MemoryStore started with capacity 366.3 MB
+26/11/19 09:22:43 INFO spark.SparkEnv: Registering OutputCommitCoordinator
+26/11/19 09:22:43 INFO util.log: Logging initialized @1788ms
+26/11/19 09:22:43 INFO server.Server: jetty-9.2.z-SNAPSHOT
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@fd0e5b6{/jobs,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@4eed46ee{/jobs/json,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@36b0fcd5{/jobs/job,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@4fad94a7{/jobs/job/json,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@475835b1{/stages,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@6326d182{/stages/json,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@5241cf67{/stages/stage,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@716a7124{/stages/stage/json,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@77192705{/stages/pool,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@226642a5{/stages/pool/json,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@7e809b79{/storage,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@5cc126dc{/storage/json,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@625e134e{/storage/rdd,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@72bd06ca{/storage/rdd/json,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@89c10b7{/environment,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@5dbe30be{/environment/json,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@4fe89c24{/executors,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@55795845{/executors/json,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@3d08f3f5{/executors/threadDump,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@119f1f2a{/executors/threadDump/json,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@1a1da881{/static,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@5b970f7{/,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@7fd4acee{/api,null,AVAILABLE}
+26/11/19 09:22:43 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@165b8a71{/stages/stage/kill,null,AVAILABLE}
+26/11/19 09:22:43 INFO server.ServerConnector: Started ServerConnector@51e4ccb3{HTTP/1.1}{0.0.0.0:4040}
+26/11/19 09:22:43 INFO server.Server: Started @1893ms
+26/11/19 09:22:43 INFO util.Utils: Successfully started service 'SparkUI' on port 4040.
+26/11/19 09:22:43 INFO ui.SparkUI: Bound SparkUI to 0.0.0.0, and started at http://192.168.133.4:4040
+26/11/19 09:22:43 INFO spark.SparkContext: Added JAR file:/opt/HiBench-6.0/sparkbench/assembly/target/sparkbench-assembly-6.0-dist.jar at spark://192.168.133.4:46787/jars/sparkbench-assembly-6.0-dist.jar with timestamp 1795047763605
+26/11/19 09:22:44 INFO client.RMProxy: Connecting to ResourceManager at ubuntu/127.0.1.1:8032
+26/11/19 09:22:44 INFO yarn.Client: Requesting a new application from cluster with 1 NodeManagers
+26/11/19 09:22:44 INFO yarn.Client: Verifying our application has not requested more than the maximum memory capability of the cluster (28672 MB per container)
+26/11/19 09:22:44 INFO yarn.Client: Will allocate AM container, with 896 MB memory including 384 MB overhead
+26/11/19 09:22:44 INFO yarn.Client: Setting up container launch context for our AM
+26/11/19 09:22:44 INFO yarn.Client: Setting up the launch environment for our AM container
+26/11/19 09:22:44 INFO yarn.Client: Preparing resources for our AM container
+26/11/19 09:22:44 WARN yarn.Client: Neither spark.yarn.jars nor spark.yarn.archive is set, falling back to uploading libraries under SPARK_HOME.
+26/11/19 09:22:46 INFO yarn.Client: Uploading resource file:/tmp/spark-7eef82eb-b42f-445b-8dfc-fa02963cad90/__spark_libs__8238875304430800927.zip -> hdfs://ubuntu:9000/user/inuos/.sparkStaging/application_1794543422643_0081/__spark_libs__8238875304430800927.zip
+26/11/19 09:22:47 INFO yarn.Client: Uploading resource file:/tmp/spark-7eef82eb-b42f-445b-8dfc-fa02963cad90/__spark_conf__8157828368781286598.zip -> hdfs://ubuntu:9000/user/inuos/.sparkStaging/application_1794543422643_0081/__spark_conf__.zip
+26/11/19 09:22:47 INFO spark.SecurityManager: Changing view acls to: inuos
+26/11/19 09:22:47 INFO spark.SecurityManager: Changing modify acls to: inuos
+26/11/19 09:22:47 INFO spark.SecurityManager: Changing view acls groups to: 
+26/11/19 09:22:47 INFO spark.SecurityManager: Changing modify acls groups to: 
+26/11/19 09:22:47 INFO spark.SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users  with view permissions: Set(inuos); groups with view permissions: Set(); users  with modify permissions: Set(inuos); groups with modify permissions: Set()
+26/11/19 09:22:47 INFO yarn.Client: Submitting application application_1794543422643_0081 to ResourceManager
+26/11/19 09:22:47 INFO impl.YarnClientImpl: Submitted application application_1794543422643_0081
+26/11/19 09:22:47 INFO cluster.SchedulerExtensionServices: Starting Yarn extension services with app application_1794543422643_0081 and attemptId None
+26/11/19 09:22:48 INFO yarn.Client: Application report for application_1794543422643_0081 (state: ACCEPTED)
+26/11/19 09:22:48 INFO yarn.Client: 
+	 client token: N/A
+	 diagnostics: N/A
+	 ApplicationMaster host: N/A
+	 ApplicationMaster RPC port: -1
+	 queue: default
+	 start time: 1795047767070
+	 final status: UNDEFINED
+	 tracking URL: http://ubuntu:8088/proxy/application_1794543422643_0081/
+	 user: inuos
+26/11/19 09:22:49 INFO yarn.Client: Application report for application_1794543422643_0081 (state: ACCEPTED)
+26/11/19 09:22:50 INFO yarn.Client: Application report for application_1794543422643_0081 (state: ACCEPTED)
+26/11/19 09:22:51 INFO yarn.Client: Application report for application_1794543422643_0081 (state: ACCEPTED)
+26/11/19 09:22:51 INFO cluster.YarnSchedulerBackend$YarnSchedulerEndpoint: ApplicationMaster registered as NettyRpcEndpointRef(null)
+26/11/19 09:22:51 INFO cluster.YarnClientSchedulerBackend: Add WebUI Filter. org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter, Map(PROXY_HOSTS -> ubuntu, PROXY_URI_BASES -> http://ubuntu:8088/proxy/application_1794543422643_0081), /proxy/application_1794543422643_0081
+26/11/19 09:22:51 INFO ui.JettyUtils: Adding filter: org.apache.hadoop.yarn.server.webproxy.amfilter.AmIpFilter
+26/11/19 09:22:52 INFO yarn.Client: Application report for application_1794543422643_0081 (state: RUNNING)
+26/11/19 09:22:52 INFO yarn.Client: 
+	 client token: N/A
+	 diagnostics: N/A
+	 ApplicationMaster host: 192.168.133.4
+	 ApplicationMaster RPC port: 0
+	 queue: default
+	 start time: 1795047767070
+	 final status: UNDEFINED
+	 tracking URL: http://ubuntu:8088/proxy/application_1794543422643_0081/
+	 user: inuos
+26/11/19 09:22:52 INFO cluster.YarnClientSchedulerBackend: Application application_1794543422643_0081 has started running.
+26/11/19 09:22:52 INFO util.Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 44109.
+26/11/19 09:22:52 INFO netty.NettyBlockTransferService: Server created on 192.168.133.4:44109
+26/11/19 09:22:52 INFO storage.BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 192.168.133.4, 44109)
+26/11/19 09:22:52 INFO storage.BlockManagerMasterEndpoint: Registering block manager 192.168.133.4:44109 with 366.3 MB RAM, BlockManagerId(driver, 192.168.133.4, 44109)
+26/11/19 09:22:52 INFO storage.BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 192.168.133.4, 44109)
+26/11/19 09:22:52 INFO handler.ContextHandler: Started o.s.j.s.ServletContextHandler@7efb53af{/metrics/json,null,AVAILABLE}
+26/11/19 09:22:56 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Registered executor NettyRpcEndpointRef(null) (192.168.133.4:34060) with ID 1
+26/11/19 09:22:56 INFO cluster.YarnClientSchedulerBackend: SchedulerBackend is ready for scheduling beginning after reached minRegisteredResourcesRatio: 0.8
+26/11/19 09:22:56 INFO storage.BlockManagerMasterEndpoint: Registering block manager ubuntu:42384 with 8.4 GB RAM, BlockManagerId(1, ubuntu, 42384)
+26/11/19 09:22:56 INFO memory.MemoryStore: Block broadcast_0 stored as values in memory (estimated size 288.0 KB, free 366.0 MB)
+26/11/19 09:22:56 INFO memory.MemoryStore: Block broadcast_0_piece0 stored as bytes in memory (estimated size 23.3 KB, free 366.0 MB)
+26/11/19 09:22:56 INFO storage.BlockManagerInfo: Added broadcast_0_piece0 in memory on 192.168.133.4:44109 (size: 23.3 KB, free: 366.3 MB)
+26/11/19 09:22:56 INFO spark.SparkContext: Created broadcast 0 from textFile at SparkPageRank.scala:53
+26/11/19 09:22:57 INFO mapred.FileInputFormat: Total input paths to process : 8
+26/11/19 09:22:57 INFO Configuration.deprecation: mapred.tip.id is deprecated. Instead, use mapreduce.task.id
+26/11/19 09:22:57 INFO Configuration.deprecation: mapred.task.id is deprecated. Instead, use mapreduce.task.attempt.id
+26/11/19 09:22:57 INFO Configuration.deprecation: mapred.task.is.map is deprecated. Instead, use mapreduce.task.ismap
+26/11/19 09:22:57 INFO Configuration.deprecation: mapred.task.partition is deprecated. Instead, use mapreduce.task.partition
+26/11/19 09:22:57 INFO Configuration.deprecation: mapred.job.id is deprecated. Instead, use mapreduce.job.id
+26/11/19 09:22:57 INFO output.FileOutputCommitter: File Output Committer Algorithm version is 1
+26/11/19 09:22:57 INFO spark.SparkContext: Starting job: saveAsHadoopFile at IOCommon.scala:63
+26/11/19 09:22:57 INFO scheduler.DAGScheduler: Registering RDD 3 (distinct at SparkPageRank.scala:58)
+26/11/19 09:22:57 INFO scheduler.DAGScheduler: Registering RDD 5 (distinct at SparkPageRank.scala:58)
+26/11/19 09:22:57 INFO scheduler.DAGScheduler: Registering RDD 12 (flatMap at SparkPageRank.scala:62)
+26/11/19 09:22:57 INFO scheduler.DAGScheduler: Registering RDD 19 (flatMap at SparkPageRank.scala:62)
+26/11/19 09:22:57 INFO scheduler.DAGScheduler: Registering RDD 26 (flatMap at SparkPageRank.scala:62)
+26/11/19 09:22:57 INFO scheduler.DAGScheduler: Got job 0 (saveAsHadoopFile at IOCommon.scala:63) with 16 output partitions
+26/11/19 09:22:57 INFO scheduler.DAGScheduler: Final stage: ResultStage 5 (saveAsHadoopFile at IOCommon.scala:63)
+26/11/19 09:22:57 INFO scheduler.DAGScheduler: Parents of final stage: List(ShuffleMapStage 4)
+26/11/19 09:22:57 INFO scheduler.DAGScheduler: Missing parents: List(ShuffleMapStage 4)
+26/11/19 09:22:57 INFO scheduler.DAGScheduler: Submitting ShuffleMapStage 0 (MapPartitionsRDD[3] at distinct at SparkPageRank.scala:58), which has no missing parents
+26/11/19 09:22:57 INFO memory.MemoryStore: Block broadcast_1 stored as values in memory (estimated size 4.1 KB, free 366.0 MB)
+26/11/19 09:22:57 INFO memory.MemoryStore: Block broadcast_1_piece0 stored as bytes in memory (estimated size 2.4 KB, free 366.0 MB)
+26/11/19 09:22:57 INFO storage.BlockManagerInfo: Added broadcast_1_piece0 in memory on 192.168.133.4:44109 (size: 2.4 KB, free: 366.3 MB)
+26/11/19 09:22:57 INFO spark.SparkContext: Created broadcast 1 from broadcast at DAGScheduler.scala:1012
+26/11/19 09:22:57 INFO scheduler.DAGScheduler: Submitting 16 missing tasks from ShuffleMapStage 0 (MapPartitionsRDD[3] at distinct at SparkPageRank.scala:58)
+26/11/19 09:22:57 INFO cluster.YarnScheduler: Adding task set 0.0 with 16 tasks
+26/11/19 09:22:57 INFO scheduler.TaskSetManager: Starting task 0.0 in stage 0.0 (TID 0, ubuntu, partition 0, NODE_LOCAL, 5512 bytes)
+26/11/19 09:22:57 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 0 on executor id: 1 hostname: ubuntu.
+26/11/19 09:22:58 INFO storage.BlockManagerInfo: Added broadcast_1_piece0 in memory on ubuntu:42384 (size: 2.4 KB, free: 8.4 GB)
+26/11/19 09:22:58 INFO storage.BlockManagerInfo: Added broadcast_0_piece0 in memory on ubuntu:42384 (size: 23.3 KB, free: 8.4 GB)
+26/11/19 09:24:43 INFO scheduler.TaskSetManager: Starting task 1.0 in stage 0.0 (TID 1, ubuntu, partition 1, NODE_LOCAL, 5512 bytes)
+26/11/19 09:24:43 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 1 on executor id: 1 hostname: ubuntu.
+26/11/19 09:24:43 INFO scheduler.TaskSetManager: Finished task 0.0 in stage 0.0 (TID 0) in 106043 ms on ubuntu (1/16)
+26/11/19 09:24:58 INFO scheduler.TaskSetManager: Starting task 2.0 in stage 0.0 (TID 2, ubuntu, partition 2, NODE_LOCAL, 5512 bytes)
+26/11/19 09:24:58 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 2 on executor id: 1 hostname: ubuntu.
+26/11/19 09:24:58 INFO scheduler.TaskSetManager: Finished task 1.0 in stage 0.0 (TID 1) in 14591 ms on ubuntu (2/16)
+26/11/19 09:26:07 INFO scheduler.TaskSetManager: Starting task 3.0 in stage 0.0 (TID 3, ubuntu, partition 3, NODE_LOCAL, 5512 bytes)
+26/11/19 09:26:07 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 3 on executor id: 1 hostname: ubuntu.
+26/11/19 09:26:07 INFO scheduler.TaskSetManager: Finished task 2.0 in stage 0.0 (TID 2) in 69367 ms on ubuntu (3/16)
+26/11/19 09:26:23 INFO scheduler.TaskSetManager: Starting task 4.0 in stage 0.0 (TID 4, ubuntu, partition 4, NODE_LOCAL, 5512 bytes)
+26/11/19 09:26:23 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 4 on executor id: 1 hostname: ubuntu.
+26/11/19 09:26:23 INFO scheduler.TaskSetManager: Finished task 3.0 in stage 0.0 (TID 3) in 15688 ms on ubuntu (4/16)
+26/11/19 09:27:18 INFO scheduler.TaskSetManager: Starting task 5.0 in stage 0.0 (TID 5, ubuntu, partition 5, NODE_LOCAL, 5512 bytes)
+26/11/19 09:27:18 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 5 on executor id: 1 hostname: ubuntu.
+26/11/19 09:27:18 INFO scheduler.TaskSetManager: Finished task 4.0 in stage 0.0 (TID 4) in 54747 ms on ubuntu (5/16)
+26/11/19 09:27:29 INFO scheduler.TaskSetManager: Starting task 6.0 in stage 0.0 (TID 6, ubuntu, partition 6, NODE_LOCAL, 5512 bytes)
+26/11/19 09:27:29 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 6 on executor id: 1 hostname: ubuntu.
+26/11/19 09:27:29 INFO scheduler.TaskSetManager: Finished task 5.0 in stage 0.0 (TID 5) in 11013 ms on ubuntu (6/16)
+26/11/19 09:28:28 INFO scheduler.TaskSetManager: Starting task 7.0 in stage 0.0 (TID 7, ubuntu, partition 7, NODE_LOCAL, 5512 bytes)
+26/11/19 09:28:28 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 7 on executor id: 1 hostname: ubuntu.
+26/11/19 09:28:28 INFO scheduler.TaskSetManager: Finished task 6.0 in stage 0.0 (TID 6) in 59603 ms on ubuntu (7/16)
+26/11/19 09:28:43 INFO scheduler.TaskSetManager: Starting task 8.0 in stage 0.0 (TID 8, ubuntu, partition 8, NODE_LOCAL, 5512 bytes)
+26/11/19 09:28:43 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 8 on executor id: 1 hostname: ubuntu.
+26/11/19 09:28:43 INFO scheduler.TaskSetManager: Finished task 7.0 in stage 0.0 (TID 7) in 14371 ms on ubuntu (8/16)
+26/11/19 09:29:37 INFO scheduler.TaskSetManager: Starting task 9.0 in stage 0.0 (TID 9, ubuntu, partition 9, NODE_LOCAL, 5512 bytes)
+26/11/19 09:29:37 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 9 on executor id: 1 hostname: ubuntu.
+26/11/19 09:29:37 INFO scheduler.TaskSetManager: Finished task 8.0 in stage 0.0 (TID 8) in 54843 ms on ubuntu (9/16)
+26/11/19 09:29:56 INFO scheduler.TaskSetManager: Starting task 10.0 in stage 0.0 (TID 10, ubuntu, partition 10, NODE_LOCAL, 5512 bytes)
+26/11/19 09:29:56 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 10 on executor id: 1 hostname: ubuntu.
+26/11/19 09:29:56 INFO scheduler.TaskSetManager: Finished task 9.0 in stage 0.0 (TID 9) in 18605 ms on ubuntu (10/16)
+26/11/19 09:31:01 INFO scheduler.TaskSetManager: Starting task 11.0 in stage 0.0 (TID 11, ubuntu, partition 11, NODE_LOCAL, 5512 bytes)
+26/11/19 09:31:01 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 11 on executor id: 1 hostname: ubuntu.
+26/11/19 09:31:01 INFO scheduler.TaskSetManager: Finished task 10.0 in stage 0.0 (TID 10) in 64992 ms on ubuntu (11/16)
+26/11/19 09:31:15 INFO scheduler.TaskSetManager: Starting task 12.0 in stage 0.0 (TID 12, ubuntu, partition 12, NODE_LOCAL, 5512 bytes)
+26/11/19 09:31:15 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 12 on executor id: 1 hostname: ubuntu.
+26/11/19 09:31:15 INFO scheduler.TaskSetManager: Finished task 11.0 in stage 0.0 (TID 11) in 14265 ms on ubuntu (12/16)
+26/11/19 09:32:11 INFO scheduler.TaskSetManager: Starting task 13.0 in stage 0.0 (TID 13, ubuntu, partition 13, NODE_LOCAL, 5512 bytes)
+26/11/19 09:32:11 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 13 on executor id: 1 hostname: ubuntu.
+26/11/19 09:32:11 INFO scheduler.TaskSetManager: Finished task 12.0 in stage 0.0 (TID 12) in 55820 ms on ubuntu (13/16)
+26/11/19 09:32:24 INFO scheduler.TaskSetManager: Starting task 14.0 in stage 0.0 (TID 14, ubuntu, partition 14, NODE_LOCAL, 5512 bytes)
+26/11/19 09:32:24 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 14 on executor id: 1 hostname: ubuntu.
+26/11/19 09:32:24 INFO scheduler.TaskSetManager: Finished task 13.0 in stage 0.0 (TID 13) in 13356 ms on ubuntu (14/16)
+26/11/19 09:33:23 INFO scheduler.TaskSetManager: Starting task 15.0 in stage 0.0 (TID 15, ubuntu, partition 15, NODE_LOCAL, 5512 bytes)
+26/11/19 09:33:23 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 15 on executor id: 1 hostname: ubuntu.
+26/11/19 09:33:23 INFO scheduler.TaskSetManager: Finished task 14.0 in stage 0.0 (TID 14) in 58482 ms on ubuntu (15/16)
+26/11/19 09:33:34 INFO scheduler.TaskSetManager: Finished task 15.0 in stage 0.0 (TID 15) in 11304 ms on ubuntu (16/16)
+26/11/19 09:33:34 INFO cluster.YarnScheduler: Removed TaskSet 0.0, whose tasks have all completed, from pool 
+26/11/19 09:33:34 INFO scheduler.DAGScheduler: ShuffleMapStage 0 (distinct at SparkPageRank.scala:58) finished in 637.051 s
+26/11/19 09:33:34 INFO scheduler.DAGScheduler: looking for newly runnable stages
+26/11/19 09:33:34 INFO scheduler.DAGScheduler: running: Set()
+26/11/19 09:33:34 INFO scheduler.DAGScheduler: waiting: Set(ShuffleMapStage 1, ResultStage 5, ShuffleMapStage 2, ShuffleMapStage 3, ShuffleMapStage 4)
+26/11/19 09:33:34 INFO scheduler.DAGScheduler: failed: Set()
+26/11/19 09:33:34 INFO scheduler.DAGScheduler: Submitting ShuffleMapStage 1 (MapPartitionsRDD[5] at distinct at SparkPageRank.scala:58), which has no missing parents
+26/11/19 09:33:34 INFO memory.MemoryStore: Block broadcast_2 stored as values in memory (estimated size 4.6 KB, free 366.0 MB)
+26/11/19 09:33:34 INFO memory.MemoryStore: Block broadcast_2_piece0 stored as bytes in memory (estimated size 2.5 KB, free 366.0 MB)
+26/11/19 09:33:34 INFO storage.BlockManagerInfo: Added broadcast_2_piece0 in memory on 192.168.133.4:44109 (size: 2.5 KB, free: 366.3 MB)
+26/11/19 09:33:34 INFO spark.SparkContext: Created broadcast 2 from broadcast at DAGScheduler.scala:1012
+26/11/19 09:33:34 INFO scheduler.DAGScheduler: Submitting 16 missing tasks from ShuffleMapStage 1 (MapPartitionsRDD[5] at distinct at SparkPageRank.scala:58)
+26/11/19 09:33:34 INFO cluster.YarnScheduler: Adding task set 1.0 with 16 tasks
+26/11/19 09:33:34 INFO scheduler.TaskSetManager: Starting task 0.0 in stage 1.0 (TID 16, ubuntu, partition 0, NODE_LOCAL, 5256 bytes)
+26/11/19 09:33:34 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 16 on executor id: 1 hostname: ubuntu.
+26/11/19 09:33:34 INFO storage.BlockManagerInfo: Added broadcast_2_piece0 in memory on ubuntu:42384 (size: 2.5 KB, free: 8.4 GB)
+26/11/19 09:33:34 INFO spark.MapOutputTrackerMasterEndpoint: Asked to send map output locations for shuffle 4 to 192.168.133.4:34060
+26/11/19 09:33:34 INFO spark.MapOutputTrackerMaster: Size of output statuses for shuffle 4 is 191 bytes
+26/11/19 09:33:47 INFO scheduler.TaskSetManager: Starting task 1.0 in stage 1.0 (TID 17, ubuntu, partition 1, NODE_LOCAL, 5256 bytes)
+26/11/19 09:33:47 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 17 on executor id: 1 hostname: ubuntu.
+26/11/19 09:33:47 INFO scheduler.TaskSetManager: Finished task 0.0 in stage 1.0 (TID 16) in 12689 ms on ubuntu (1/16)
+26/11/19 09:34:00 INFO scheduler.TaskSetManager: Starting task 2.0 in stage 1.0 (TID 18, ubuntu, partition 2, NODE_LOCAL, 5256 bytes)
+26/11/19 09:34:00 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 18 on executor id: 1 hostname: ubuntu.
+26/11/19 09:34:00 INFO scheduler.TaskSetManager: Finished task 1.0 in stage 1.0 (TID 17) in 12626 ms on ubuntu (2/16)
+26/11/19 09:34:13 INFO scheduler.TaskSetManager: Starting task 3.0 in stage 1.0 (TID 19, ubuntu, partition 3, NODE_LOCAL, 5256 bytes)
+26/11/19 09:34:13 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 19 on executor id: 1 hostname: ubuntu.
+26/11/19 09:34:13 INFO scheduler.TaskSetManager: Finished task 2.0 in stage 1.0 (TID 18) in 13055 ms on ubuntu (3/16)
+26/11/19 09:34:26 INFO scheduler.TaskSetManager: Starting task 4.0 in stage 1.0 (TID 20, ubuntu, partition 4, NODE_LOCAL, 5256 bytes)
+26/11/19 09:34:26 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 20 on executor id: 1 hostname: ubuntu.
+26/11/19 09:34:26 INFO scheduler.TaskSetManager: Finished task 3.0 in stage 1.0 (TID 19) in 13178 ms on ubuntu (4/16)
+26/11/19 09:34:38 INFO scheduler.TaskSetManager: Starting task 5.0 in stage 1.0 (TID 21, ubuntu, partition 5, NODE_LOCAL, 5256 bytes)
+26/11/19 09:34:38 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 21 on executor id: 1 hostname: ubuntu.
+26/11/19 09:34:38 INFO scheduler.TaskSetManager: Finished task 4.0 in stage 1.0 (TID 20) in 12430 ms on ubuntu (5/16)
+26/11/19 09:34:50 INFO scheduler.TaskSetManager: Starting task 6.0 in stage 1.0 (TID 22, ubuntu, partition 6, NODE_LOCAL, 5256 bytes)
+26/11/19 09:34:50 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 22 on executor id: 1 hostname: ubuntu.
+26/11/19 09:34:50 INFO scheduler.TaskSetManager: Finished task 5.0 in stage 1.0 (TID 21) in 11829 ms on ubuntu (6/16)
+26/11/19 09:35:02 INFO scheduler.TaskSetManager: Starting task 7.0 in stage 1.0 (TID 23, ubuntu, partition 7, NODE_LOCAL, 5256 bytes)
+26/11/19 09:35:02 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 23 on executor id: 1 hostname: ubuntu.
+26/11/19 09:35:02 INFO scheduler.TaskSetManager: Finished task 6.0 in stage 1.0 (TID 22) in 12040 ms on ubuntu (7/16)
+26/11/19 09:35:13 INFO scheduler.TaskSetManager: Starting task 8.0 in stage 1.0 (TID 24, ubuntu, partition 8, NODE_LOCAL, 5256 bytes)
+26/11/19 09:35:13 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 24 on executor id: 1 hostname: ubuntu.
+26/11/19 09:35:13 INFO scheduler.TaskSetManager: Finished task 7.0 in stage 1.0 (TID 23) in 11435 ms on ubuntu (8/16)
+26/11/19 09:35:27 INFO scheduler.TaskSetManager: Starting task 9.0 in stage 1.0 (TID 25, ubuntu, partition 9, NODE_LOCAL, 5256 bytes)
+26/11/19 09:35:27 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 25 on executor id: 1 hostname: ubuntu.
+26/11/19 09:35:27 INFO scheduler.TaskSetManager: Finished task 8.0 in stage 1.0 (TID 24) in 13285 ms on ubuntu (9/16)
+26/11/19 09:35:39 INFO scheduler.TaskSetManager: Starting task 10.0 in stage 1.0 (TID 26, ubuntu, partition 10, NODE_LOCAL, 5256 bytes)
+26/11/19 09:35:39 INFO scheduler.TaskSetManager: Finished task 9.0 in stage 1.0 (TID 25) in 11824 ms on ubuntu (10/16)
+26/11/19 09:35:39 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 26 on executor id: 1 hostname: ubuntu.
+26/11/19 09:35:56 INFO scheduler.TaskSetManager: Starting task 11.0 in stage 1.0 (TID 27, ubuntu, partition 11, NODE_LOCAL, 5256 bytes)
+26/11/19 09:35:56 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 27 on executor id: 1 hostname: ubuntu.
+26/11/19 09:35:56 INFO scheduler.TaskSetManager: Finished task 10.0 in stage 1.0 (TID 26) in 17427 ms on ubuntu (11/16)
+26/11/19 09:36:09 INFO scheduler.TaskSetManager: Starting task 12.0 in stage 1.0 (TID 28, ubuntu, partition 12, NODE_LOCAL, 5256 bytes)
+26/11/19 09:36:09 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 28 on executor id: 1 hostname: ubuntu.
+26/11/19 09:36:09 INFO scheduler.TaskSetManager: Finished task 11.0 in stage 1.0 (TID 27) in 12712 ms on ubuntu (12/16)
+26/11/19 09:36:22 INFO scheduler.TaskSetManager: Starting task 13.0 in stage 1.0 (TID 29, ubuntu, partition 13, NODE_LOCAL, 5256 bytes)
+26/11/19 09:36:22 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 29 on executor id: 1 hostname: ubuntu.
+26/11/19 09:36:22 INFO scheduler.TaskSetManager: Finished task 12.0 in stage 1.0 (TID 28) in 12776 ms on ubuntu (13/16)
+26/11/19 09:36:34 INFO scheduler.TaskSetManager: Starting task 14.0 in stage 1.0 (TID 30, ubuntu, partition 14, NODE_LOCAL, 5256 bytes)
+26/11/19 09:36:34 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 30 on executor id: 1 hostname: ubuntu.
+26/11/19 09:36:34 INFO scheduler.TaskSetManager: Finished task 13.0 in stage 1.0 (TID 29) in 12562 ms on ubuntu (14/16)
+26/11/19 09:36:47 INFO scheduler.TaskSetManager: Starting task 15.0 in stage 1.0 (TID 31, ubuntu, partition 15, NODE_LOCAL, 5256 bytes)
+26/11/19 09:36:47 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 31 on executor id: 1 hostname: ubuntu.
+26/11/19 09:36:47 INFO scheduler.TaskSetManager: Finished task 14.0 in stage 1.0 (TID 30) in 12666 ms on ubuntu (15/16)
+26/11/19 09:37:01 INFO scheduler.TaskSetManager: Finished task 15.0 in stage 1.0 (TID 31) in 14251 ms on ubuntu (16/16)
+26/11/19 09:37:01 INFO cluster.YarnScheduler: Removed TaskSet 1.0, whose tasks have all completed, from pool 
+26/11/19 09:37:01 INFO scheduler.DAGScheduler: ShuffleMapStage 1 (distinct at SparkPageRank.scala:58) finished in 206.757 s
+26/11/19 09:37:01 INFO scheduler.DAGScheduler: looking for newly runnable stages
+26/11/19 09:37:01 INFO scheduler.DAGScheduler: running: Set()
+26/11/19 09:37:01 INFO scheduler.DAGScheduler: waiting: Set(ResultStage 5, ShuffleMapStage 2, ShuffleMapStage 3, ShuffleMapStage 4)
+26/11/19 09:37:01 INFO scheduler.DAGScheduler: failed: Set()
+26/11/19 09:37:01 INFO scheduler.DAGScheduler: Submitting ShuffleMapStage 2 (MapPartitionsRDD[12] at flatMap at SparkPageRank.scala:62), which has no missing parents
+26/11/19 09:37:01 INFO memory.MemoryStore: Block broadcast_3 stored as values in memory (estimated size 6.5 KB, free 366.0 MB)
+26/11/19 09:37:01 INFO memory.MemoryStore: Block broadcast_3_piece0 stored as bytes in memory (estimated size 3.2 KB, free 366.0 MB)
+26/11/19 09:37:01 INFO storage.BlockManagerInfo: Added broadcast_3_piece0 in memory on 192.168.133.4:44109 (size: 3.2 KB, free: 366.3 MB)
+26/11/19 09:37:01 INFO spark.SparkContext: Created broadcast 3 from broadcast at DAGScheduler.scala:1012
+26/11/19 09:37:01 INFO scheduler.DAGScheduler: Submitting 16 missing tasks from ShuffleMapStage 2 (MapPartitionsRDD[12] at flatMap at SparkPageRank.scala:62)
+26/11/19 09:37:01 INFO cluster.YarnScheduler: Adding task set 2.0 with 16 tasks
+26/11/19 09:37:01 INFO scheduler.TaskSetManager: Starting task 0.0 in stage 2.0 (TID 32, ubuntu, partition 0, NODE_LOCAL, 5486 bytes)
+26/11/19 09:37:01 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 32 on executor id: 1 hostname: ubuntu.
+26/11/19 09:37:01 INFO storage.BlockManagerInfo: Added broadcast_3_piece0 in memory on ubuntu:42384 (size: 3.2 KB, free: 8.4 GB)
+26/11/19 09:37:01 INFO spark.MapOutputTrackerMasterEndpoint: Asked to send map output locations for shuffle 3 to 192.168.133.4:34060
+26/11/19 09:37:01 INFO spark.MapOutputTrackerMaster: Size of output statuses for shuffle 3 is 150 bytes
+26/11/19 09:37:07 INFO storage.BlockManagerInfo: Added rdd_6_0 in memory on ubuntu:42384 (size: 355.6 MB, free: 8.0 GB)
+26/11/19 09:37:21 INFO scheduler.TaskSetManager: Starting task 1.0 in stage 2.0 (TID 33, ubuntu, partition 1, NODE_LOCAL, 5486 bytes)
+26/11/19 09:37:21 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 33 on executor id: 1 hostname: ubuntu.
+26/11/19 09:37:21 INFO scheduler.TaskSetManager: Finished task 0.0 in stage 2.0 (TID 32) in 19778 ms on ubuntu (1/16)
+26/11/19 09:37:26 INFO storage.BlockManagerInfo: Added rdd_6_1 in memory on ubuntu:42384 (size: 356.4 MB, free: 7.7 GB)
+26/11/19 09:37:41 INFO scheduler.TaskSetManager: Starting task 2.0 in stage 2.0 (TID 34, ubuntu, partition 2, NODE_LOCAL, 5486 bytes)
+26/11/19 09:37:41 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 34 on executor id: 1 hostname: ubuntu.
+26/11/19 09:37:41 INFO scheduler.TaskSetManager: Finished task 1.0 in stage 2.0 (TID 33) in 20103 ms on ubuntu (2/16)
+26/11/19 09:37:46 INFO storage.BlockManagerInfo: Added rdd_6_2 in memory on ubuntu:42384 (size: 360.8 MB, free: 7.3 GB)
+26/11/19 09:38:01 INFO scheduler.TaskSetManager: Starting task 3.0 in stage 2.0 (TID 35, ubuntu, partition 3, NODE_LOCAL, 5486 bytes)
+26/11/19 09:38:01 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 35 on executor id: 1 hostname: ubuntu.
+26/11/19 09:38:01 INFO scheduler.TaskSetManager: Finished task 2.0 in stage 2.0 (TID 34) in 19937 ms on ubuntu (3/16)
+26/11/19 09:38:08 INFO storage.BlockManagerInfo: Added rdd_6_3 in memory on ubuntu:42384 (size: 353.6 MB, free: 7.0 GB)
+26/11/19 09:38:25 INFO scheduler.TaskSetManager: Starting task 4.0 in stage 2.0 (TID 36, ubuntu, partition 4, NODE_LOCAL, 5486 bytes)
+26/11/19 09:38:25 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 36 on executor id: 1 hostname: ubuntu.
+26/11/19 09:38:25 INFO scheduler.TaskSetManager: Finished task 3.0 in stage 2.0 (TID 35) in 23989 ms on ubuntu (4/16)
+26/11/19 09:38:34 INFO storage.BlockManagerInfo: Added rdd_6_4 in memory on ubuntu:42384 (size: 355.0 MB, free: 6.6 GB)
+26/11/19 09:38:49 INFO scheduler.TaskSetManager: Starting task 5.0 in stage 2.0 (TID 37, ubuntu, partition 5, NODE_LOCAL, 5486 bytes)
+26/11/19 09:38:49 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 37 on executor id: 1 hostname: ubuntu.
+26/11/19 09:38:49 INFO scheduler.TaskSetManager: Finished task 4.0 in stage 2.0 (TID 36) in 24044 ms on ubuntu (5/16)
+26/11/19 09:38:55 INFO storage.BlockManagerInfo: Added rdd_6_5 in memory on ubuntu:42384 (size: 350.9 MB, free: 6.3 GB)
+26/11/19 09:39:09 INFO scheduler.TaskSetManager: Starting task 6.0 in stage 2.0 (TID 38, ubuntu, partition 6, NODE_LOCAL, 5486 bytes)
+26/11/19 09:39:09 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 38 on executor id: 1 hostname: ubuntu.
+26/11/19 09:39:09 INFO scheduler.TaskSetManager: Finished task 5.0 in stage 2.0 (TID 37) in 19844 ms on ubuntu (6/16)
+26/11/19 09:39:15 INFO storage.BlockManagerInfo: Added rdd_6_6 in memory on ubuntu:42384 (size: 346.9 MB, free: 5.9 GB)
+26/11/19 09:39:28 INFO scheduler.TaskSetManager: Starting task 7.0 in stage 2.0 (TID 39, ubuntu, partition 7, NODE_LOCAL, 5486 bytes)
+26/11/19 09:39:28 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 39 on executor id: 1 hostname: ubuntu.
+26/11/19 09:39:28 INFO scheduler.TaskSetManager: Finished task 6.0 in stage 2.0 (TID 38) in 19632 ms on ubuntu (7/16)
+26/11/19 09:39:34 INFO storage.BlockManagerInfo: Added rdd_6_7 in memory on ubuntu:42384 (size: 347.7 MB, free: 5.6 GB)
+26/11/19 09:39:48 INFO scheduler.TaskSetManager: Starting task 8.0 in stage 2.0 (TID 40, ubuntu, partition 8, NODE_LOCAL, 5486 bytes)
+26/11/19 09:39:48 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 40 on executor id: 1 hostname: ubuntu.
+26/11/19 09:39:48 INFO scheduler.TaskSetManager: Finished task 7.0 in stage 2.0 (TID 39) in 19847 ms on ubuntu (8/16)
+26/11/19 09:39:54 INFO storage.BlockManagerInfo: Added rdd_6_8 in memory on ubuntu:42384 (size: 335.5 MB, free: 5.3 GB)
+26/11/19 09:40:08 INFO scheduler.TaskSetManager: Starting task 9.0 in stage 2.0 (TID 41, ubuntu, partition 9, NODE_LOCAL, 5486 bytes)
+26/11/19 09:40:08 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 41 on executor id: 1 hostname: ubuntu.
+26/11/19 09:40:08 INFO scheduler.TaskSetManager: Finished task 8.0 in stage 2.0 (TID 40) in 20141 ms on ubuntu (9/16)
+26/11/19 09:40:13 INFO storage.BlockManagerInfo: Added rdd_6_9 in memory on ubuntu:42384 (size: 344.1 MB, free: 4.9 GB)
+26/11/19 09:40:25 INFO scheduler.TaskSetManager: Starting task 10.0 in stage 2.0 (TID 42, ubuntu, partition 10, NODE_LOCAL, 5486 bytes)
+26/11/19 09:40:25 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 42 on executor id: 1 hostname: ubuntu.
+26/11/19 09:40:25 INFO scheduler.TaskSetManager: Finished task 9.0 in stage 2.0 (TID 41) in 17104 ms on ubuntu (10/16)
+26/11/19 09:40:31 INFO storage.BlockManagerInfo: Added rdd_6_10 in memory on ubuntu:42384 (size: 346.0 MB, free: 4.6 GB)
+26/11/19 09:40:42 INFO scheduler.TaskSetManager: Starting task 11.0 in stage 2.0 (TID 43, ubuntu, partition 11, NODE_LOCAL, 5486 bytes)
+26/11/19 09:40:42 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 43 on executor id: 1 hostname: ubuntu.
+26/11/19 09:40:42 INFO scheduler.TaskSetManager: Finished task 10.0 in stage 2.0 (TID 42) in 16964 ms on ubuntu (11/16)
+26/11/19 09:40:48 INFO storage.BlockManagerInfo: Added rdd_6_11 in memory on ubuntu:42384 (size: 341.7 MB, free: 4.3 GB)
+26/11/19 09:41:01 INFO scheduler.TaskSetManager: Starting task 12.0 in stage 2.0 (TID 44, ubuntu, partition 12, NODE_LOCAL, 5486 bytes)
+26/11/19 09:41:01 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 44 on executor id: 1 hostname: ubuntu.
+26/11/19 09:41:01 INFO scheduler.TaskSetManager: Finished task 11.0 in stage 2.0 (TID 43) in 18768 ms on ubuntu (12/16)
+26/11/19 09:41:07 INFO storage.BlockManagerInfo: Added rdd_6_12 in memory on ubuntu:42384 (size: 350.8 MB, free: 3.9 GB)
+26/11/19 09:41:21 INFO scheduler.TaskSetManager: Starting task 13.0 in stage 2.0 (TID 45, ubuntu, partition 13, NODE_LOCAL, 5486 bytes)
+26/11/19 09:41:21 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 45 on executor id: 1 hostname: ubuntu.
+26/11/19 09:41:21 INFO scheduler.TaskSetManager: Finished task 12.0 in stage 2.0 (TID 44) in 20018 ms on ubuntu (13/16)
+26/11/19 09:41:32 INFO storage.BlockManagerInfo: Added rdd_6_13 in memory on ubuntu:42384 (size: 346.7 MB, free: 3.6 GB)
+26/11/19 09:41:45 INFO scheduler.TaskSetManager: Starting task 14.0 in stage 2.0 (TID 46, ubuntu, partition 14, NODE_LOCAL, 5486 bytes)
+26/11/19 09:41:45 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 46 on executor id: 1 hostname: ubuntu.
+26/11/19 09:41:45 INFO scheduler.TaskSetManager: Finished task 13.0 in stage 2.0 (TID 45) in 23871 ms on ubuntu (14/16)
+26/11/19 09:41:52 INFO storage.BlockManagerInfo: Added rdd_6_14 in memory on ubuntu:42384 (size: 357.4 MB, free: 3.2 GB)
+26/11/19 09:42:08 INFO scheduler.TaskSetManager: Starting task 15.0 in stage 2.0 (TID 47, ubuntu, partition 15, NODE_LOCAL, 5486 bytes)
+26/11/19 09:42:08 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 47 on executor id: 1 hostname: ubuntu.
+26/11/19 09:42:08 INFO scheduler.TaskSetManager: Finished task 14.0 in stage 2.0 (TID 46) in 22629 ms on ubuntu (15/16)
+26/11/19 09:42:14 INFO storage.BlockManagerInfo: Added rdd_6_15 in memory on ubuntu:42384 (size: 356.1 MB, free: 2.9 GB)
+26/11/19 09:42:29 INFO scheduler.TaskSetManager: Finished task 15.0 in stage 2.0 (TID 47) in 21130 ms on ubuntu (16/16)
+26/11/19 09:42:29 INFO cluster.YarnScheduler: Removed TaskSet 2.0, whose tasks have all completed, from pool 
+26/11/19 09:42:29 INFO scheduler.DAGScheduler: ShuffleMapStage 2 (flatMap at SparkPageRank.scala:62) finished in 327.766 s
+26/11/19 09:42:29 INFO scheduler.DAGScheduler: looking for newly runnable stages
+26/11/19 09:42:29 INFO scheduler.DAGScheduler: running: Set()
+26/11/19 09:42:29 INFO scheduler.DAGScheduler: waiting: Set(ResultStage 5, ShuffleMapStage 3, ShuffleMapStage 4)
+26/11/19 09:42:29 INFO scheduler.DAGScheduler: failed: Set()
+26/11/19 09:42:29 INFO scheduler.DAGScheduler: Submitting ShuffleMapStage 3 (MapPartitionsRDD[19] at flatMap at SparkPageRank.scala:62), which has no missing parents
+26/11/19 09:42:29 INFO memory.MemoryStore: Block broadcast_4 stored as values in memory (estimated size 6.8 KB, free 366.0 MB)
+26/11/19 09:42:29 INFO memory.MemoryStore: Block broadcast_4_piece0 stored as bytes in memory (estimated size 3.4 KB, free 366.0 MB)
+26/11/19 09:42:29 INFO storage.BlockManagerInfo: Added broadcast_4_piece0 in memory on 192.168.133.4:44109 (size: 3.4 KB, free: 366.3 MB)
+26/11/19 09:42:29 INFO spark.SparkContext: Created broadcast 4 from broadcast at DAGScheduler.scala:1012
+26/11/19 09:42:29 INFO scheduler.DAGScheduler: Submitting 16 missing tasks from ShuffleMapStage 3 (MapPartitionsRDD[19] at flatMap at SparkPageRank.scala:62)
+26/11/19 09:42:29 INFO cluster.YarnScheduler: Adding task set 3.0 with 16 tasks
+26/11/19 09:42:29 INFO scheduler.TaskSetManager: Starting task 0.0 in stage 3.0 (TID 48, ubuntu, partition 0, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:42:29 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 48 on executor id: 1 hostname: ubuntu.
+26/11/19 09:42:29 INFO storage.BlockManagerInfo: Added broadcast_4_piece0 in memory on ubuntu:42384 (size: 3.4 KB, free: 2.9 GB)
+26/11/19 09:42:29 INFO spark.MapOutputTrackerMasterEndpoint: Asked to send map output locations for shuffle 2 to 192.168.133.4:34060
+26/11/19 09:42:29 INFO spark.MapOutputTrackerMaster: Size of output statuses for shuffle 2 is 150 bytes
+26/11/19 09:42:46 INFO scheduler.TaskSetManager: Starting task 1.0 in stage 3.0 (TID 49, ubuntu, partition 1, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:42:46 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 49 on executor id: 1 hostname: ubuntu.
+26/11/19 09:42:46 INFO scheduler.TaskSetManager: Finished task 0.0 in stage 3.0 (TID 48) in 17256 ms on ubuntu (1/16)
+26/11/19 09:43:07 INFO scheduler.TaskSetManager: Starting task 2.0 in stage 3.0 (TID 50, ubuntu, partition 2, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:43:07 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 50 on executor id: 1 hostname: ubuntu.
+26/11/19 09:43:07 INFO scheduler.TaskSetManager: Finished task 1.0 in stage 3.0 (TID 49) in 21355 ms on ubuntu (2/16)
+26/11/19 09:43:28 INFO scheduler.TaskSetManager: Starting task 3.0 in stage 3.0 (TID 51, ubuntu, partition 3, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:43:28 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 51 on executor id: 1 hostname: ubuntu.
+26/11/19 09:43:28 INFO scheduler.TaskSetManager: Finished task 2.0 in stage 3.0 (TID 50) in 20909 ms on ubuntu (3/16)
+26/11/19 09:43:42 INFO scheduler.TaskSetManager: Starting task 4.0 in stage 3.0 (TID 52, ubuntu, partition 4, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:43:42 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 52 on executor id: 1 hostname: ubuntu.
+26/11/19 09:43:42 INFO scheduler.TaskSetManager: Finished task 3.0 in stage 3.0 (TID 51) in 13960 ms on ubuntu (4/16)
+26/11/19 09:43:57 INFO scheduler.TaskSetManager: Starting task 5.0 in stage 3.0 (TID 53, ubuntu, partition 5, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:43:57 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 53 on executor id: 1 hostname: ubuntu.
+26/11/19 09:43:57 INFO scheduler.TaskSetManager: Finished task 4.0 in stage 3.0 (TID 52) in 15207 ms on ubuntu (5/16)
+26/11/19 09:44:13 INFO scheduler.TaskSetManager: Starting task 6.0 in stage 3.0 (TID 54, ubuntu, partition 6, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:44:13 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 54 on executor id: 1 hostname: ubuntu.
+26/11/19 09:44:13 INFO scheduler.TaskSetManager: Finished task 5.0 in stage 3.0 (TID 53) in 15251 ms on ubuntu (6/16)
+26/11/19 09:44:26 INFO scheduler.TaskSetManager: Starting task 7.0 in stage 3.0 (TID 55, ubuntu, partition 7, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:44:26 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 55 on executor id: 1 hostname: ubuntu.
+26/11/19 09:44:26 INFO scheduler.TaskSetManager: Finished task 6.0 in stage 3.0 (TID 54) in 12802 ms on ubuntu (7/16)
+26/11/19 09:44:38 INFO scheduler.TaskSetManager: Starting task 8.0 in stage 3.0 (TID 56, ubuntu, partition 8, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:44:38 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 56 on executor id: 1 hostname: ubuntu.
+26/11/19 09:44:38 INFO scheduler.TaskSetManager: Finished task 7.0 in stage 3.0 (TID 55) in 11961 ms on ubuntu (8/16)
+26/11/19 09:44:52 INFO scheduler.TaskSetManager: Starting task 9.0 in stage 3.0 (TID 57, ubuntu, partition 9, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:44:52 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 57 on executor id: 1 hostname: ubuntu.
+26/11/19 09:44:52 INFO scheduler.TaskSetManager: Finished task 8.0 in stage 3.0 (TID 56) in 14540 ms on ubuntu (9/16)
+26/11/19 09:45:06 INFO scheduler.TaskSetManager: Starting task 10.0 in stage 3.0 (TID 58, ubuntu, partition 10, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:45:06 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 58 on executor id: 1 hostname: ubuntu.
+26/11/19 09:45:06 INFO scheduler.TaskSetManager: Finished task 9.0 in stage 3.0 (TID 57) in 14282 ms on ubuntu (10/16)
+26/11/19 09:45:18 INFO scheduler.TaskSetManager: Starting task 11.0 in stage 3.0 (TID 59, ubuntu, partition 11, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:45:18 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 59 on executor id: 1 hostname: ubuntu.
+26/11/19 09:45:18 INFO scheduler.TaskSetManager: Finished task 10.0 in stage 3.0 (TID 58) in 11923 ms on ubuntu (11/16)
+26/11/19 09:45:32 INFO scheduler.TaskSetManager: Starting task 12.0 in stage 3.0 (TID 60, ubuntu, partition 12, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:45:32 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 60 on executor id: 1 hostname: ubuntu.
+26/11/19 09:45:32 INFO scheduler.TaskSetManager: Finished task 11.0 in stage 3.0 (TID 59) in 13507 ms on ubuntu (12/16)
+26/11/19 09:45:45 INFO scheduler.TaskSetManager: Starting task 13.0 in stage 3.0 (TID 61, ubuntu, partition 13, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:45:45 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 61 on executor id: 1 hostname: ubuntu.
+26/11/19 09:45:45 INFO scheduler.TaskSetManager: Finished task 12.0 in stage 3.0 (TID 60) in 13392 ms on ubuntu (13/16)
+26/11/19 09:45:58 INFO scheduler.TaskSetManager: Starting task 14.0 in stage 3.0 (TID 62, ubuntu, partition 14, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:45:58 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 62 on executor id: 1 hostname: ubuntu.
+26/11/19 09:45:58 INFO scheduler.TaskSetManager: Finished task 13.0 in stage 3.0 (TID 61) in 12615 ms on ubuntu (14/16)
+26/11/19 09:46:10 INFO scheduler.TaskSetManager: Starting task 15.0 in stage 3.0 (TID 63, ubuntu, partition 15, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:46:10 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 63 on executor id: 1 hostname: ubuntu.
+26/11/19 09:46:10 INFO scheduler.TaskSetManager: Finished task 14.0 in stage 3.0 (TID 62) in 11962 ms on ubuntu (15/16)
+26/11/19 09:46:23 INFO scheduler.TaskSetManager: Finished task 15.0 in stage 3.0 (TID 63) in 13146 ms on ubuntu (16/16)
+26/11/19 09:46:23 INFO cluster.YarnScheduler: Removed TaskSet 3.0, whose tasks have all completed, from pool 
+26/11/19 09:46:23 INFO scheduler.DAGScheduler: ShuffleMapStage 3 (flatMap at SparkPageRank.scala:62) finished in 234.037 s
+26/11/19 09:46:23 INFO scheduler.DAGScheduler: looking for newly runnable stages
+26/11/19 09:46:23 INFO scheduler.DAGScheduler: running: Set()
+26/11/19 09:46:23 INFO scheduler.DAGScheduler: waiting: Set(ResultStage 5, ShuffleMapStage 4)
+26/11/19 09:46:23 INFO scheduler.DAGScheduler: failed: Set()
+26/11/19 09:46:23 INFO scheduler.DAGScheduler: Submitting ShuffleMapStage 4 (MapPartitionsRDD[26] at flatMap at SparkPageRank.scala:62), which has no missing parents
+26/11/19 09:46:23 INFO memory.MemoryStore: Block broadcast_5 stored as values in memory (estimated size 6.8 KB, free 366.0 MB)
+26/11/19 09:46:23 INFO memory.MemoryStore: Block broadcast_5_piece0 stored as bytes in memory (estimated size 3.4 KB, free 366.0 MB)
+26/11/19 09:46:23 INFO storage.BlockManagerInfo: Added broadcast_5_piece0 in memory on 192.168.133.4:44109 (size: 3.4 KB, free: 366.3 MB)
+26/11/19 09:46:23 INFO spark.SparkContext: Created broadcast 5 from broadcast at DAGScheduler.scala:1012
+26/11/19 09:46:23 INFO scheduler.DAGScheduler: Submitting 16 missing tasks from ShuffleMapStage 4 (MapPartitionsRDD[26] at flatMap at SparkPageRank.scala:62)
+26/11/19 09:46:23 INFO cluster.YarnScheduler: Adding task set 4.0 with 16 tasks
+26/11/19 09:46:23 INFO scheduler.TaskSetManager: Starting task 0.0 in stage 4.0 (TID 64, ubuntu, partition 0, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:46:23 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 64 on executor id: 1 hostname: ubuntu.
+26/11/19 09:46:23 INFO storage.BlockManagerInfo: Added broadcast_5_piece0 in memory on ubuntu:42384 (size: 3.4 KB, free: 2.9 GB)
+26/11/19 09:46:23 INFO spark.MapOutputTrackerMasterEndpoint: Asked to send map output locations for shuffle 1 to 192.168.133.4:34060
+26/11/19 09:46:23 INFO spark.MapOutputTrackerMaster: Size of output statuses for shuffle 1 is 150 bytes
+26/11/19 09:46:37 INFO scheduler.TaskSetManager: Starting task 1.0 in stage 4.0 (TID 65, ubuntu, partition 1, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:46:37 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 65 on executor id: 1 hostname: ubuntu.
+26/11/19 09:46:37 INFO scheduler.TaskSetManager: Finished task 0.0 in stage 4.0 (TID 64) in 13867 ms on ubuntu (1/16)
+26/11/19 09:46:49 INFO scheduler.TaskSetManager: Starting task 2.0 in stage 4.0 (TID 66, ubuntu, partition 2, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:46:49 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 66 on executor id: 1 hostname: ubuntu.
+26/11/19 09:46:49 INFO scheduler.TaskSetManager: Finished task 1.0 in stage 4.0 (TID 65) in 12737 ms on ubuntu (2/16)
+26/11/19 09:47:04 INFO scheduler.TaskSetManager: Starting task 3.0 in stage 4.0 (TID 67, ubuntu, partition 3, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:47:04 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 67 on executor id: 1 hostname: ubuntu.
+26/11/19 09:47:04 INFO scheduler.TaskSetManager: Finished task 2.0 in stage 4.0 (TID 66) in 14023 ms on ubuntu (3/16)
+26/11/19 09:47:17 INFO scheduler.TaskSetManager: Starting task 4.0 in stage 4.0 (TID 68, ubuntu, partition 4, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:47:17 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 68 on executor id: 1 hostname: ubuntu.
+26/11/19 09:47:17 INFO scheduler.TaskSetManager: Finished task 3.0 in stage 4.0 (TID 67) in 13218 ms on ubuntu (4/16)
+26/11/19 09:47:30 INFO scheduler.TaskSetManager: Starting task 5.0 in stage 4.0 (TID 69, ubuntu, partition 5, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:47:30 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 69 on executor id: 1 hostname: ubuntu.
+26/11/19 09:47:30 INFO scheduler.TaskSetManager: Finished task 4.0 in stage 4.0 (TID 68) in 13673 ms on ubuntu (5/16)
+26/11/19 09:47:44 INFO scheduler.TaskSetManager: Starting task 6.0 in stage 4.0 (TID 70, ubuntu, partition 6, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:47:44 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 70 on executor id: 1 hostname: ubuntu.
+26/11/19 09:47:44 INFO scheduler.TaskSetManager: Finished task 5.0 in stage 4.0 (TID 69) in 13276 ms on ubuntu (6/16)
+26/11/19 09:48:00 INFO scheduler.TaskSetManager: Starting task 7.0 in stage 4.0 (TID 71, ubuntu, partition 7, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:48:00 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 71 on executor id: 1 hostname: ubuntu.
+26/11/19 09:48:00 INFO scheduler.TaskSetManager: Finished task 6.0 in stage 4.0 (TID 70) in 15842 ms on ubuntu (7/16)
+26/11/19 09:48:16 INFO scheduler.TaskSetManager: Starting task 8.0 in stage 4.0 (TID 72, ubuntu, partition 8, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:48:16 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 72 on executor id: 1 hostname: ubuntu.
+26/11/19 09:48:16 INFO scheduler.TaskSetManager: Finished task 7.0 in stage 4.0 (TID 71) in 16120 ms on ubuntu (8/16)
+26/11/19 09:48:30 INFO scheduler.TaskSetManager: Starting task 9.0 in stage 4.0 (TID 73, ubuntu, partition 9, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:48:30 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 73 on executor id: 1 hostname: ubuntu.
+26/11/19 09:48:30 INFO scheduler.TaskSetManager: Finished task 8.0 in stage 4.0 (TID 72) in 14485 ms on ubuntu (9/16)
+26/11/19 09:48:46 INFO scheduler.TaskSetManager: Starting task 10.0 in stage 4.0 (TID 74, ubuntu, partition 10, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:48:46 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 74 on executor id: 1 hostname: ubuntu.
+26/11/19 09:48:46 INFO scheduler.TaskSetManager: Finished task 9.0 in stage 4.0 (TID 73) in 15648 ms on ubuntu (10/16)
+26/11/19 09:49:00 INFO scheduler.TaskSetManager: Starting task 11.0 in stage 4.0 (TID 75, ubuntu, partition 11, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:49:00 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 75 on executor id: 1 hostname: ubuntu.
+26/11/19 09:49:00 INFO scheduler.TaskSetManager: Finished task 10.0 in stage 4.0 (TID 74) in 14186 ms on ubuntu (11/16)
+26/11/19 09:49:14 INFO scheduler.TaskSetManager: Starting task 12.0 in stage 4.0 (TID 76, ubuntu, partition 12, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:49:14 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 76 on executor id: 1 hostname: ubuntu.
+26/11/19 09:49:14 INFO scheduler.TaskSetManager: Finished task 11.0 in stage 4.0 (TID 75) in 13763 ms on ubuntu (12/16)
+26/11/19 09:49:27 INFO scheduler.TaskSetManager: Starting task 13.0 in stage 4.0 (TID 77, ubuntu, partition 13, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:49:27 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 77 on executor id: 1 hostname: ubuntu.
+26/11/19 09:49:27 INFO scheduler.TaskSetManager: Finished task 12.0 in stage 4.0 (TID 76) in 13502 ms on ubuntu (13/16)
+26/11/19 09:49:41 INFO scheduler.TaskSetManager: Starting task 14.0 in stage 4.0 (TID 78, ubuntu, partition 14, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:49:41 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 78 on executor id: 1 hostname: ubuntu.
+26/11/19 09:49:41 INFO scheduler.TaskSetManager: Finished task 13.0 in stage 4.0 (TID 77) in 13460 ms on ubuntu (14/16)
+26/11/19 09:49:53 INFO scheduler.TaskSetManager: Starting task 15.0 in stage 4.0 (TID 79, ubuntu, partition 15, PROCESS_LOCAL, 5495 bytes)
+26/11/19 09:49:53 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 79 on executor id: 1 hostname: ubuntu.
+26/11/19 09:49:53 INFO scheduler.TaskSetManager: Finished task 14.0 in stage 4.0 (TID 78) in 12622 ms on ubuntu (15/16)
+26/11/19 09:50:07 INFO scheduler.TaskSetManager: Finished task 15.0 in stage 4.0 (TID 79) in 13246 ms on ubuntu (16/16)
+26/11/19 09:50:07 INFO cluster.YarnScheduler: Removed TaskSet 4.0, whose tasks have all completed, from pool 
+26/11/19 09:50:07 INFO scheduler.DAGScheduler: ShuffleMapStage 4 (flatMap at SparkPageRank.scala:62) finished in 223.652 s
+26/11/19 09:50:07 INFO scheduler.DAGScheduler: looking for newly runnable stages
+26/11/19 09:50:07 INFO scheduler.DAGScheduler: running: Set()
+26/11/19 09:50:07 INFO scheduler.DAGScheduler: waiting: Set(ResultStage 5)
+26/11/19 09:50:07 INFO scheduler.DAGScheduler: failed: Set()
+26/11/19 09:50:07 INFO scheduler.DAGScheduler: Submitting ResultStage 5 (MapPartitionsRDD[29] at map at IOCommon.scala:61), which has no missing parents
+26/11/19 09:50:07 INFO memory.MemoryStore: Block broadcast_6 stored as values in memory (estimated size 73.7 KB, free 365.9 MB)
+26/11/19 09:50:07 INFO memory.MemoryStore: Block broadcast_6_piece0 stored as bytes in memory (estimated size 26.9 KB, free 365.9 MB)
+26/11/19 09:50:07 INFO storage.BlockManagerInfo: Added broadcast_6_piece0 in memory on 192.168.133.4:44109 (size: 26.9 KB, free: 366.2 MB)
+26/11/19 09:50:07 INFO spark.SparkContext: Created broadcast 6 from broadcast at DAGScheduler.scala:1012
+26/11/19 09:50:07 INFO scheduler.DAGScheduler: Submitting 16 missing tasks from ResultStage 5 (MapPartitionsRDD[29] at map at IOCommon.scala:61)
+26/11/19 09:50:07 INFO cluster.YarnScheduler: Adding task set 5.0 with 16 tasks
+26/11/19 09:50:07 INFO scheduler.TaskSetManager: Starting task 0.0 in stage 5.0 (TID 80, ubuntu, partition 0, NODE_LOCAL, 5267 bytes)
+26/11/19 09:50:07 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 80 on executor id: 1 hostname: ubuntu.
+26/11/19 09:50:07 INFO storage.BlockManagerInfo: Added broadcast_6_piece0 in memory on ubuntu:42384 (size: 26.9 KB, free: 2.9 GB)
+26/11/19 09:50:07 INFO spark.MapOutputTrackerMasterEndpoint: Asked to send map output locations for shuffle 0 to 192.168.133.4:34060
+26/11/19 09:50:07 INFO spark.MapOutputTrackerMaster: Size of output statuses for shuffle 0 is 150 bytes
+26/11/19 09:50:08 INFO scheduler.TaskSetManager: Starting task 1.0 in stage 5.0 (TID 81, ubuntu, partition 1, NODE_LOCAL, 5267 bytes)
+26/11/19 09:50:08 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 81 on executor id: 1 hostname: ubuntu.
+26/11/19 09:50:08 INFO scheduler.TaskSetManager: Finished task 0.0 in stage 5.0 (TID 80) in 1565 ms on ubuntu (1/16)
+26/11/19 09:50:09 INFO scheduler.TaskSetManager: Starting task 2.0 in stage 5.0 (TID 82, ubuntu, partition 2, NODE_LOCAL, 5267 bytes)
+26/11/19 09:50:09 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 82 on executor id: 1 hostname: ubuntu.
+26/11/19 09:50:09 INFO scheduler.TaskSetManager: Finished task 1.0 in stage 5.0 (TID 81) in 1119 ms on ubuntu (2/16)
+26/11/19 09:50:10 INFO scheduler.TaskSetManager: Starting task 3.0 in stage 5.0 (TID 83, ubuntu, partition 3, NODE_LOCAL, 5267 bytes)
+26/11/19 09:50:10 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 83 on executor id: 1 hostname: ubuntu.
+26/11/19 09:50:10 INFO scheduler.TaskSetManager: Finished task 2.0 in stage 5.0 (TID 82) in 1119 ms on ubuntu (3/16)
+26/11/19 09:50:12 INFO scheduler.TaskSetManager: Starting task 4.0 in stage 5.0 (TID 84, ubuntu, partition 4, NODE_LOCAL, 5267 bytes)
+26/11/19 09:50:12 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 84 on executor id: 1 hostname: ubuntu.
+26/11/19 09:50:12 INFO scheduler.TaskSetManager: Finished task 3.0 in stage 5.0 (TID 83) in 1111 ms on ubuntu (4/16)
+26/11/19 09:50:13 INFO scheduler.TaskSetManager: Starting task 5.0 in stage 5.0 (TID 85, ubuntu, partition 5, NODE_LOCAL, 5267 bytes)
+26/11/19 09:50:13 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 85 on executor id: 1 hostname: ubuntu.
+26/11/19 09:50:13 INFO scheduler.TaskSetManager: Finished task 4.0 in stage 5.0 (TID 84) in 1089 ms on ubuntu (5/16)
+26/11/19 09:50:14 INFO scheduler.TaskSetManager: Starting task 6.0 in stage 5.0 (TID 86, ubuntu, partition 6, NODE_LOCAL, 5267 bytes)
+26/11/19 09:50:14 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 86 on executor id: 1 hostname: ubuntu.
+26/11/19 09:50:14 INFO scheduler.TaskSetManager: Finished task 5.0 in stage 5.0 (TID 85) in 1203 ms on ubuntu (6/16)
+26/11/19 09:50:15 INFO scheduler.TaskSetManager: Starting task 7.0 in stage 5.0 (TID 87, ubuntu, partition 7, NODE_LOCAL, 5267 bytes)
+26/11/19 09:50:15 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 87 on executor id: 1 hostname: ubuntu.
+26/11/19 09:50:15 INFO scheduler.TaskSetManager: Finished task 6.0 in stage 5.0 (TID 86) in 1122 ms on ubuntu (7/16)
+26/11/19 09:50:16 INFO scheduler.TaskSetManager: Starting task 8.0 in stage 5.0 (TID 88, ubuntu, partition 8, NODE_LOCAL, 5267 bytes)
+26/11/19 09:50:16 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 88 on executor id: 1 hostname: ubuntu.
+26/11/19 09:50:16 INFO scheduler.TaskSetManager: Finished task 7.0 in stage 5.0 (TID 87) in 1112 ms on ubuntu (8/16)
+26/11/19 09:50:17 INFO scheduler.TaskSetManager: Starting task 9.0 in stage 5.0 (TID 89, ubuntu, partition 9, NODE_LOCAL, 5267 bytes)
+26/11/19 09:50:17 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 89 on executor id: 1 hostname: ubuntu.
+26/11/19 09:50:17 INFO scheduler.TaskSetManager: Finished task 8.0 in stage 5.0 (TID 88) in 1083 ms on ubuntu (9/16)
+26/11/19 09:50:18 INFO scheduler.TaskSetManager: Starting task 10.0 in stage 5.0 (TID 90, ubuntu, partition 10, NODE_LOCAL, 5267 bytes)
+26/11/19 09:50:18 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 90 on executor id: 1 hostname: ubuntu.
+26/11/19 09:50:18 INFO scheduler.TaskSetManager: Finished task 9.0 in stage 5.0 (TID 89) in 1034 ms on ubuntu (10/16)
+26/11/19 09:50:19 INFO scheduler.TaskSetManager: Starting task 11.0 in stage 5.0 (TID 91, ubuntu, partition 11, NODE_LOCAL, 5267 bytes)
+26/11/19 09:50:19 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 91 on executor id: 1 hostname: ubuntu.
+26/11/19 09:50:19 INFO scheduler.TaskSetManager: Finished task 10.0 in stage 5.0 (TID 90) in 1106 ms on ubuntu (11/16)
+26/11/19 09:50:20 INFO scheduler.TaskSetManager: Starting task 12.0 in stage 5.0 (TID 92, ubuntu, partition 12, NODE_LOCAL, 5267 bytes)
+26/11/19 09:50:20 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 92 on executor id: 1 hostname: ubuntu.
+26/11/19 09:50:20 INFO scheduler.TaskSetManager: Finished task 11.0 in stage 5.0 (TID 91) in 1080 ms on ubuntu (12/16)
+26/11/19 09:50:21 INFO scheduler.TaskSetManager: Starting task 13.0 in stage 5.0 (TID 93, ubuntu, partition 13, NODE_LOCAL, 5267 bytes)
+26/11/19 09:50:21 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 93 on executor id: 1 hostname: ubuntu.
+26/11/19 09:50:21 INFO scheduler.TaskSetManager: Finished task 12.0 in stage 5.0 (TID 92) in 1131 ms on ubuntu (13/16)
+26/11/19 09:50:23 INFO scheduler.TaskSetManager: Starting task 14.0 in stage 5.0 (TID 94, ubuntu, partition 14, NODE_LOCAL, 5267 bytes)
+26/11/19 09:50:23 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 94 on executor id: 1 hostname: ubuntu.
+26/11/19 09:50:23 INFO scheduler.TaskSetManager: Finished task 13.0 in stage 5.0 (TID 93) in 1088 ms on ubuntu (14/16)
+26/11/19 09:50:24 INFO scheduler.TaskSetManager: Starting task 15.0 in stage 5.0 (TID 95, ubuntu, partition 15, NODE_LOCAL, 5267 bytes)
+26/11/19 09:50:24 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Launching task 95 on executor id: 1 hostname: ubuntu.
+26/11/19 09:50:24 INFO scheduler.TaskSetManager: Finished task 14.0 in stage 5.0 (TID 94) in 1078 ms on ubuntu (15/16)
+26/11/19 09:50:25 INFO scheduler.TaskSetManager: Finished task 15.0 in stage 5.0 (TID 95) in 1100 ms on ubuntu (16/16)
+26/11/19 09:50:25 INFO cluster.YarnScheduler: Removed TaskSet 5.0, whose tasks have all completed, from pool 
+26/11/19 09:50:25 INFO scheduler.DAGScheduler: ResultStage 5 (saveAsHadoopFile at IOCommon.scala:63) finished in 18.115 s
+26/11/19 09:50:25 INFO scheduler.DAGScheduler: Job 0 finished: saveAsHadoopFile at IOCommon.scala:63, took 1647.893533 s
+26/11/19 09:50:25 INFO server.ServerConnector: Stopped ServerConnector@51e4ccb3{HTTP/1.1}{0.0.0.0:4040}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@165b8a71{/stages/stage/kill,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@7fd4acee{/api,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@5b970f7{/,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@1a1da881{/static,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@119f1f2a{/executors/threadDump/json,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@3d08f3f5{/executors/threadDump,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@55795845{/executors/json,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@4fe89c24{/executors,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@5dbe30be{/environment/json,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@89c10b7{/environment,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@72bd06ca{/storage/rdd/json,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@625e134e{/storage/rdd,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@5cc126dc{/storage/json,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@7e809b79{/storage,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@226642a5{/stages/pool/json,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@77192705{/stages/pool,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@716a7124{/stages/stage/json,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@5241cf67{/stages/stage,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@6326d182{/stages/json,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@475835b1{/stages,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@4fad94a7{/jobs/job/json,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@36b0fcd5{/jobs/job,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@4eed46ee{/jobs/json,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO handler.ContextHandler: Stopped o.s.j.s.ServletContextHandler@fd0e5b6{/jobs,null,UNAVAILABLE}
+26/11/19 09:50:25 INFO ui.SparkUI: Stopped Spark web UI at http://192.168.133.4:4040
+26/11/19 09:50:25 INFO cluster.YarnClientSchedulerBackend: Interrupting monitor thread
+26/11/19 09:50:25 INFO cluster.YarnClientSchedulerBackend: Shutting down all executors
+26/11/19 09:50:25 INFO cluster.YarnSchedulerBackend$YarnDriverEndpoint: Asking each executor to shut down
+26/11/19 09:50:25 INFO cluster.SchedulerExtensionServices: Stopping SchedulerExtensionServices
+(serviceOption=None,
+ services=List(),
+ started=false)
+26/11/19 09:50:25 INFO cluster.YarnClientSchedulerBackend: Stopped
+26/11/19 09:50:25 INFO spark.MapOutputTrackerMasterEndpoint: MapOutputTrackerMasterEndpoint stopped!
+26/11/19 09:50:25 INFO memory.MemoryStore: MemoryStore cleared
+26/11/19 09:50:25 INFO storage.BlockManager: BlockManager stopped
+26/11/19 09:50:25 INFO storage.BlockManagerMaster: BlockManagerMaster stopped
+26/11/19 09:50:25 INFO scheduler.OutputCommitCoordinator$OutputCommitCoordinatorEndpoint: OutputCommitCoordinator stopped!
+26/11/19 09:50:25 INFO spark.SparkContext: Successfully stopped SparkContext
+26/11/19 09:50:25 INFO util.ShutdownHookManager: Shutdown hook called
+26/11/19 09:50:25 INFO util.ShutdownHookManager: Deleting directory /tmp/spark-7eef82eb-b42f-445b-8dfc-fa02963cad90
