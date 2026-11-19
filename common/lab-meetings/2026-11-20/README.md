@@ -5,6 +5,8 @@
 
 ## 슬라이드 순서 (11-19 사용자 확정: 흐름 → 단계마다 바꾼 것+그래프 → 요약)
 
+- PPT: [fig6a-paper-aligned.pptx](fig6a-paper-aligned.pptx) (22장, 발표자 노트 포함)
+
 경로: `S` = `original-hadoop2.7/x86-server/steps/`, `F` = 이 폴더 `fig/`. 대표 그래프 = r1, 4회 2×2는 부록
 
 | # | 슬라이드 | 내용 | 그림 |
