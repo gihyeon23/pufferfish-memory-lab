@@ -68,6 +68,7 @@
 | G-2 r2~r4 | 같은 조건 3회 더 (4회로 맞춤) | 11-19 08:54~10:20 완료 | [r2](17-fig6a-G2-r2/)·[r3](17-fig6a-G2-r3/)·[r4](17-fig6a-G2-r4/) — 4회 모두 PR 첫 shrink 884~941초, kill 2·2·3·2 (전부 KM2) |
 | G-3 | G-2 조건 + watch에 cache·rss 기록 (KM이 높은 게 page cache 때문인지) | 11-19 11:30~11:58 완료 | [r1](17-fig6a-G3-r1/) — **KM cache 최대 0.2GB, 사용량 거의 전부 rss** → cache 가설 기각. 다른 값은 G-2와 같음 (kill 2, PR 첫 shrink 899초) → 추가 3회 안 함 |
 | G-4 | G-2 + executor 4코어 1회 (PR 입력 읽기 단계를 줄여 PR이 먼저 크게, 11-19 사용자) | 11-19 17:01~17:29 완료, VM 꺼짐 없음 (dmesg OOM 0, 여유 최저 5.7GB) | [r1](17-fig6a-G4-4core-r1/) — PR stage 0 630→456초, PR 250초에 12.5GB(논문 환산 54)로 먼저 큼. 그러나 **kill 13번 (KM1 5·KM2 8)**: KM이 kill 직후 재시작 → 다시 kill 반복. 첫 kill 180초(11%) |
+| G-4 확인 | kill 뒤 재시작이 왜 바로 되나 (RM 로그·코드, VM 실행 없음) | 11-19 | 논문: 메모리 부족이면 FLEX 요청 지연 [p.264], Fig 6(a) 재시작 600~1050초 막힘 "node memory is not available" [p.266]. 원 코드: NM이 `노드×balloon.stop − 할당 합`을 RM에 보고 (`NodeMemoryManager.java:473-478`), RM은 이 값 ≥ 요청×2(4GB)일 때만 FLEX 배정, 아니면 give up (`LeafQueue.java:1549-1566`). G-4 RM 로그: give up 516번 → 대기는 작동. 그러나 kill이 KM의 큰 크기(약 10~13GB)를 한꺼번에 풀어 보고값 7.8~13GB → **kill 1~3초 뒤 재배정** (13번 반복). 4코어는 KM도 빨리 키워서 kill 때 풀리는 양이 큼 (**추측**) |
 
 ### 단계 B+E 4회 요약 [실측]
 
