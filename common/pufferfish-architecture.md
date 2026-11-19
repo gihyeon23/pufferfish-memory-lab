@@ -87,6 +87,7 @@ CLAUDE.md 워크플로에 따라 논문(`common/papers/pufferfish-paper.pdf`,
 - Fig 6(a) 흐름 (p.265~266): PR(c1) 최우선, KM(c2·c3)은 처음에 억눌림 → **c3 약 600초에 kill** (c1의 큰 수요 때문) → c3 재시작이 **600~1050초 막힘** (노드 메모리 없음) → **c1 약 880초 shrink** → 풀린 메모리가 c3로
 - Fig 6(a) 그래프 읽기 (본문 아님, 11-15 확대 확인): cnt-1(PR) 크기 shrink **3번** — 약 905초 70→56GB, 약 1000초 56→43GB, 약 1480초 79→55GB. 사용량이 떨어진 뒤 약 85~120초 뒤에 shrink (2분 대기와 맞아 보임, **추측**). shrink 뒤 크기−사용량 약 3~5GB
 - Fig 6(a) 픽셀 역추적 (11-19, [papers/fig6a-digitized.txt](papers/fig6a-digitized.txt)): **KM1은 약 400~1075초 28GB(노드 23%)에 고정**, KM2는 kill 전 18GB 이하 → KM이 억눌려서 PR이 가장 높음. PR 크기 최대 79.6GB·사용량 최대 66GB. **마지막 종료는 KM2 약 1866초, PR 약 1800초 (96%)**
+- KM이 묶인 이유 (11-19 분석): 논문 규칙 = OCM이면 suspend, puff로 충분해지면 resume [p.261, 263], 낮은 우선순위는 backoff로 puff를 적게 받아 suspend 유지 [p.263], "KM은 처음에 억눌림" [p.265]. 원 코드도 같음 (`ContainerImpl` SUSPENDING→RUNNING은 OCM 해소 + swap 있을 때). 우리 G-2는 stop 전 puff PR 4·KM1 14·KM2 33 → PR이 OCM이 아닐 때가 많아 KM이 puff를 대신 받음. 우리 PR은 단독도 1000초까지 10GB 이하, 논문 PR은 375초에 노드 44% → **PR 메모리 증가 모양 차이가 원인 후보 (추측)**
 - Fig 5(b) (p.263): kill은 "최우선이 OCM인데 노드가 못 채워줄 때"만
 - swap: "SSD-backed swap partition", 1GB reclaim 약 0.5초 (p.268)
 - Fig 11·12 (p.268): 시작 단계 puff 오버헤드 10% 미만, ϕ·MIN_CONT가 클수록 puff 횟수↓
