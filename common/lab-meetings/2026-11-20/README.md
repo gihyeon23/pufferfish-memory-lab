@@ -24,7 +24,7 @@
 | 10 | G 메모리 수요 150% | 단독 실행으로 입력 맞춤 (PR 50%·KM 48%) → Fig 6(a) | `S/17-fig6a-G2-r1/fig6a.png` |
 | 11 | 결과 요약표 | 아래 §6 표 | — |
 | 12 | 논문 vs G-2 | 나란히 | `F/paper-vs-G2.png` |
-| 13 | 왜 아직 다른가 | 역추적: 논문 KM 27GB에 묶임, 우리 KM 2배. G-3: 측정 차이 아님 (rss) | 진행률별 표 (`common/papers/fig6a-digitized.txt`) |
+| 13 | 남은 차이 (11-19 쉽게 다시 씀) | KM1 최대 논문 28 vs 우리 58GB, KM2 18 vs 31GB. 원인 후보: 측정 차이 아님(G-3), 논문 KM1 계속 suspend로 보임(추측), 우리 KM1 suspend 20% | 진행률별 표 (`common/papers/fig6a-digitized.txt`) |
 | 14 | 정정 보고 | §7 + "PR이 마지막 종료" → 실제는 KM2가 약 66초 뒤 (역추적) | — |
 | 15 | 여쭐 것 | §8 | — |
 | 부록 | 단계별 4회 | | `F/grid-{14,A,BE,C512,C2G,F,G2}.png` |
