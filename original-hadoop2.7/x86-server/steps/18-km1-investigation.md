@@ -53,3 +53,23 @@
 - KM 단독(G1b)은 시작 3.4분에 12.3GB(수요 90%) — 앞쪽에 몰림
 - **추측**: 논문 PR은 앞쪽에서 계속 OCM이라 C 첫 번째를 지키고, puff를 먼저 받아 KM1이 23%에 막힘. 우리 PR은 수요가 뒤쪽에 몰려 초반에 C에서 빠지고, 그 자리를 KM1이 차지 → kill·puff가 KM1 쪽으로 감. 코드 동작은 논문 Alg.1과 같고, **차이는 PR의 메모리 증가 모양(워크로드)**
 - 3단계(판단 로그 추가 빌드)는 불필요 — C 출입(`add swapping container`, `is removed`)이 이미 nm.log에 있음
+
+## 3. K6 — OCM 유지 6분 진단 1회 (2026-11-24, `runs/18/K6-r1/`)
+
+- 조건: G-2 + `SWAP_KEEP_TIME` 59 → 179 (2분 → 6분). 논문 값 아님, **원인 확인용**. 이 값은 shrink 대기에도 쓰임
+- 방법: `~/legacy/setup/K/NodeMemoryManager.java`(D 복사 + 한 줄) + `C/ContainerImpl.java`로 `patch-nm-timing.sh` → NM 재시작 → `fig6a.sh 0`. 끝난 뒤 D+C jar로 복구함
+
+| | G-2 (5회) | K6-r1 |
+|---|---|---|
+| KM1 첫 executor 최대 limit | 13.9~15.8GB | **10.5GB** (첫 kill 뒤 puff 없음) |
+| 첫 executor 종료 | 239~293초, NMM kill(KM2) | 약 370초, **Spark heartbeat 시간 초과**(KM1·KM2 둘 다) |
+| 끝난 executor 수 (KM1 / KM2) | 0 / 2~3 | 4 / 5 |
+| heartbeat 시간 초과 / NMM kill | 0 / 2~3 | 10 / 4 |
+| 실행 초 PR / KM1 / KM2 | 약 1634 / 665~747 / 약 1490 | 1644 / **1915** / 2234 |
+
+- PR이 C 맨 앞에 남자 첫 kill 뒤 KM1이 몰아서 커지는 일은 없어짐 → 2단계 경로 확인
+- 하지만 KM이 오래 suspend(cpu 0번, quota 1000)되어 약 155초 동안 heartbeat를 못 보내 Spark가 executor를 버림 (`fig6a-km1.log` "Executor heartbeat timed out after 157576 ms")
+- 첫 kill 전에도 KM1은 약 10GB(노드 36%)까지 큼. 논문 400초 KM1은 23%
+- **추측**
+  - KM1 과다 = (a) 초반 puff에서 이미 36% + (b) 첫 kill 뒤 몰아받기. K6는 (b)만 없앰
+  - 논문 KM은 오래 억눌려도 executor가 안 죽음 → suspend 방식이나 Spark timeout 설정이 우리와 다를 가능성
