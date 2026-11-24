@@ -16,8 +16,8 @@ Pufferfish 논문의 메모리 관리 동작(OCM 감지 → suspend → puff →
 
 - worker1 단일 노드에서 **Fig 6(a) (puff)** 재현 중
 - 원 코드 그대로 결과(steps 09~16)를 비교 기준으로 확보
-- 논문 기준 수정 단계 A (shrink 대기 2분) 실행 중
-- 다음: kill 기준 → shrink 여유분 → reclaim 대상 → puff 상한 → Fig 6(b)(c) → 3대 클러스터
+- 논문 기준 수정 A~E + 조건 F·G 완료 ([steps/17](original-hadoop2.7/x86-server/steps/17-paper-aligned-plan.md))
+- 진행 중: KM1 메모리 과다 원인 조사 ([steps/18](original-hadoop2.7/x86-server/steps/18-km1-investigation.md), 이슈 #58)
 
 ## 실험 환경
 
